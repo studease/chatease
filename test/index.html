@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" lang="en">
+<head>
+	<title>WebSocket Chat Demo</title>
+	<style>
+		//body { margin: 0px; padding: 0px; }
+	</style>
+	<!--<link type="text/css" rel="stylesheet" href="css/style.css" />-->
+	<script type='text/javascript' src="../sockjs/sockjs-1.0.3.js"></script>
+	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
+	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
+	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.css.js'></script>
+	<script type='text/javascript' src='../cn/studease/events/chatease.events.js'></script>
+	<script type='text/javascript' src='../cn/studease/events/chatease.events.eventdispatcher.js'></script>
+	<script type='text/javascript' src='../cn/studease/api/chatease.api.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.states.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.modes.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.def.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.def.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.entity.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.model.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.view.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.controller.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.def.js'></script>
+	<script type='text/javascript'>
+		document.cookie = 'token=0123456789';
+	</script>
+</head>
+<body>
+	<div id='chatwrap'></div>
+	
+	<script type="text/javaScript">
+		var chat = chatease('chatwrap').setup({
+			width: 300,
+			height: 464,
+			url: 'ws://192.168.1.202/websocket/websck',
+			maxlog: 20,
+			events: {
+				onReady: function(e) {
+					cblog('onReady');
+				},
+				onConnect: function(e) {
+					cblog('onConnect');
+				},
+				onIdent: function(e) {
+					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.user.interval + '] in channel ' + e.channel + '.');
+				},
+				onMessage: function(e) {
+					//cblog('onMessage', e.user.name + ': ' + e.data);
+				},
+				onJoin: function(e) {
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] joined channel ' + e.channel + '.');
+				},
+				onLeft: function(e) {
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] left channel ' + e.channel + '.');
+				},
+				onNickClick: function(e) {
+					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ']');
+				},
+				onError: function(e) {
+					cblog('onError');
+				},
+				onClose: function(e) {
+					cblog('onClose');
+				}
+			}
+		});
+		
+		function cblog(cb, msg) {
+			console.log('[cb.' + cb + '] ' + (msg || ''));
+		}
+	</script>
+</body>
+</html>
