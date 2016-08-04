@@ -23,6 +23,13 @@
 			
 			var replace = document.getElementById(entity.id);
 			replace.parentNode.replaceChild(_wrapper, replace);
+			
+			window.onresize = function() {
+				if (utils.typeOf(model.onresize) == 'function') 
+					model.onresize.call(null);
+				else 
+					_this.resize();
+			};
 		}
 		
 		_this.setup = function() {
@@ -34,10 +41,6 @@
 			}
 			
 			setTimeout(function() {
-				window.onresize = function(e) {
-					_this.resize();
-				};
-				_this.resize(model.width, model.height);
 				_this.dispatchEvent(events.chatease_READY, { channelId: entity.id });
 			}, 0);
 		};

@@ -67,8 +67,16 @@
 				onClose: function(e) {
 					cblog('onClose');
 				}
-			}
+			}/*,
+			onresize: resize*/
 		});
+		
+		/*function resize() {
+			var ply = document.getElementById('player');
+			var cht = document.getElementById('chatroom');
+			chat.resize(cht ? cht.clientWidth : null, ply ? ply.clientHeight : null);
+		}
+		resize();*/
 		
 		function cblog(cb, msg) {
 			console.log('[cb.' + cb + '] ' + (msg || ''));

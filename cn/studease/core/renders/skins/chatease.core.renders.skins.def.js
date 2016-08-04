@@ -44,6 +44,7 @@
 			padding: '0',
 			'font-family': '微软雅黑,arial,sans-serif',
 			'font-size': '14px',
+			'font-weight': CSS_NORMAL,
 			'box-sizing': 'content-box'
 		});
 		
@@ -256,12 +257,17 @@
 			config.width = parseInt(width);
 			config.height = parseInt(height);
 			
-			var _mainLayer = document.getElementById(config.prefix + 'main'),
+			var _wrapper = document.getElementById(config.id),
+				_mainLayer = document.getElementById(config.prefix + 'main'),
 				_consoleLayer = document.getElementById(config.prefix + 'console'),
 				_dialogLayer = document.getElementById(config.prefix + 'dialog'),
 				_textInput = document.getElementById(config.prefix + 'input'),
 				_sendButton = document.getElementById(config.prefix + 'submit');
 			
+			css.style(_wrapper, {
+				width: config.width + 'px',
+				height: config.height + 'px'
+			});
 			css.style(_mainLayer, {
 				height: config.height - parseInt(TITLE_HEIGHT) + 'px'
 			});
@@ -273,19 +279,19 @@
 			});
 			css.style(_textInput, {
 				width: config.width - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 2 + 'px'
+				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 2 + 'px'
 			});
 			css.style(_sendButton, {
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) -2 + 'px'
+				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) -2 + 'px'
 			});
 			
 			if (utils.isMSIE(7)) {
 				css.style(_textInput, {
 					width: config.width - parseInt(SENDBTN_WIDTH) - 20 + 'px',
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 12 + 'px'
+					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 12 + 'px'
 				});
 				css.style(_sendButton, {
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) + 'px'
+					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) + 'px'
 				});
 			}
 		};

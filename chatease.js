@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '0.0.01';
+chatease.version = '0.1.02';
 chatease.debug = false;
 
 (function(chatease) {
@@ -217,20 +217,6 @@ chatease.debug = false;
 		}
 		return name.join('');
 	}
-})(chatease);
-
-(function(chatease) {
-	chatease.renderModes = {
-		DEFAULT: 'def'
-	};
-})(chatease);
-
-(function(chatease) {
-	chatease.states = {
-		CONNECTED: 'connected',
-		CLOSED: 'closed',
-		ERROR: 'error'
-	};
 })(chatease);
 
 (function(chatease) {
@@ -476,7 +462,21 @@ chatease.debug = false;
 })(chatease);
 
 (function(chatease) {
+	chatease.core.states = {
+		CONNECTED: 'connected',
+		CLOSED: 'closed',
+		ERROR: 'error'
+	};
+})(chatease);
+
+(function(chatease) {
 	chatease.core.renders = {};
+})(chatease);
+
+(function(chatease) {
+	chatease.core.renders.modes = {
+		DEFAULT: 'def'
+	};
 })(chatease);
 
 (function(chatease) {
@@ -529,6 +529,7 @@ chatease.debug = false;
 			padding: '0',
 			'font-family': '微软雅黑,arial,sans-serif',
 			'font-size': '14px',
+			'font-weight': CSS_NORMAL,
 			'box-sizing': 'content-box'
 		});
 		
@@ -741,12 +742,17 @@ chatease.debug = false;
 			config.width = parseInt(width);
 			config.height = parseInt(height);
 			
-			var _mainLayer = document.getElementById(config.prefix + 'main'),
+			var _wrapper = document.getElementById(config.id),
+				_mainLayer = document.getElementById(config.prefix + 'main'),
 				_consoleLayer = document.getElementById(config.prefix + 'console'),
 				_dialogLayer = document.getElementById(config.prefix + 'dialog'),
 				_textInput = document.getElementById(config.prefix + 'input'),
 				_sendButton = document.getElementById(config.prefix + 'submit');
 			
+			css.style(_wrapper, {
+				width: config.width + 'px',
+				height: config.height + 'px'
+			});
 			css.style(_mainLayer, {
 				height: config.height - parseInt(TITLE_HEIGHT) + 'px'
 			});
@@ -758,19 +764,19 @@ chatease.debug = false;
 			});
 			css.style(_textInput, {
 				width: config.width - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 2 + 'px'
+				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 2 + 'px'
 			});
 			css.style(_sendButton, {
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) -2 + 'px'
+				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) -2 + 'px'
 			});
 			
 			if (utils.isMSIE(7)) {
 				css.style(_textInput, {
 					width: config.width - parseInt(SENDBTN_WIDTH) - 20 + 'px',
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 12 + 'px'
+					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 12 + 'px'
 				});
 				css.style(_sendButton, {
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) + 'px'
+					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) + 'px'
 				});
 			}
 		};
@@ -1144,8 +1150,8 @@ chatease.debug = false;
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		states = chatease.states,
-		core = chatease.core;
+		core = chatease.core,
+		states = core.states;
 	
 	core.model = function(config) {
 		 var _this = utils.extend(this, new events.eventdispatcher('core.model')),
@@ -1196,10 +1202,11 @@ chatease.debug = false;
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		renderModes = chatease.renderModes,
-		states = chatease.states,
+		embed = chatease.embed,
 		core = chatease.core,
+		states = core.states,
 		renders = core.renders,
+		renderModes = renders.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'chatwrap';
@@ -1217,6 +1224,13 @@ chatease.debug = false;
 			
 			var replace = document.getElementById(entity.id);
 			replace.parentNode.replaceChild(_wrapper, replace);
+			
+			window.onresize = function() {
+				if (utils.typeOf(model.onresize) == 'function') 
+					model.onresize.call(null);
+				else 
+					_this.resize();
+			};
 		}
 		
 		_this.setup = function() {
@@ -1228,10 +1242,6 @@ chatease.debug = false;
 			}
 			
 			setTimeout(function() {
-				window.onresize = function(e) {
-					_this.resize();
-				};
-				_this.resize(model.width, model.height);
 				_this.dispatchEvent(events.chatease_READY, { channelId: entity.id });
 			}, 0);
 		};
@@ -1335,8 +1345,8 @@ chatease.debug = false;
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		states = chatease.states,
-		core = chatease.core;
+		core = chatease.core,
+		states = core.states;
 	
 	core.controller = function(model, view) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.controller')),
@@ -1593,8 +1603,8 @@ chatease.debug = false;
 
 (function(chatease) {
 	var utils = chatease.utils,
-		renderModes = chatease.renderModes,
-		events = chatease.events;
+		events = chatease.events,
+		renderModes = chatease.core.renders.modes;
 	
 	var embed = chatease.embed = function(api) {
 		var _this = utils.extend(this, new events.eventdispatcher('embed')),
@@ -1667,8 +1677,8 @@ chatease.debug = false;
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		renderModes = chatease.renderModes,
-		embed = chatease.embed;
+		embed = chatease.embed,
+		renderModes = chatease.core.renders.modes;
 	
 	embed.config = function(config) {
 		var _defaults = {
@@ -1695,9 +1705,9 @@ chatease.debug = false;
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		renderModes = chatease.renderModes,
 		embed = chatease.embed,
-		core = chatease.core;
+		core = chatease.core,
+		renderModes = core.renders.modes;
 	
 	embed.def = function(api, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('embed.def'));
