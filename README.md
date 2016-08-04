@@ -1,6 +1,6 @@
 # chatease
 
-This is a client-side script of chat room, transmitting through websocket.
+This is a client-side script of chat room, transmitting through websocket, with skin build in.
 
 
 ## Tested
@@ -10,10 +10,12 @@ This is a client-side script of chat room, transmitting through websocket.
 * **Opera**
 * **Safari**
 * **IE9-11, Edge**
-* **IE5-8(sockjs)**
+* **IE5-8 (Modified sockjs)**
 
 
 ## Example
+
+### Basic configuraion:
 
 ```js
 <div id='chatwrap'></div>
@@ -21,45 +23,62 @@ This is a client-side script of chat room, transmitting through websocket.
 var chat = chatease('chatwrap').setup({
 	width: 300,
 	height: 464,
-	url: 'ws://192.168.1.202/websocket/websck',
-	maxlog: 20,
-	events: {
-		onReady: function(e) {
-			cblog('onReady');
-		},
-		onConnect: function(e) {
-			cblog('onConnect');
-		},
-		onIdent: function(e) {
-			cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.user.interval + '] in channel ' + e.channel + '.');
-		},
-		onMessage: function(e) {
-			//cblog('onMessage', e.user.name + ': ' + e.data);
-		},
-		onJoin: function(e) {
-			cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] joined channel ' + e.channel + '.');
-		},
-		onLeft: function(e) {
-			cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] left channel ' + e.channel + '.');
-		},
-		onNickClick: function(e) {
-			cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ']');
-		},
-		onError: function(e) {
-			cblog('onError');
-		},
-		onClose: function(e) {
-			cblog('onClose');
-		}
-	}
+	url: 'ws://192.168.1.202/websocket/websck'
 });
+```
 
-function cblog(cb, msg) {
-	console.log('[cb.' + cb + '] ' + (msg || ''));
+### More configuration:
+
+Please have a look at cn/studease/embed/chatease.embed.config.js.
+
+```js
+_defaults = {
+	url: 'ws://' + window.location.host + '/websocket/websck',
+	width: 300,
+	height: 450,
+	renderMode: renderModes.DEFAULT,
+	retryDelay: 3,
+	maxRetries: 0,
+	messageInterval: 0,
+	maxlog: 50,
+	fallback: true
 }
 ```
 
-For more configuration, please have a look at cn/studease/embed/chatease.embed.config.js
+### Add callback:
+
+```js
+var chat = chatease('chatwrap').setup({
+	...
+	events: {
+		onReady: function(e) {
+			console.log('onReady');
+		},
+		...
+	}
+});
+```
+
+For more events, check cn/studease/api/chatease.api.js.
+
+```js
+_eventMapping = {
+	onError: events.ERROR,
+	onReady: events.chatease_READY,
+	onConnect: events.chatease_CONNECT,
+	onIdent: events.chatease_INDENT,
+	onMessage: events.chatease_MESSAGE,
+	onJoin: events.chatease_JOIN,
+	onLeft: events.chatease_LEFT,
+	onNickClick: events.chatease_VIEW_NICKCLICK,
+	onClose: events.chatease_CLOSE
+}
+```
+
+### Interface
+
+* **send(message, userId)**
+* **resize(width, height)**
 
 
 ## Software License

@@ -39,7 +39,6 @@
 			width: 300,
 			height: 464,
 			url: 'ws://192.168.1.202/websocket/websck',
-			maxlog: 20,
 			events: {
 				onReady: function(e) {
 					cblog('onReady');
@@ -48,16 +47,16 @@
 					cblog('onConnect');
 				},
 				onIdent: function(e) {
-					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.user.interval + '] in channel ' + e.channel + '.');
+					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.user.interval + '] in channel ' + e.channel.id + '.');
 				},
 				onMessage: function(e) {
 					//cblog('onMessage', e.user.name + ': ' + e.data);
 				},
 				onJoin: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] joined channel ' + e.channel + '.');
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] joined channel ' + e.channel.id + '.');
 				},
 				onLeft: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] left channel ' + e.channel + '.');
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] left channel ' + e.channel.id + '.');
 				},
 				onNickClick: function(e) {
 					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ']');
