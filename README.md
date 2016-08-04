@@ -75,7 +75,7 @@ _eventMapping = {
 }
 ```
 
-### Interface
+### Interface:
 
 * **send(message, userId)**
 * **resize(width, height)**

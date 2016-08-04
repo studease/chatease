@@ -13,6 +13,7 @@
 		DIALOG_CLASS = 'dialog',
 		CONTROL_CLASS = 'control',
 		INPUT_CLASS = 'input',
+		SUBMIT_CLASS = 'submit',
 		NICK_SYSTEM_CLASS = 'system',
 		NICK_MYSELF_CLASS = 'myself',
 		BUTTON_CLASS = 'btn',
@@ -33,7 +34,7 @@
 				skin: 'def',
 				prefix: 'chat-'
 			},
-			_container,
+			_renderLayer,
 			_titleLayer,
 			_mainLayer,
 			_consoleLayer,
@@ -52,11 +53,11 @@
 		function _init() {
 			_this.config = utils.extend({}, _defaults, config);
 			
-			_container = utils.createElement('div', RENDER_CLASS);
+			_renderLayer = utils.createElement('div', RENDER_CLASS);
 			_titleLayer = utils.createElement('div', TITLE_CLASS);
 			_mainLayer = utils.createElement('div', MAIN_CLASS);
-			_container.appendChild(_titleLayer);
-			_container.appendChild(_mainLayer);
+			_renderLayer.appendChild(_titleLayer);
+			_renderLayer.appendChild(_mainLayer);
 			
 			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
 			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
@@ -156,11 +157,12 @@
 		}
 		
 		function _setElementIds() {
-			_mainLayer.id = _this.config.prefix + 'main';
-			_consoleLayer.id = _this.config.prefix + 'console';
-			_dialogLayer.id = _this.config.prefix + 'dialog';
-			_textInput.id = _this.config.prefix + 'input';
-			_sendButton.id = _this.config.prefix + 'submit';
+			_renderLayer.id = _this.config.prefix + RENDER_CLASS;
+			_mainLayer.id = _this.config.prefix + MAIN_CLASS;
+			_consoleLayer.id = _this.config.prefix + CONSOLE_CLASS;
+			_dialogLayer.id = _this.config.prefix + DIALOG_CLASS;
+			_textInput.id = _this.config.prefix + INPUT_CLASS;
+			_sendButton.id = _this.config.prefix + SUBMIT_CLASS;
 		}
 		
 		_this.show = function(data, user) {
@@ -294,12 +296,12 @@
 		};
 		
 		_this.element = function() {
-			return _container;
+			return _renderLayer;
 		};
 		
 		_this.resize = function(width, height) {
-			width = width || _container.clientWidth || config.width;
-			height = height || _container.clientHeight || config.height;
+			width = width || _renderLayer.offsetWidth || config.width;
+			height = height || _renderLayer.offsetHeight || config.height;
 			if (_skin) 
 				_skin.resize(width, height);
 		};

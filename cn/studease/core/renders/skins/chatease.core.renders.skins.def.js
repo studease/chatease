@@ -12,6 +12,7 @@
 		DIALOG_CLASS = 'dialog',
 		CONTROL_CLASS = 'control',
 		INPUT_CLASS = 'input',
+		SUBMIT_CLASS = 'submit',
 		NICK_SYSTEM_CLASS = 'system',
 		NICK_MYSELF_CLASS = 'myself',
 		BUTTON_CLASS = 'btn',
@@ -37,7 +38,8 @@
 		
 		css('.' + WRAP_CLASS, {
 			width: config.width + 'px',
-			height: config.height + 'px'
+			height: config.height + 'px',
+			'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.05)'
 		});
 		css('.' + WRAP_CLASS + ' *', {
 			margin: '0',
@@ -49,8 +51,8 @@
 		});
 		
 		css('.' + RENDER_CLASS, {
-			width: CSS_100PCT,
-			height: CSS_100PCT,
+			width: config.width - 2 + 'px',
+			height: config.height - 2 + 'px',
 			border: '1px solid #1184ce',
 			'border-radius': '4px',
 			position: CSS_RELATIVE
@@ -83,9 +85,7 @@
 		
 		css(' .' + MAIN_CLASS, {
 			width: CSS_100PCT,
-			height: config.height - parseInt(TITLE_HEIGHT) + 'px',
-			'border-color': '#d6e9c6',
-			'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.05)'
+			height: config.height -2 - parseInt(TITLE_HEIGHT) + 'px'
 		});
 		
 		css(' .' + MAIN_CLASS + ' .' + CONSOLE_CLASS, {
@@ -161,8 +161,9 @@
 		
 		css(' .' + MAIN_CLASS + ' .' + DIALOG_CLASS, {
 			width: CSS_100PCT,
-			height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 + 'px',
-			position: CSS_RELATIVE
+			height: (config.height -1 - parseInt(TITLE_HEIGHT)) * 0.25 + 'px',
+			position: CSS_RELATIVE,
+			overflow: CSS_HIDDEN
 		});
 		
 		css(' .' + MAIN_CLASS + ' .' + DIALOG_CLASS + ' .' + CONTROL_CLASS, {
@@ -222,7 +223,7 @@
 			'float': 'left',
 			margin: '0',
 			padding: '5px 10px',
-			width: config.width - parseInt(SENDBTN_WIDTH) + 'px',
+			width: config.width -2 - parseInt(SENDBTN_WIDTH) + 'px',
 			height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 2 + 'px',
 			resize: CSS_NONE,
 			border: '0 none',
@@ -244,7 +245,7 @@
 		
 		if (utils.isMSIE(7)) {
 			css(' .' + MAIN_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' textarea', {
-				width: config.width - parseInt(SENDBTN_WIDTH) - 20 + 'px',
+				width: config.width -2 - parseInt(SENDBTN_WIDTH) - 20 + 'px',
 				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 12 + 'px'
 			});
 			css(' .' + MAIN_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' button', {
@@ -258,40 +259,45 @@
 			config.height = parseInt(height);
 			
 			var _wrapper = document.getElementById(config.id),
-				_mainLayer = document.getElementById(config.prefix + 'main'),
-				_consoleLayer = document.getElementById(config.prefix + 'console'),
-				_dialogLayer = document.getElementById(config.prefix + 'dialog'),
-				_textInput = document.getElementById(config.prefix + 'input'),
-				_sendButton = document.getElementById(config.prefix + 'submit');
+				_renderLayer = document.getElementById(config.prefix + RENDER_CLASS),
+				_mainLayer = document.getElementById(config.prefix + MAIN_CLASS),
+				_consoleLayer = document.getElementById(config.prefix + CONSOLE_CLASS),
+				_dialogLayer = document.getElementById(config.prefix + DIALOG_CLASS),
+				_textInput = document.getElementById(config.prefix + INPUT_CLASS),
+				_sendButton = document.getElementById(config.prefix + SUBMIT_CLASS);
 			
 			css.style(_wrapper, {
 				width: config.width + 'px',
 				height: config.height + 'px'
 			});
+			css.style(_renderLayer, {
+				width: config.width - 2 + 'px',
+				height: config.height - 2 + 'px'
+			});
 			css.style(_mainLayer, {
-				height: config.height - parseInt(TITLE_HEIGHT) + 'px'
+				height: config.height -2 - parseInt(TITLE_HEIGHT) + 'px'
 			});
 			css.style(_consoleLayer, {
 				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.75 + 'px'
 			});
 			css.style(_dialogLayer, {
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 + 'px'
+				height: (config.height -1 - parseInt(TITLE_HEIGHT)) * 0.25 + 'px'
 			});
 			css.style(_textInput, {
-				width: config.width - parseInt(SENDBTN_WIDTH) + 'px',
-				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 2 + 'px'
+				width: config.width -2 - parseInt(SENDBTN_WIDTH) + 'px',
+				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 2 + 'px'
 			});
 			css.style(_sendButton, {
-				height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) -2 + 'px'
+				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) -2 + 'px'
 			});
 			
 			if (utils.isMSIE(7)) {
 				css.style(_textInput, {
-					width: config.width - parseInt(SENDBTN_WIDTH) - 20 + 'px',
-					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) - 12 + 'px'
+					width: config.width -2 - parseInt(SENDBTN_WIDTH) - 20 + 'px',
+					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) - 12 + 'px'
 				});
 				css.style(_sendButton, {
-					height: Math.ceil((config.height - parseInt(TITLE_HEIGHT)) * 0.25) - parseInt(CONTROL_HEIGHT) + 'px'
+					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROL_HEIGHT) + 'px'
 				});
 			}
 		};
