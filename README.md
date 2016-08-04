@@ -10,7 +10,7 @@ This is a client-side script of chat room, transmitting through websocket, with 
 * **Opera**
 * **Safari**
 * **IE9-11, Edge**
-* **IE5-8 (Modified sockjs)**
+* **IE5-8 (With modified sockjs)**
 
 
 ## Example
