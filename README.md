@@ -9,8 +9,8 @@ This is a client-side script of chat room, transmitting through websocket, with 
 * **Firefox**
 * **Opera**
 * **Safari**
-* **IE9-11, Edge**
-* **IE5-8 (With modified sockjs)**
+* **IE10-11, Edge**
+* **IE5-9 (With modified sockjs)**
 
 
 ## Example
