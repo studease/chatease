@@ -1,5 +1,9 @@
 # chatease.js
 
+> [[domain] http://studease.cn](http://studease.cn)
+
+> [[source] https://github.com/studease/chatease](https://github.com/studease/chatease)
+
 This is a client-side script of chat room, transmitting through websocket, with skin build in.
 
 
