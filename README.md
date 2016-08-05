@@ -80,6 +80,10 @@ _eventMapping = {
 * **send(message, userId)**
 * **resize(width, height)**
 
+### Server-side sample project:
+
+[chatease-server](https://github.com/studease/chatease-server)
+
 
 ## Software License
 
