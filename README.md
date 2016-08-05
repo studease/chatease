@@ -1,4 +1,4 @@
-# chatease
+# chatease.js
 
 This is a client-side script of chat room, transmitting through websocket, with skin build in.
 
