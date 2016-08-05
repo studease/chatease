@@ -21,6 +21,8 @@ This is a client-side script of chat room, transmitting through websocket, with 
 
 ### Basic configuraion:
 
+The example below will find the element with an id of chatwrap and render a dialog into it.
+
 ```js
 <div id='chatwrap'></div>
 ...
