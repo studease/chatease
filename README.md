@@ -87,4 +87,4 @@ _eventMapping = {
 
 ## Software License
 
-MIT
+MIT.
