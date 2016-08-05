@@ -14,7 +14,7 @@ This is a client-side script of chat room, transmitting through websocket, with 
 * **Opera**
 * **Safari**
 * **IE10-11, Edge**
-* **IE5-9 (With modified sockjs)**
+* **IE7-9 (With modified sockjs)**
 
 
 ## Example
