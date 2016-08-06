@@ -177,12 +177,13 @@
 		
 		function _reconnect() {
 			if (!model.maxRetries || _retriesCount < model.maxRetries) {
-				view.show('正在准备重连...');
+				var delay = Math.ceil(model.retryDelay + Math.random() * 5000);
+				view.show('正在准备重连(' + delay / 1000 + '秒)...');
 				setTimeout(function() {
 					_retriesCount++;
 					_websocket = null;
 					_connect();
-				}, model.retryDelay + Math.random() * 5);
+				}, delay);
 			}
 		}
 		

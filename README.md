@@ -43,7 +43,7 @@ _defaults = {
 	width: 300,
 	height: 450,
 	renderMode: renderModes.DEFAULT,
-	retryDelay: 3,
+	retryDelay: 3000,
 	maxRetries: 0,
 	messageInterval: 0,
 	maxlog: 50,
