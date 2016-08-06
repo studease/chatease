@@ -42,10 +42,10 @@ _defaults = {
 	url: 'ws://' + window.location.host + '/websocket/websck',
 	width: 300,
 	height: 450,
-	renderMode: renderModes.DEFAULT,
-	retryDelay: 3000,
-	maxRetries: 0,
-	messageInterval: 0,
+	renderMode: renderModes.DEFAULT, // 'def'
+	retryDelay: 3000, // ms
+	maxRetries: 0, // -1: never, 0: always, uint: n times
+	messageInterval: 0, // ms
 	maxlog: 50,
 	fallback: true
 }
