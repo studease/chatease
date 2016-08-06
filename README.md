@@ -70,14 +70,14 @@ For more events, check cn/studease/api/chatease.api.js.
 ```js
 _eventMapping = {
 	onError: events.ERROR,
-	onReady: events.chatease_READY,
-	onConnect: events.chatease_CONNECT,
-	onIdent: events.chatease_INDENT,
-	onMessage: events.chatease_MESSAGE,
-	onJoin: events.chatease_JOIN,
-	onLeft: events.chatease_LEFT,
-	onNickClick: events.chatease_VIEW_NICKCLICK,
-	onClose: events.chatease_CLOSE
+	onReady: events.CHATEASE_READY,
+	onConnect: events.CHATEASE_CONNECT,
+	onIdent: events.CHATEASE_INDENT,
+	onMessage: events.CHATEASE_MESSAGE,
+	onJoin: events.CHATEASE_JOIN,
+	onLeft: events.CHATEASE_LEFT,
+	onNickClick: events.CHATEASE_VIEW_NICKCLICK,
+	onClose: events.CHATEASE_CLOSE
 }
 ```
 

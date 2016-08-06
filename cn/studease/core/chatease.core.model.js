@@ -27,7 +27,7 @@
 				return;
 			}
 			_this.state = state;
-			_this.dispatchEvent(events.chatease_STATE, { state: state });
+			_this.dispatchEvent(events.CHATEASE_STATE, { state: state });
 		};
 		
 		_this.setMsgShield = function(shield) {
@@ -35,7 +35,7 @@
 				return;
 			}
 			_this.shieldMsg = shield;
-			_this.dispatchEvent(events.chatease_VIEW_SHIELDMSG, { shield: shield });
+			_this.dispatchEvent(events.CHATEASE_VIEW_SHIELDMSG, { shield: shield });
 		};
 		
 		_this.getConfig = function(name) {

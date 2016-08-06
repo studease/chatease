@@ -41,7 +41,7 @@
 			}
 			
 			setTimeout(function() {
-				_this.dispatchEvent(events.chatease_READY, { channelId: entity.id });
+				_this.dispatchEvent(events.CHATEASE_READY, { channelId: entity.id });
 			}, 0);
 		};
 		
@@ -52,16 +52,16 @@
 					_this.render = _render = new renders[renderModes.DEFAULT](_this, renderConf);
 					break;
 				default:
-					_this.dispatchEvent(events.chatease_SETUP_ERROR, { message: 'Unknown render mode!', render: model.renderMode });
+					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Unknown render mode!', render: model.renderMode });
 					break;
 			}
 			
 			if (_render) {
-				_render.addEventListener(events.chatease_VIEW_SEND, _onSend);
-				_render.addEventListener(events.chatease_VIEW_SHIELDMSG, _onShieldMsg);
-				_render.addEventListener(events.chatease_VIEW_CLEARSCREEN, _onClearScreen);
-				_render.addEventListener(events.chatease_VIEW_NICKCLICK, _onNickClick);
-				_render.addEventListener(events.chatease_RENDER_ERROR, _onRenderError);
+				_render.addEventListener(events.CHATEASE_VIEW_SEND, _onSend);
+				_render.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onShieldMsg);
+				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _onClearScreen);
+				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
+				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 				_wrapper.appendChild(_render.element());
 			}
 		}

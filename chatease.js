@@ -225,23 +225,23 @@ chatease.debug = false;
 		ERROR: 'ERROR',
 		
 		// API Events
-		chatease_READY: 'chateaseReady',
-		chatease_SETUP_ERROR: 'chateaseSetupError',
-		chatease_RENDER_ERROR: 'chateaseRenderError',
+		CHATEASE_READY: 'chateaseReady',
+		CHATEASE_SETUP_ERROR: 'chateaseSetupError',
+		CHATEASE_RENDER_ERROR: 'chateaseRenderError',
 		
-		chatease_STATE: 'chateaseState',
-		chatease_CONNECT: 'chateaseConnect',
-		chatease_INDENT: 'chateaseIdent',
-		chatease_MESSAGE: 'chateaseMessage',
-		chatease_JOIN: 'chateaseJoin',
-		chatease_LEFT: 'chateaseLeft',
-		chatease_ERROR: 'chateaseError',
-		chatease_CLOSE: 'chateaseClose',
+		CHATEASE_STATE: 'chateaseState',
+		CHATEASE_CONNECT: 'chateaseConnect',
+		CHATEASE_INDENT: 'chateaseIdent',
+		CHATEASE_MESSAGE: 'chateaseMessage',
+		CHATEASE_JOIN: 'chateaseJoin',
+		CHATEASE_LEFT: 'chateaseLeft',
+		CHATEASE_ERROR: 'chateaseError',
+		CHATEASE_CLOSE: 'chateaseClose',
 		
-		chatease_VIEW_SEND: 'chateaseViewSend',
-		chatease_VIEW_SHIELDMSG: 'chateaseViewMsgShield',
-		chatease_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
-		chatease_VIEW_NICKCLICK: 'chateaseViewNickClick'
+		CHATEASE_VIEW_SEND: 'chateaseViewSend',
+		CHATEASE_VIEW_SHIELDMSG: 'chateaseViewMsgShield',
+		CHATEASE_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
+		CHATEASE_VIEW_NICKCLICK: 'chateaseViewNickClick'
 	};
 })(chatease);
 
@@ -373,14 +373,14 @@ chatease.debug = false;
 	var _insts = {},
 		_eventMapping = {
 		onError: events.ERROR,
-		onReady: events.chatease_READY,
-		onConnect: events.chatease_CONNECT,
-		onIdent: events.chatease_INDENT,
-		onMessage: events.chatease_MESSAGE,
-		onJoin: events.chatease_JOIN,
-		onLeft: events.chatease_LEFT,
-		onNickClick: events.chatease_VIEW_NICKCLICK,
-		onClose: events.chatease_CLOSE
+		onReady: events.CHATEASE_READY,
+		onConnect: events.CHATEASE_CONNECT,
+		onIdent: events.CHATEASE_INDENT,
+		onMessage: events.CHATEASE_MESSAGE,
+		onJoin: events.CHATEASE_JOIN,
+		onLeft: events.CHATEASE_LEFT,
+		onNickClick: events.CHATEASE_VIEW_NICKCLICK,
+		onClose: events.CHATEASE_CLOSE
 	};
 	
 	chatease.api = function(container) {
@@ -893,14 +893,14 @@ chatease.debug = false;
 				utils.log('Failed to init skin[' + _this.config.skin + '].');
 			}
 			if (!_skin) {
-				_this.dispatchEvent(events.chatease_RENDER_ERROR, { message: 'No suitable skin found!', skin: _this.config.skin });
+				_this.dispatchEvent(events.CHATEASE_RENDER_ERROR, { message: 'No suitable skin found!', skin: _this.config.skin });
 				return;
 			}
 		}
 		
 		function _buildComponents() {
-			_addCheckBox('msgshield', events.chatease_VIEW_SHIELDMSG, null, '屏蔽消息', false);
-			_addButton('clrscreen', events.chatease_VIEW_CLEARSCREEN, null, '清屏', 'glyphicon glyphicon-trash');
+			_addCheckBox('msgshield', events.CHATEASE_VIEW_SHIELDMSG, null, '屏蔽消息', false);
+			_addButton('clrscreen', events.CHATEASE_VIEW_CLEARSCREEN, null, '清屏', 'glyphicon glyphicon-trash');
 		}
 		
 		function _addCheckBox(name, event, data, label, checked) {
@@ -1000,11 +1000,11 @@ chatease.debug = false;
 					a.innerHTML = user.name;
 					try {
 						a.addEventListener('click', function(e) {
-							_this.dispatchEvent(events.chatease_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
 						});
 					} catch(e) {
 						a.attachEvent('onclick', function(e) {
-							_this.dispatchEvent(events.chatease_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
 						});
 					}
 					box.appendChild(a);
@@ -1074,7 +1074,7 @@ chatease.debug = false;
 		}
 		
 		_this.send = function() {
-			_this.dispatchEvent(events.chatease_VIEW_SEND, { message: _textInput.value, userId: null });
+			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { message: _textInput.value, userId: null });
 			_this.clearInput();
 		}
 		
@@ -1184,7 +1184,7 @@ chatease.debug = false;
 				return;
 			}
 			_this.state = state;
-			_this.dispatchEvent(events.chatease_STATE, { state: state });
+			_this.dispatchEvent(events.CHATEASE_STATE, { state: state });
 		};
 		
 		_this.setMsgShield = function(shield) {
@@ -1192,7 +1192,7 @@ chatease.debug = false;
 				return;
 			}
 			_this.shieldMsg = shield;
-			_this.dispatchEvent(events.chatease_VIEW_SHIELDMSG, { shield: shield });
+			_this.dispatchEvent(events.CHATEASE_VIEW_SHIELDMSG, { shield: shield });
 		};
 		
 		_this.getConfig = function(name) {
@@ -1250,7 +1250,7 @@ chatease.debug = false;
 			}
 			
 			setTimeout(function() {
-				_this.dispatchEvent(events.chatease_READY, { channelId: entity.id });
+				_this.dispatchEvent(events.CHATEASE_READY, { channelId: entity.id });
 			}, 0);
 		};
 		
@@ -1261,16 +1261,16 @@ chatease.debug = false;
 					_this.render = _render = new renders[renderModes.DEFAULT](_this, renderConf);
 					break;
 				default:
-					_this.dispatchEvent(events.chatease_SETUP_ERROR, { message: 'Unknown render mode!', render: model.renderMode });
+					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Unknown render mode!', render: model.renderMode });
 					break;
 			}
 			
 			if (_render) {
-				_render.addEventListener(events.chatease_VIEW_SEND, _onSend);
-				_render.addEventListener(events.chatease_VIEW_SHIELDMSG, _onShieldMsg);
-				_render.addEventListener(events.chatease_VIEW_CLEARSCREEN, _onClearScreen);
-				_render.addEventListener(events.chatease_VIEW_NICKCLICK, _onNickClick);
-				_render.addEventListener(events.chatease_RENDER_ERROR, _onRenderError);
+				_render.addEventListener(events.CHATEASE_VIEW_SEND, _onSend);
+				_render.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onShieldMsg);
+				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _onClearScreen);
+				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
+				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 				_wrapper.appendChild(_render.element());
 			}
 		}
@@ -1364,16 +1364,16 @@ chatease.debug = false;
 			_retriesCount = 0;
 		
 		function _init() {
-			model.addEventListener(events.chatease_STATE, _modelStateHandler);
-			model.addEventListener(events.chatease_VIEW_SHIELDMSG, _onModelShieldMsg);
+			model.addEventListener(events.CHATEASE_STATE, _modelStateHandler);
+			model.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onModelShieldMsg);
 			
-			view.addEventListener(events.chatease_READY, _onReady);
-			view.addEventListener(events.chatease_VIEW_SEND, _onSend);
-			view.addEventListener(events.chatease_VIEW_SHIELDMSG, _onViewShieldMsg);
-			view.addEventListener(events.chatease_VIEW_CLEARSCREEN, _onClearScreen);
-			view.addEventListener(events.chatease_VIEW_NICKCLICK, _onNickClick);
-			view.addEventListener(events.chatease_SETUP_ERROR, _onSetupError);
-			view.addEventListener(events.chatease_RENDER_ERROR, _onRenderError);
+			view.addEventListener(events.CHATEASE_READY, _onReady);
+			view.addEventListener(events.CHATEASE_VIEW_SEND, _onSend);
+			view.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onViewShieldMsg);
+			view.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _onClearScreen);
+			view.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
+			view.addEventListener(events.CHATEASE_SETUP_ERROR, _onSetupError);
+			view.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 		}
 		
 		_this.send = function(message, userId) {
@@ -1422,25 +1422,25 @@ chatease.debug = false;
 							}
 						});
 						model.messageInterval = data.user.interval;
-						_this.dispatchEvent(events.chatease_INDENT, data);
+						_this.dispatchEvent(events.CHATEASE_INDENT, data);
 						break;
 					case 'message':
 						view.show(data.data, data.user);
-						_this.dispatchEvent(events.chatease_MESSAGE, data);
+						_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 						break;
 					case 'join':
 						view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 进入聊天室。');
-						_this.dispatchEvent(events.chatease_JOIN, data);
+						_this.dispatchEvent(events.CHATEASE_JOIN, data);
 						break;
 					case 'left':
 						view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 已离开。');
-						_this.dispatchEvent(events.chatease_LEFT, data);
+						_this.dispatchEvent(events.CHATEASE_LEFT, data);
 						break;
 					case 'error':
 						var explain = _getErrorExplain(data);
 						if (explain) 
 							view.show(explain);
-						_this.dispatchEvent(events.chatease_ERROR, data);
+						_this.dispatchEvent(events.CHATEASE_ERROR, data);
 						break;
 					default:
 						utils.log('Unknown data type, ignored.');
@@ -1510,19 +1510,19 @@ chatease.debug = false;
 				case states.CONNECTED:
 					view.show('聊天室已连接。');
 					_retriesCount = 0;
-					_this.dispatchEvent(events.chatease_CONNECT, { channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_CONNECT, { channelId: model.id });
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
-					_this.dispatchEvent(events.chatease_CLOSE, { channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_CLOSE, { channelId: model.id });
 					_reconnect();
 					break;
 				case states.ERROR:
 					view.show('聊天室异常！');
-					_this.dispatchEvent(events.chatease_ERROR, { message: 'Chat room error!', channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_ERROR, { message: 'Chat room error!', channelId: model.id });
 					break;
 				default:
-					_this.dispatchEvent(events.chatease_ERROR, { message: 'Unknown model state!', state: e.state });
+					_this.dispatchEvent(events.CHATEASE_ERROR, { message: 'Unknown model state!', state: e.state });
 					break;
 			}
 		}
@@ -1642,7 +1642,7 @@ chatease.debug = false;
 					_config.renderMode = _config.renderMode = renderModes.DEFAULT;
 					_embedder = new embed.def(api, _config);
 				} else {
-					_this.dispatchEvent(events.chatease_SETUP_ERROR, { message: 'No suitable render found!', render: _config.renderMode, fallback: _config.fallback });
+					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'No suitable render found!', render: _config.renderMode, fallback: _config.fallback });
 					return;
 				}
 			}
@@ -1662,9 +1662,9 @@ chatease.debug = false;
 		function _onEvent(e) {
 			switch (e.type) {
 				case events.ERROR:
-				case events.chatease_SETUP_ERROR:
-				case events.chatease_RENDER_ERROR:
-				case events.chatease_ERROR:
+				case events.CHATEASE_SETUP_ERROR:
+				case events.CHATEASE_RENDER_ERROR:
+				case events.CHATEASE_ERROR:
 					_this.errorScreen(e.message);
 					_this.dispatchEvent(events.ERROR, e);
 					break;

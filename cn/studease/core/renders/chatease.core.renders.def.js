@@ -102,14 +102,14 @@
 				utils.log('Failed to init skin[' + _this.config.skin + '].');
 			}
 			if (!_skin) {
-				_this.dispatchEvent(events.chatease_RENDER_ERROR, { message: 'No suitable skin found!', skin: _this.config.skin });
+				_this.dispatchEvent(events.CHATEASE_RENDER_ERROR, { message: 'No suitable skin found!', skin: _this.config.skin });
 				return;
 			}
 		}
 		
 		function _buildComponents() {
-			_addCheckBox('msgshield', events.chatease_VIEW_SHIELDMSG, null, '屏蔽消息', false);
-			_addButton('clrscreen', events.chatease_VIEW_CLEARSCREEN, null, '清屏', 'glyphicon glyphicon-trash');
+			_addCheckBox('msgshield', events.CHATEASE_VIEW_SHIELDMSG, null, '屏蔽消息', false);
+			_addButton('clrscreen', events.CHATEASE_VIEW_CLEARSCREEN, null, '清屏', 'glyphicon glyphicon-trash');
 		}
 		
 		function _addCheckBox(name, event, data, label, checked) {
@@ -209,11 +209,11 @@
 					a.innerHTML = user.name;
 					try {
 						a.addEventListener('click', function(e) {
-							_this.dispatchEvent(events.chatease_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
 						});
 					} catch(e) {
 						a.attachEvent('onclick', function(e) {
-							_this.dispatchEvent(events.chatease_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
 						});
 					}
 					box.appendChild(a);
@@ -283,7 +283,7 @@
 		}
 		
 		_this.send = function() {
-			_this.dispatchEvent(events.chatease_VIEW_SEND, { message: _textInput.value, userId: null });
+			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { message: _textInput.value, userId: null });
 			_this.clearInput();
 		}
 		

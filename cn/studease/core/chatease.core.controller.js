@@ -12,16 +12,16 @@
 			_retriesCount = 0;
 		
 		function _init() {
-			model.addEventListener(events.chatease_STATE, _modelStateHandler);
-			model.addEventListener(events.chatease_VIEW_SHIELDMSG, _onModelShieldMsg);
+			model.addEventListener(events.CHATEASE_STATE, _modelStateHandler);
+			model.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onModelShieldMsg);
 			
-			view.addEventListener(events.chatease_READY, _onReady);
-			view.addEventListener(events.chatease_VIEW_SEND, _onSend);
-			view.addEventListener(events.chatease_VIEW_SHIELDMSG, _onViewShieldMsg);
-			view.addEventListener(events.chatease_VIEW_CLEARSCREEN, _onClearScreen);
-			view.addEventListener(events.chatease_VIEW_NICKCLICK, _onNickClick);
-			view.addEventListener(events.chatease_SETUP_ERROR, _onSetupError);
-			view.addEventListener(events.chatease_RENDER_ERROR, _onRenderError);
+			view.addEventListener(events.CHATEASE_READY, _onReady);
+			view.addEventListener(events.CHATEASE_VIEW_SEND, _onSend);
+			view.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _onViewShieldMsg);
+			view.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _onClearScreen);
+			view.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
+			view.addEventListener(events.CHATEASE_SETUP_ERROR, _onSetupError);
+			view.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 		}
 		
 		_this.send = function(message, userId) {
@@ -70,25 +70,25 @@
 							}
 						});
 						model.messageInterval = data.user.interval;
-						_this.dispatchEvent(events.chatease_INDENT, data);
+						_this.dispatchEvent(events.CHATEASE_INDENT, data);
 						break;
 					case 'message':
 						view.show(data.data, data.user);
-						_this.dispatchEvent(events.chatease_MESSAGE, data);
+						_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 						break;
 					case 'join':
 						view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 进入聊天室。');
-						_this.dispatchEvent(events.chatease_JOIN, data);
+						_this.dispatchEvent(events.CHATEASE_JOIN, data);
 						break;
 					case 'left':
 						view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 已离开。');
-						_this.dispatchEvent(events.chatease_LEFT, data);
+						_this.dispatchEvent(events.CHATEASE_LEFT, data);
 						break;
 					case 'error':
 						var explain = _getErrorExplain(data);
 						if (explain) 
 							view.show(explain);
-						_this.dispatchEvent(events.chatease_ERROR, data);
+						_this.dispatchEvent(events.CHATEASE_ERROR, data);
 						break;
 					default:
 						utils.log('Unknown data type, ignored.');
@@ -158,19 +158,19 @@
 				case states.CONNECTED:
 					view.show('聊天室已连接。');
 					_retriesCount = 0;
-					_this.dispatchEvent(events.chatease_CONNECT, { channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_CONNECT, { channelId: model.id });
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
-					_this.dispatchEvent(events.chatease_CLOSE, { channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_CLOSE, { channelId: model.id });
 					_reconnect();
 					break;
 				case states.ERROR:
 					view.show('聊天室异常！');
-					_this.dispatchEvent(events.chatease_ERROR, { message: 'Chat room error!', channelId: model.id });
+					_this.dispatchEvent(events.CHATEASE_ERROR, { message: 'Chat room error!', channelId: model.id });
 					break;
 				default:
-					_this.dispatchEvent(events.chatease_ERROR, { message: 'Unknown model state!', state: e.state });
+					_this.dispatchEvent(events.CHATEASE_ERROR, { message: 'Unknown model state!', state: e.state });
 					break;
 			}
 		}

@@ -31,7 +31,7 @@
 					_config.renderMode = _config.renderMode = renderModes.DEFAULT;
 					_embedder = new embed.def(api, _config);
 				} else {
-					_this.dispatchEvent(events.chatease_SETUP_ERROR, { message: 'No suitable render found!', render: _config.renderMode, fallback: _config.fallback });
+					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'No suitable render found!', render: _config.renderMode, fallback: _config.fallback });
 					return;
 				}
 			}
@@ -51,9 +51,9 @@
 		function _onEvent(e) {
 			switch (e.type) {
 				case events.ERROR:
-				case events.chatease_SETUP_ERROR:
-				case events.chatease_RENDER_ERROR:
-				case events.chatease_ERROR:
+				case events.CHATEASE_SETUP_ERROR:
+				case events.CHATEASE_RENDER_ERROR:
+				case events.CHATEASE_ERROR:
 					_this.errorScreen(e.message);
 					_this.dispatchEvent(events.ERROR, e);
 					break;

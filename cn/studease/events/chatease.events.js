@@ -4,22 +4,22 @@
 		ERROR: 'ERROR',
 		
 		// API Events
-		chatease_READY: 'chateaseReady',
-		chatease_SETUP_ERROR: 'chateaseSetupError',
-		chatease_RENDER_ERROR: 'chateaseRenderError',
+		CHATEASE_READY: 'chateaseReady',
+		CHATEASE_SETUP_ERROR: 'chateaseSetupError',
+		CHATEASE_RENDER_ERROR: 'chateaseRenderError',
 		
-		chatease_STATE: 'chateaseState',
-		chatease_CONNECT: 'chateaseConnect',
-		chatease_INDENT: 'chateaseIdent',
-		chatease_MESSAGE: 'chateaseMessage',
-		chatease_JOIN: 'chateaseJoin',
-		chatease_LEFT: 'chateaseLeft',
-		chatease_ERROR: 'chateaseError',
-		chatease_CLOSE: 'chateaseClose',
+		CHATEASE_STATE: 'chateaseState',
+		CHATEASE_CONNECT: 'chateaseConnect',
+		CHATEASE_INDENT: 'chateaseIdent',
+		CHATEASE_MESSAGE: 'chateaseMessage',
+		CHATEASE_JOIN: 'chateaseJoin',
+		CHATEASE_LEFT: 'chateaseLeft',
+		CHATEASE_ERROR: 'chateaseError',
+		CHATEASE_CLOSE: 'chateaseClose',
 		
-		chatease_VIEW_SEND: 'chateaseViewSend',
-		chatease_VIEW_SHIELDMSG: 'chateaseViewMsgShield',
-		chatease_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
-		chatease_VIEW_NICKCLICK: 'chateaseViewNickClick'
+		CHATEASE_VIEW_SEND: 'chateaseViewSend',
+		CHATEASE_VIEW_SHIELDMSG: 'chateaseViewMsgShield',
+		CHATEASE_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
+		CHATEASE_VIEW_NICKCLICK: 'chateaseViewNickClick'
 	};
 })(chatease);
