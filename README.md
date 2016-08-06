@@ -4,6 +4,8 @@
 
 > [[source] https://github.com/studease/chatease](https://github.com/studease/chatease)
 
+> [[zh_doc] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
+
 This is a client-side script of chat room, transmitting through websocket, with skin build in.
 
 
