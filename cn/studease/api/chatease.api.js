@@ -41,9 +41,9 @@
 			return _this;
 		};
 		
-		_this.setEntity = function(entity, renderMode) {
+		_this.setEntity = function(entity, renderName) {
 			_entity = entity;
-			_this.renderMode = renderMode;
+			_this.renderName = renderName;
 			
 			_this.send = _entity.send;
 			_this.resize = _entity.resize;

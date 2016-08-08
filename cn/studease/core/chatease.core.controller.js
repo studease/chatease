@@ -8,6 +8,7 @@
 		var _this = utils.extend(this, new events.eventdispatcher('core.controller')),
 			_ready = false,
 			_websocket,
+			_filter,
 			_lastSent = 0,
 			_retriesCount = 0;
 		
@@ -29,7 +30,7 @@
 				_connect();
 				return;
 			}
-			_websocket.send(message.substr(0, 30));
+			_websocket.send(message);
 		};
 		
 		function _connect() {
@@ -37,10 +38,12 @@
 				return;
 			
 			try {
+				var token = utils.getCookie('token');
+				var paramstr = token ? ((model.url.indexOf('?') == -1 ? '?' : '&') + 'token=' + token) : '';
 				if (window.WebSocket) {
-					_websocket = new WebSocket(model.url + '?token=' + utils.getCookie('token'));
+					_websocket = new WebSocket(model.url + paramstr);
 				} else if (window.MozWebSocket) {
-					_websocket = new MozWebSocket(model.url + '?token=' + utils.getCookie('token'));
+					_websocket = new MozWebSocket(model.url + paramstr);
 				} else {
 					_websocket = new SockJS(model.url.replace(/^ws/, 'http') + '/sockjs');
 				}
@@ -69,10 +72,15 @@
 								model.user[k] = v;
 							}
 						});
-						model.messageInterval = data.user.interval;
+						model.interval = data.user.interval;
 						_this.dispatchEvent(events.CHATEASE_INDENT, data);
 						break;
 					case 'message':
+						try {
+							if (!_filter) 
+								_filter = new utils.filter(model.keywords);
+							data.data.text = _filter.replace(data.data.text);
+						} catch (err) { utils.log('Failed to execute filter.'); }
 						view.show(data.data, data.user);
 						_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 						break;
@@ -210,13 +218,14 @@
 		}
 		
 		function _onSend(e) {
-			if (!e || !e.message) {
+			e.message = utils.trim(model.maxlength ? e.message.substr(0, model.maxlength) : e.message);
+			if (!e.message) {
 				view.show('请输入内容！');
 				return;
 			}
 			
 			var currentTime = new Date().getTime();
-			if (model.messageInterval >= 0 && currentTime - _lastSent < model.messageInterval) {
+			if (model.interval >= 0 && currentTime - _lastSent < model.interval) {
 				view.show('操作频繁！');
 				return;
 			}

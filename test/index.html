@@ -11,6 +11,7 @@
 	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.css.js'></script>
+	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.filter.js'></script>
 	<script type='text/javascript' src='../cn/studease/events/chatease.events.js'></script>
 	<script type='text/javascript' src='../cn/studease/events/chatease.events.eventdispatcher.js'></script>
 	<script type='text/javascript' src='../cn/studease/api/chatease.api.js'></script>
@@ -19,6 +20,7 @@
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.modes.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.modes.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.entity.js'></script>
@@ -27,7 +29,7 @@
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.controller.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
-	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.def.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>
 	<script type='text/javascript'>
 		document.cookie = 'token=0123456789';
 	</script>
@@ -35,11 +37,13 @@
 <body>
 	<div id='chatwrap'></div>
 	
+	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chatwrap').setup({
 			width: 300,
 			height: 464,
 			url: 'ws://192.168.1.202/websocket/websck',
+			keywords: keywords,
 			events: {
 				onReady: function(e) {
 					cblog('onReady');

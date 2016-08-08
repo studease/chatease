@@ -21,19 +21,11 @@
 		
 		_this.embed = function() {
 			try {
-				_embedder = new embed[_config.renderMode](api, _config);
+				_embedder = new embed.embedder(api, _config);
 			} catch (e) {
-				utils.log('Render [' + _config.renderMode + '] not found.');
-			}
-			
-			if (!_embedder || !_embedder.supports()) {
-				if (_config.fallback) {
-					_config.renderMode = _config.renderMode = renderModes.DEFAULT;
-					_embedder = new embed.def(api, _config);
-				} else {
-					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'No suitable render found!', render: _config.renderMode, fallback: _config.fallback });
-					return;
-				}
+				utils.log('Failed to init embedder!');
+				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Failed to init embedder!', render: _config.render.name, fallback: _config.fallback });
+				return;
 			}
 			_embedder.addGlobalListener(_onEvent);
 			_embedder.embed();

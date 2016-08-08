@@ -46,13 +46,19 @@
 		};
 		
 		function _setupRender() {
-			switch (model.renderMode) {
+			switch (model.render.name) {
 				case renderModes.DEFAULT:
-					var renderConf = utils.extend(model.getConfig('render'), { id: model.id, width: model.width, height: model.height, maxlog: model.maxlog });
+					var renderConf = utils.extend(model.getConfig('render'), {
+						id: model.id,
+						width: model.width,
+						height: model.height,
+						maxlength: model.maxlength,
+						maxRecords: model.maxRecords
+					});
 					_this.render = _render = new renders[renderModes.DEFAULT](_this, renderConf);
 					break;
 				default:
-					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Unknown render mode!', render: model.renderMode });
+					_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Unknown render mode!', render: model.render.name });
 					break;
 			}
 			
