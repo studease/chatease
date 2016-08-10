@@ -45,13 +45,11 @@
 			if (_websocket) 
 				return;
 			
-			var token = utils.getCookie('token');
-			var paramstr = token ? ((model.url.indexOf('?') == -1 ? '?' : '&') + 'token=' + token) : '';
 			try {
 				if (window.WebSocket) {
-					_websocket = new WebSocket(model.url + paramstr);
+					_websocket = new WebSocket(model.url);
 				} else if (window.MozWebSocket) {
-					_websocket = new MozWebSocket(model.url + paramstr);
+					_websocket = new MozWebSocket(model.url);
 				} else {
 					_websocket = new SockJS(model.url.replace(/^ws/, 'http') + '/sockjs');
 				}
@@ -227,10 +225,15 @@
 		}
 		
 		_this.join = function(channelId) {
-			_this.send({
+			var obj = {
 				cmd: 'join',
 				channel: { id: channelId }
-			});
+			};
+			var token = utils.getCookie('token');
+		  if (token) {
+		  	obj.token = token[1];
+		  }
+			_this.send(obj);
 		};
 		
 		function _onSend(e) {
