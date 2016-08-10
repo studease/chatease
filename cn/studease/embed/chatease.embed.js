@@ -5,10 +5,9 @@
 	
 	var embed = chatease.embed = function(api) {
 		var _this = utils.extend(this, new events.eventdispatcher('embed')),
-			_config = new embed.config(api.config),
+			_config = {},
 			_errorOccurred = false,
 			_embedder = null;
-		_config.id = api.id;
 		
 		function _init() {
 			utils.foreach(_config.events, function(e, cb) {
@@ -21,6 +20,7 @@
 		
 		_this.embed = function() {
 			try {
+				_config = new embed.config(api.config);
 				_embedder = new embed.embedder(api, _config);
 			} catch (e) {
 				utils.log('Failed to init embedder!');

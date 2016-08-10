@@ -34,6 +34,8 @@
 			utils.emptyElement(_this.container);
 			
 			_this.config = options;
+			_this.config.id = _this.id;
+			
 			_this.embedder = new chatease.embed(_this);
 			_this.embedder.addGlobalListener(_onEvent);
 			_this.embedder.embed();

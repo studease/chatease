@@ -10,6 +10,8 @@
 			url: 'ws://' + window.location.host + '/websocket/websck',
 			width: 300,
 			height: 450,
+			
+			channel: 1,
 	 		
 	 		maxlength: 30, // 0: no limit, uint: n bytes
 	 		interval: 0, // ms
@@ -20,7 +22,7 @@
 			render: {
 				name: renderModes.DEFAULT, // 'def'
 				skin: {
-					name: skinModes.DEFAULT, // 'def'
+					name: skinModes.DEFAULT // 'def'
 				}
 			},
 			

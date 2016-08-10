@@ -52,6 +52,7 @@
 						id: model.id,
 						width: model.width,
 						height: model.height,
+						channel: model.channel,
 						maxlength: model.maxlength,
 						maxRecords: model.maxRecords
 					});

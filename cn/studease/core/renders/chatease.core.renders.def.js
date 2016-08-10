@@ -176,7 +176,7 @@
 			switch (utils.typeOf(data)) {
 				case 'object':
 					message = data.text;
-					if (data.type == 'uni') {
+					if (data.pipe.type == 'uni') {
 						var span = utils.createElement('span');
 						span.innerHTML = '[密语]';
 						box.appendChild(span);
@@ -190,9 +190,11 @@
 				case 'string':
 					if (user === '') 
 						break;
-					user = { id: 0, name: user, role: 0 }; // fall through
+					user = { id: 0, name: user, role: 0 };
+					// fall through
 				case 'null':
-					user = { id: 0, name: '[系统]', role: 64 }; // fall through
+					user = { id: 0, name: '[系统]', role: 64 };
+					// fall through
 				case 'object':
 					if (utils.typeOf(user.id) == null) 
 						break;
@@ -287,7 +289,11 @@
 		}
 		
 		_this.send = function() {
-			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { message: _textInput.value, userId: null });
+			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
+				text: _textInput.value,
+				type: 'multi',
+				pipe: _this.config.channel
+			}});
 			_this.clearInput();
 		}
 		

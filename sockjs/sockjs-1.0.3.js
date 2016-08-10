@@ -1522,7 +1522,10 @@ AbstractXHRObject.prototype._start = function(method, url, payload, opts) {
 
   // several browsers cache POSTs
   var mytoken = document.cookie.match(/^token=(\w+)/i);
-  url = urlUtils.addQuery(url, 'token=' + mytoken[1] + '&t=' + (+new Date()));
+  if (mytoken) {
+  	url = urlUtils.addQuery(url, 'token=' + mytoken[1]);
+  }
+  url = urlUtils.addQuery(url, 't=' + (+new Date()));
 
   // Explorer tends to keep connection open, even after the
   // tab gets closed: http://bugs.jquery.com/ticket/5280
@@ -2774,6 +2777,10 @@ XDRObject.prototype._start = function(method, url, payload) {
   var self = this;
   var xdr = new global.XDomainRequest();
   // IE caches even POSTs
+  var mytoken = document.cookie.match(/^token=(\w+)/i);
+  if (mytoken) {
+  	url = urlUtils.addQuery(url, 'token=' + mytoken[1]);
+  }
   url = urlUtils.addQuery(url, 't=' + (+new Date()));
 
   xdr.onerror = function() {
