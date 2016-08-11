@@ -16,7 +16,7 @@ This is a client-side script of chat room, transmitting through websocket, with 
 * **Opera**
 * **Safari**
 * **IE10-11, Edge**
-* **IE7-9 (With modified sockjs)**
+* **IE7-9 (using sockjs)**
 
 
 ## Example
@@ -31,7 +31,8 @@ The example below will find the element with an id of chatwrap and render a dial
 var chat = chatease('chatwrap').setup({
 	width: 300,
 	height: 464,
-	url: 'ws://192.168.1.202/websocket/websck'
+	url: 'ws://localhost/websocket/websck',
+	channel: 1
 });
 ```
 
@@ -42,14 +43,26 @@ Please have a look at cn/studease/embed/chatease.embed.config.js.
 ```js
 _defaults = {
 	url: 'ws://' + window.location.host + '/websocket/websck',
-	width: 300,
-	height: 450,
-	renderMode: renderModes.DEFAULT, // 'def'
-	retryDelay: 3000, // ms
+	width: 300, // px
+	height: 450, // px
+	
+	channel: 1, // Channel ID in Number type.
+	
+	maxlength: 30, // 0: no limit, uint: n bytes
+	interval: 0, // ms
+	
 	maxRetries: 0, // -1: never, 0: always, uint: n times
-	messageInterval: 0, // ms
-	maxlog: 50,
-	fallback: true
+	retryDelay: 3000, // ms
+	
+	render: {
+		name: renderModes.DEFAULT, // 'def'
+		skin: {
+			name: skinModes.DEFAULT // 'def'
+		}
+	},
+	
+	keywords: '', // 'keywords1|keywords2|keywordsx'
+	maxRecords: 50 // 0: no limit
 }
 ```
 
@@ -71,22 +84,27 @@ For more events, check cn/studease/api/chatease.api.js.
 
 ```js
 _eventMapping = {
-	onError: events.ERROR,
-	onReady: events.CHATEASE_READY,
-	onConnect: events.CHATEASE_CONNECT,
-	onIdent: events.CHATEASE_INDENT,
-	onMessage: events.CHATEASE_MESSAGE,
-	onJoin: events.CHATEASE_JOIN,
-	onLeft: events.CHATEASE_LEFT,
-	onNickClick: events.CHATEASE_VIEW_NICKCLICK,
-	onClose: events.CHATEASE_CLOSE
+	onError: events.ERROR, // Error occured.
+	onReady: events.CHATEASE_READY, // Initialized, or UI is ready.
+	onConnect: events.CHATEASE_CONNECT, // Server connected.
+	onIdent: events.CHATEASE_INDENT, // Joined channel.
+	onMessage: events.CHATEASE_MESSAGE, // Got message.
+	onJoin: events.CHATEASE_JOIN, // Someone joined in.
+	onLeft: events.CHATEASE_LEFT, // Someone left.
+	onNickClick: events.CHATEASE_VIEW_NICKCLICK, // Clicked someone's nickname.
+	onClose: events.CHATEASE_CLOSE // Connection closed.
 }
 ```
 
 ### Interface:
 
-* **send(message, userId)**
+* **send(data)**
+> Params:
+> 	data An object which will be sent in json format.
 * **resize(width, height)**
+> Params:
+> 	width Width in px.
+> 	height Hieght in px.
 
 ### Server-side sample project:
 
