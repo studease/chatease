@@ -101,13 +101,16 @@ _eventMapping = {
 * **send(data)**
 
 > Params:
-> 	data An object which will be sent in json format.
+
+> 	data: An object which will be sent in json format.
 
 * **resize(width, height)**
 
 > Params:
-> 	width Width in px.
-> 	height Hieght in px.
+
+> 	width: Width in px.
+
+> 	height: Hieght in px.
 
 ### Server-side sample project:
 
