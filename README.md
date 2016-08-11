@@ -99,9 +99,12 @@ _eventMapping = {
 ### Interface:
 
 * **send(data)**
+
 > Params:
 > 	data An object which will be sent in json format.
+
 * **resize(width, height)**
+
 > Params:
 > 	width Width in px.
 > 	height Hieght in px.
