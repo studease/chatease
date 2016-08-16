@@ -10,7 +10,7 @@
 			_embedder = null;
 		
 		function _init() {
-			utils.foreach(_config.events, function(e, cb) {
+			utils.foreach(api.config.events, function(e, cb) {
 				var fn = api[e];
 				if (utils.typeOf(fn) === 'function') {
 					fn.call(api, cb);
@@ -24,7 +24,7 @@
 				_embedder = new embed.embedder(api, _config);
 			} catch (e) {
 				utils.log('Failed to init embedder!');
-				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Failed to init embedder!', render: _config.render.name, fallback: _config.fallback });
+				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Failed to init embedder!', render: _config.render.name });
 				return;
 			}
 			_embedder.addGlobalListener(_onEvent);

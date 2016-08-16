@@ -21,6 +21,7 @@
 		
 		function _initializeAPI() {
 			_this.send = _controller.send;
+			_this.join = _controller.join;
 			_this.resize = _view.resize;
 		}
 		

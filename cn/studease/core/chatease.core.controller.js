@@ -9,7 +9,6 @@
 			_ready = false,
 			_websocket,
 			_filter,
-			_lastSent = 0,
 			_retriesCount = 0;
 		
 		function _init() {
@@ -31,12 +30,18 @@
 				return;
 			}
 			
-			var currentTime = new Date().getTime();
-			if (model.interval >= 0 && currentTime - _lastSent < model.interval) {
-				view.show('操作频繁！');
+			if (utils.typeOf(data) != 'object' || data.hasOwnProperty('cmd') == false 
+					|| data.hasOwnProperty('channel') == false || data.channel.hasOwnProperty('id') == false) {
+				_onError(400, data);
 				return;
 			}
-			_lastSent = currentTime;
+			
+			var channelId = data.channel.id;
+			var channel = model.getChannel(channelId);
+			if (channel.setActive() == false) {
+				_onError(409, data);
+				return;
+			}
 			
 			_websocket.send(JSON.stringify(data));
 		};
@@ -45,6 +50,7 @@
 			if (_websocket) 
 				return;
 			
+			view.show('聊天室连接中…');
 			try {
 				if (window.WebSocket) {
 					_websocket = new WebSocket(model.url);
@@ -80,14 +86,16 @@
 			}
 			
 			switch (data.raw) {
-				case 'ident':
+				case 'identity':
 					utils.foreach(data.user, function(k, v) {
 						if (model.user.hasOwnProperty(k)) {
 							model.user[k] = v;
 						}
 					});
-					model.interval = data.user.interval;
-					view.show('加入房间成功！');
+					var channel = model.getChannel(data.channel.id);
+					channel.setProperties(data.channel.role, data.channel.state);
+					
+					view.show('已加入房间（' + data.channel.id + '）！');
 					_this.dispatchEvent(events.CHATEASE_INDENT, data);
 					break;
 				case 'message':
@@ -95,33 +103,53 @@
 						if (!_filter) 
 							_filter = new utils.filter(model.keywords);
 						data.text = _filter.replace(data.text);
-					} catch (err) { utils.log('Failed to execute filter.'); }
-					view.show(data, data.user);
+					} catch (err) {
+						utils.log('Failed to execute filter.');
+					}
+					
+					view.show(data, utils.extend({ role: data.channel.role, state: data.channel.state}, data.user));
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 				case 'join':
-					view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 进入聊天室。');
+					view.show(_getUserTitle(data.channel.role) + ' ' + data.user.name + ' 进入聊天室。');
 					_this.dispatchEvent(events.CHATEASE_JOIN, data);
 					break;
 				case 'left':
-					view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 已离开。');
+					view.show(_getUserTitle(data.channel.role) + ' ' + data.user.name + ' 已离开。');
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
 					break;
 				case 'error':
-					var explain = _getErrorExplain(data);
-					if (explain) 
-						view.show(explain);
-					_this.dispatchEvent(events.CHATEASE_ERROR, data);
+					_onError(data.error.code, data);
 					break;
 				default:
-					utils.log('Unknown data type, ignored.');
+					utils.log('Unknown data type: ' + data.raw + ', ignored.');
 					break;
 			}
 		}
 		
-		function _getErrorExplain(data) {
-			var explain;
-			switch (data.error.code) {
+		function _onError(code, params) {
+			var explain = _getErrorExplain(code);
+			if (explain) 
+				view.show(explain);
+			
+			var data = {
+				raw: 'error',
+				error: {
+					code: code,
+					explain: explain
+				}
+			};
+			utils.foreach(params, function(k, v) {
+				if (k != 'cmd' && k != 'raw' && k != 'error') {
+					data[k] = v;
+				}
+			});
+			_this.dispatchEvent(events.CHATEASE_ERROR, data);
+		}
+		
+		function _getErrorExplain(code) {
+			var explain = '';
+			switch (code) {
 				case 400:
 					explain = '错误请求！';
 					break;
@@ -133,6 +161,9 @@
 					break;
 				case 404:
 					explain = '未知请求！';
+					break;
+				case 406:
+					explain = '非法请求！';
 					break;
 				case 409:
 					explain = '操作频繁！';
@@ -173,7 +204,9 @@
 					view.show('聊天室已连接…');
 					_retriesCount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
-					_this.join(model.channel);
+					for (var i = 0; i < model.channel.length; i++) {
+						_this.join(model.channel[i]);
+					}
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
@@ -231,7 +264,7 @@
 			};
 			var token = utils.getCookie('token');
 		  if (token) {
-		  	obj.token = token[1];
+		  	obj.token = token;
 		  }
 			_this.send(obj);
 		};
@@ -245,9 +278,9 @@
 			_this.send({
 				cmd: 'message',
 				text: e.data.text,
-				pipe: {
-					type: e.data.type,
-					id: e.data.pipe
+				type: e.data.type,
+				channel: {
+					id: e.data.channel
 				}
 			});
 		}

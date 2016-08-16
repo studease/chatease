@@ -176,7 +176,7 @@
 			switch (utils.typeOf(data)) {
 				case 'object':
 					message = data.text;
-					if (data.pipe.type == 'uni') {
+					if (data.type == 'uni') {
 						var span = utils.createElement('span');
 						span.innerHTML = '[密语]';
 						box.appendChild(span);
@@ -289,11 +289,13 @@
 		}
 		
 		_this.send = function() {
-			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
-				text: _textInput.value,
-				type: 'multi',
-				pipe: _this.config.channel
-			}});
+			for (var i = 0; i < _this.config.channel.length; i++) {
+				_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
+					text: _textInput.value,
+					type: 'multi',
+					channel: _this.config.channel[i]
+				}});
+			}
 			_this.clearInput();
 		}
 		

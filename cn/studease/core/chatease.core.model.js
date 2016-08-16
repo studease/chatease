@@ -14,9 +14,9 @@
 				id: config.id,
 				user: {
 					id: NaN,
-					name: '',
-					role: -1
+					name: ''
 				},
+				channels: {},
 				state: states.CLOSED,
 				shieldMsg: false
 			}, _this.config);
@@ -40,6 +40,13 @@
 		
 		_this.getConfig = function(name) {
 			return _this.config[name] || {};
+		};
+		
+		_this.getChannel = function(channelId) {
+			if (_this.channels.hasOwnProperty(channelId) == false) {
+				_this.channels[channelId] = new core.channel(_this, channelId);
+			}
+			return _this.channels[channelId];
 		};
 		
 		_this.destroy = function() {

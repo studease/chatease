@@ -10,26 +10,33 @@
 			url: 'ws://' + window.location.host + '/websocket/websck',
 			width: 300,
 			height: 450,
-			
 			channel: 1,
-	 		
 	 		maxlength: 30, // 0: no limit, uint: n bytes
-	 		interval: 0, // ms
-	 		
 	 		maxRetries: 0, // -1: never, 0: always, uint: n times
 	 		retryDelay: 3000, // ms
-			
 			render: {
 				name: renderModes.DEFAULT, // 'def'
 				skin: {
 					name: skinModes.DEFAULT // 'def'
 				}
 			},
-			
 			keywords: '',
 			maxRecords: 50
 		},
 		_config = utils.extend({}, _defaults, config);
+		
+		switch (utils.typeOf(_config.channel)) {
+			case 'array':
+				break;
+			case 'number':
+				_config.channel = [_config.channel];
+				break;
+			case 'string':
+				_config.channel = _config.channel.split(',');
+				break;
+			default:
+				_config.channel = [1];
+		}
 		
 		return _config;
 	};

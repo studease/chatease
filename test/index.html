@@ -23,6 +23,7 @@
 	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.modes.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.def.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.channel.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.entity.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.model.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.view.js'></script>
@@ -42,7 +43,7 @@
 		var chat = chatease('chatwrap').setup({
 			width: 300,
 			height: 464,
-			url: 'ws://192.168.1.202/websocket/websck',
+			url: 'ws://localhost/websocket/websck',
 			channel: 1,
 			keywords: keywords,
 			events: {
@@ -53,22 +54,24 @@
 					cblog('onConnect');
 				},
 				onIdent: function(e) {
-					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.user.interval + '] in channel ' + e.channel.id + '.');
+					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + '.');
+					//if (e.channel.id != 2) 
+						//chat.join(2);
 				},
 				onMessage: function(e) {
 					//cblog('onMessage', e.user.name + ': ' + e.data);
 				},
 				onJoin: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] joined channel ' + e.channel.id + '.');
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] joined channel ' + e.channel.id + '.');
 				},
 				onLeft: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + '] left channel ' + e.channel.id + '.');
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
 				},
 				onNickClick: function(e) {
 					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ']');
 				},
 				onError: function(e) {
-					cblog('onError');
+					cblog('onError', 'code: ' + e.error.code + ', explain: ' + e.error.explain);
 				},
 				onClose: function(e) {
 					cblog('onClose');
