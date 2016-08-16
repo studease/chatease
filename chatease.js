@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '0.1.14';
+chatease.version = '0.1.19';
 chatease.debug = false;
 
 (function(chatease) {
@@ -441,6 +441,7 @@ chatease.debug = false;
 			_this.renderName = renderName;
 			
 			_this.send = _entity.send;
+			_this.join = _entity.join;
 			_this.resize = _entity.resize;
 		};
 		
@@ -1000,7 +1001,7 @@ chatease.debug = false;
 			switch (utils.typeOf(data)) {
 				case 'object':
 					message = data.text;
-					if (data.pipe.type == 'uni') {
+					if (data.type == 'uni') {
 						var span = utils.createElement('span');
 						span.innerHTML = '[密语]';
 						box.appendChild(span);
@@ -1113,11 +1114,13 @@ chatease.debug = false;
 		}
 		
 		_this.send = function() {
-			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
-				text: _textInput.value,
-				type: 'multi',
-				pipe: _this.config.channel
-			}});
+			for (var i = 0; i < _this.config.channel.length; i++) {
+				_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
+					text: _textInput.value,
+					type: 'multi',
+					channel: _this.config.channel[i]
+				}});
+			}
 			_this.clearInput();
 		}
 		
@@ -1153,6 +1156,80 @@ chatease.debug = false;
 		events = chatease.events,
 		core = chatease.core;
 	
+	core.channel = function(model, id) {
+		var _this = utils.extend(this, new events.eventdispatcher('core.channel_' + id)),
+			_id = id,
+			_role = -1,
+			_state = 0,
+			_interval,
+			_active = 0,
+			_joined = false;
+		
+		function _init() {
+			_interval = _getIntervalByRole(_role);
+		}
+		
+		_this.getId = function() {
+			return _id;
+		};
+		
+		_this.getRole = function() {
+			return _role;
+		};
+		
+		_this.getState = function() {
+			return _state;
+		};
+		
+		_this.getInterval = function() {
+			return _interval;
+		};
+		
+		_this.setProperties = function(role, state) {
+			_role = role;
+			_state = state;
+			_interval = _getIntervalByRole(_role);
+			_joined = true;
+		};
+		
+		_this.setActive = function() {
+			var current = new Date().getTime();
+			if (_active > 0) {
+				if (_interval < 0 || current - _active < _interval) {
+					return false;
+				}
+			}
+			_active = current;
+			return true;
+		};
+		
+		_this.joined = function() {
+			return _joined;
+		};
+		
+		function _getIntervalByRole(role) {
+			var val = -1;
+			if (role < 0) {
+				val = 3000;
+			} else if (role == 0) {
+				val = 2000;
+			} else if (role >= 8) {
+				val = 0;
+			} else if ((role & 0x07) > 0) {
+				val = 1000;
+			}
+			return val;
+		}
+		
+		_init();
+	};
+})(chatease);
+
+(function(chatease) {
+	var utils = chatease.utils,
+		events = chatease.events,
+		core = chatease.core;
+	
 	core.entity = function(config) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.entity')),
 			_model,
@@ -1171,6 +1248,7 @@ chatease.debug = false;
 		
 		function _initializeAPI() {
 			_this.send = _controller.send;
+			_this.join = _controller.join;
 			_this.resize = _view.resize;
 		}
 		
@@ -1214,9 +1292,9 @@ chatease.debug = false;
 				id: config.id,
 				user: {
 					id: NaN,
-					name: '',
-					role: -1
+					name: ''
 				},
+				channels: {},
 				state: states.CLOSED,
 				shieldMsg: false
 			}, _this.config);
@@ -1240,6 +1318,13 @@ chatease.debug = false;
 		
 		_this.getConfig = function(name) {
 			return _this.config[name] || {};
+		};
+		
+		_this.getChannel = function(channelId) {
+			if (_this.channels.hasOwnProperty(channelId) == false) {
+				_this.channels[channelId] = new core.channel(_this, channelId);
+			}
+			return _this.channels[channelId];
 		};
 		
 		_this.destroy = function() {
@@ -1411,7 +1496,6 @@ chatease.debug = false;
 			_ready = false,
 			_websocket,
 			_filter,
-			_lastSent = 0,
 			_retriesCount = 0;
 		
 		function _init() {
@@ -1433,12 +1517,18 @@ chatease.debug = false;
 				return;
 			}
 			
-			var currentTime = new Date().getTime();
-			if (model.interval >= 0 && currentTime - _lastSent < model.interval) {
-				view.show('操作频繁！');
+			if (utils.typeOf(data) != 'object' || data.hasOwnProperty('cmd') == false 
+					|| data.hasOwnProperty('channel') == false || data.channel.hasOwnProperty('id') == false) {
+				_onError(400, data);
 				return;
 			}
-			_lastSent = currentTime;
+			
+			var channelId = data.channel.id;
+			var channel = model.getChannel(channelId);
+			if (channel.setActive() == false) {
+				_onError(409, data);
+				return;
+			}
 			
 			_websocket.send(JSON.stringify(data));
 		};
@@ -1447,6 +1537,7 @@ chatease.debug = false;
 			if (_websocket) 
 				return;
 			
+			view.show('聊天室连接中…');
 			try {
 				if (window.WebSocket) {
 					_websocket = new WebSocket(model.url);
@@ -1482,14 +1573,16 @@ chatease.debug = false;
 			}
 			
 			switch (data.raw) {
-				case 'ident':
+				case 'identity':
 					utils.foreach(data.user, function(k, v) {
 						if (model.user.hasOwnProperty(k)) {
 							model.user[k] = v;
 						}
 					});
-					model.interval = data.user.interval;
-					view.show('加入房间成功！');
+					var channel = model.getChannel(data.channel.id);
+					channel.setProperties(data.channel.role, data.channel.state);
+					
+					view.show('已加入房间（' + data.channel.id + '）！');
 					_this.dispatchEvent(events.CHATEASE_INDENT, data);
 					break;
 				case 'message':
@@ -1497,33 +1590,53 @@ chatease.debug = false;
 						if (!_filter) 
 							_filter = new utils.filter(model.keywords);
 						data.text = _filter.replace(data.text);
-					} catch (err) { utils.log('Failed to execute filter.'); }
-					view.show(data, data.user);
+					} catch (err) {
+						utils.log('Failed to execute filter.');
+					}
+					
+					view.show(data, utils.extend({ role: data.channel.role, state: data.channel.state}, data.user));
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 				case 'join':
-					view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 进入聊天室。');
+					view.show(_getUserTitle(data.channel.role) + ' ' + data.user.name + ' 进入聊天室。');
 					_this.dispatchEvent(events.CHATEASE_JOIN, data);
 					break;
 				case 'left':
-					view.show(_getUserTitle(data.user.role) + ' ' + data.user.name + ' 已离开。');
+					view.show(_getUserTitle(data.channel.role) + ' ' + data.user.name + ' 已离开。');
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
 					break;
 				case 'error':
-					var explain = _getErrorExplain(data);
-					if (explain) 
-						view.show(explain);
-					_this.dispatchEvent(events.CHATEASE_ERROR, data);
+					_onError(data.error.code, data);
 					break;
 				default:
-					utils.log('Unknown data type, ignored.');
+					utils.log('Unknown data type: ' + data.raw + ', ignored.');
 					break;
 			}
 		}
 		
-		function _getErrorExplain(data) {
-			var explain;
-			switch (data.error.code) {
+		function _onError(code, params) {
+			var explain = _getErrorExplain(code);
+			if (explain) 
+				view.show(explain);
+			
+			var data = {
+				raw: 'error',
+				error: {
+					code: code,
+					explain: explain
+				}
+			};
+			utils.foreach(params, function(k, v) {
+				if (k != 'cmd' && k != 'raw' && k != 'error') {
+					data[k] = v;
+				}
+			});
+			_this.dispatchEvent(events.CHATEASE_ERROR, data);
+		}
+		
+		function _getErrorExplain(code) {
+			var explain = '';
+			switch (code) {
 				case 400:
 					explain = '错误请求！';
 					break;
@@ -1535,6 +1648,9 @@ chatease.debug = false;
 					break;
 				case 404:
 					explain = '未知请求！';
+					break;
+				case 406:
+					explain = '非法请求！';
 					break;
 				case 409:
 					explain = '操作频繁！';
@@ -1575,7 +1691,9 @@ chatease.debug = false;
 					view.show('聊天室已连接…');
 					_retriesCount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
-					_this.join(model.channel);
+					for (var i = 0; i < model.channel.length; i++) {
+						_this.join(model.channel[i]);
+					}
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
@@ -1633,7 +1751,7 @@ chatease.debug = false;
 			};
 			var token = utils.getCookie('token');
 		  if (token) {
-		  	obj.token = token[1];
+		  	obj.token = token;
 		  }
 			_this.send(obj);
 		};
@@ -1647,9 +1765,9 @@ chatease.debug = false;
 			_this.send({
 				cmd: 'message',
 				text: e.data.text,
-				pipe: {
-					type: e.data.type,
-					id: e.data.pipe
+				type: e.data.type,
+				channel: {
+					id: e.data.channel
 				}
 			});
 		}
@@ -1700,7 +1818,7 @@ chatease.debug = false;
 			_embedder = null;
 		
 		function _init() {
-			utils.foreach(_config.events, function(e, cb) {
+			utils.foreach(api.config.events, function(e, cb) {
 				var fn = api[e];
 				if (utils.typeOf(fn) === 'function') {
 					fn.call(api, cb);
@@ -1714,7 +1832,7 @@ chatease.debug = false;
 				_embedder = new embed.embedder(api, _config);
 			} catch (e) {
 				utils.log('Failed to init embedder!');
-				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Failed to init embedder!', render: _config.render.name, fallback: _config.fallback });
+				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Failed to init embedder!', render: _config.render.name });
 				return;
 			}
 			_embedder.addGlobalListener(_onEvent);
@@ -1765,26 +1883,33 @@ chatease.debug = false;
 			url: 'ws://' + window.location.host + '/websocket/websck',
 			width: 300,
 			height: 450,
-			
 			channel: 1,
-	 		
 	 		maxlength: 30, // 0: no limit, uint: n bytes
-	 		interval: 0, // ms
-	 		
 	 		maxRetries: 0, // -1: never, 0: always, uint: n times
 	 		retryDelay: 3000, // ms
-			
 			render: {
 				name: renderModes.DEFAULT, // 'def'
 				skin: {
 					name: skinModes.DEFAULT // 'def'
 				}
 			},
-			
 			keywords: '',
 			maxRecords: 50
 		},
 		_config = utils.extend({}, _defaults, config);
+		
+		switch (utils.typeOf(_config.channel)) {
+			case 'array':
+				break;
+			case 'number':
+				_config.channel = [_config.channel];
+				break;
+			case 'string':
+				_config.channel = _config.channel.split(',');
+				break;
+			default:
+				_config.channel = [1];
+		}
 		
 		return _config;
 	};

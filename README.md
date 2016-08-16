@@ -43,26 +43,20 @@ Please have a look at cn/studease/embed/chatease.embed.config.js.
 ```js
 _defaults = {
 	url: 'ws://' + window.location.host + '/websocket/websck',
-	width: 300, // px
-	height: 450, // px
-	
-	channel: 1, // Channel ID in Number type.
-	
+	width: 300,
+	height: 450,
+	channel: 1,
 	maxlength: 30, // 0: no limit, uint: n bytes
-	interval: 0, // ms
-	
 	maxRetries: 0, // -1: never, 0: always, uint: n times
 	retryDelay: 3000, // ms
-	
 	render: {
 		name: renderModes.DEFAULT, // 'def'
 		skin: {
 			name: skinModes.DEFAULT // 'def'
 		}
 	},
-	
-	keywords: '', // 'keywords1|keywords2|keywordsx'
-	maxRecords: 50 // 0: no limit
+	keywords: '',
+	maxRecords: 50
 }
 ```
 
@@ -80,7 +74,7 @@ var chat = chatease('chatwrap').setup({
 });
 ```
 
-For more events, check cn/studease/api/chatease.api.js.
+For more events, please check cn/studease/api/chatease.api.js, or the source of test/index.html.
 
 ```js
 _eventMapping = {

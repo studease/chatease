@@ -55,8 +55,6 @@
 				},
 				onIdent: function(e) {
 					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + '.');
-					//if (e.channel.id != 2) 
-						//chat.join(2);
 				},
 				onMessage: function(e) {
 					//cblog('onMessage', e.user.name + ': ' + e.data);
@@ -71,21 +69,13 @@
 					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ']');
 				},
 				onError: function(e) {
-					cblog('onError', 'code: ' + e.error.code + ', explain: ' + e.error.explain);
+					cblog('onError', e.error ? e.error.explain : e.message);
 				},
 				onClose: function(e) {
 					cblog('onClose');
 				}
-			}/*,
-			onresize: resize*/
+			}
 		});
-		
-		/*function resize() {
-			var ply = document.getElementById('player');
-			var cht = document.getElementById('chatroom');
-			chat.resize(cht ? cht.clientWidth : null, ply ? ply.clientHeight : null);
-		}
-		resize();*/
 		
 		function cblog(cb, msg) {
 			console.log('[cb.' + cb + '] ' + (msg || ''));
