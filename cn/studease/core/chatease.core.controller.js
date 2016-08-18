@@ -37,9 +37,15 @@
 			}
 			
 			var channelId = data.channel.id;
-			var channel = model.getChannel(channelId);
-			if (channel.setActive() == false) {
+			var attributes = model.getAttributes(channelId);
+			if (attributes.setActive() == false) {
 				_onError(409, data);
+				return;
+			}
+			
+			var punishment = attributes.getPunishment();
+			if (punishment != null && (punishment.code & 0x02) > 0) {
+				_onError(403, data);
 				return;
 			}
 			
@@ -92,10 +98,24 @@
 							model.user[k] = v;
 						}
 					});
-					var channel = model.getChannel(data.channel.id);
-					channel.setProperties(data.channel.role, data.channel.state);
+					view.show('已加入房间（' + data.channel.id + '）。');
 					
-					view.show('已加入房间（' + data.channel.id + '）！');
+					var attributes = model.getAttributes(data.channel.id);
+					attributes.setProperties(data.channel.role, data.channel.state);
+					if ((data.channel.state & 0x02) == 0) {
+						view.show('您所在的用户组不能发言！');
+					}
+					
+					if (data.channel.hasOwnProperty('punishment') == true) {
+						var punishment = data.channel.punishment;
+						attributes.setPunishment(punishment);
+						
+						if ((punishment.code & 0x02) > 0) {
+							var date = new Date();
+							date.setTime(punishment.time);
+							view.show('您已被禁言（' + utils.formatTime(date) + '）！');
+						}
+					}
 					_this.dispatchEvent(events.CHATEASE_INDENT, data);
 					break;
 				case 'message':

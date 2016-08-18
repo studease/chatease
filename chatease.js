@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '0.1.19';
+chatease.version = '0.1.18';
 chatease.debug = false;
 
 (function(chatease) {
@@ -55,6 +55,21 @@ chatease.debug = false;
 		if (arr = document.cookie.match(reg))
 			return unescape(arr[2]);
 		return null;
+	};
+	
+	utils.formatTime = function(date) {
+		var hours = date.getHours() + 1;
+		var minutes = date.getMinutes();
+		var seconds = date.getSeconds();
+		return date.toLocaleDateString() + ' ' + utils.pad(hours, 2) + ':' + utils.pad(minutes, 2) + ':' + utils.pad(seconds, 2);
+	};
+	
+	utils.pad = function(val, len) {
+		var str = val + '';
+		while (str.length < len) {
+			str = '0' + str;
+		}
+		return str;
 	};
 	
 	
@@ -1156,14 +1171,18 @@ chatease.debug = false;
 		events = chatease.events,
 		core = chatease.core;
 	
-	core.channel = function(model, id) {
-		var _this = utils.extend(this, new events.eventdispatcher('core.channel_' + id)),
-			_id = id,
+	core.userattributes = function(model, channelId) {
+		var _this = utils.extend(this, new events.eventdispatcher('core.channel_' + channelId)),
+			_id = channelId,
 			_role = -1,
 			_state = 0,
 			_interval,
 			_active = 0,
-			_joined = false;
+			_joined = false,
+			_punishment = {
+				code: 0,
+				time: 0
+			};
 		
 		function _init() {
 			_interval = _getIntervalByRole(_role);
@@ -1190,6 +1209,20 @@ chatease.debug = false;
 			_state = state;
 			_interval = _getIntervalByRole(_role);
 			_joined = true;
+		};
+		
+		_this.setPunishment = function(punishment) {
+			_punishment.code = punishment.code;
+			_punishment.time = punishment.time;
+		};
+		
+		_this.getPunishment = function() {
+			if (_punishment.code == 0 || _punishment.time >= new Date().getTime()) {
+				_punishment.code = 0;
+				_punishment.time = 0;
+				return null;
+			}
+			return utils.extend({}, _punishment);
 		};
 		
 		_this.setActive = function() {
@@ -1284,7 +1317,8 @@ chatease.debug = false;
 	
 	core.model = function(config) {
 		 var _this = utils.extend(this, new events.eventdispatcher('core.model')),
-		 	_defaults = {};
+		 	_defaults = {},
+		 	_attributes = {};
 		
 		function _init() {
 			_this.config = utils.extend({}, _defaults, config);
@@ -1294,7 +1328,6 @@ chatease.debug = false;
 					id: NaN,
 					name: ''
 				},
-				channels: {},
 				state: states.CLOSED,
 				shieldMsg: false
 			}, _this.config);
@@ -1320,11 +1353,11 @@ chatease.debug = false;
 			return _this.config[name] || {};
 		};
 		
-		_this.getChannel = function(channelId) {
-			if (_this.channels.hasOwnProperty(channelId) == false) {
-				_this.channels[channelId] = new core.channel(_this, channelId);
+		_this.getAttributes = function(channelId) {
+			if (_attributes.hasOwnProperty(channelId) == false) {
+				_attributes[channelId] = new core.userattributes(_this, channelId);
 			}
-			return _this.channels[channelId];
+			return _attributes[channelId];
 		};
 		
 		_this.destroy = function() {
@@ -1524,9 +1557,15 @@ chatease.debug = false;
 			}
 			
 			var channelId = data.channel.id;
-			var channel = model.getChannel(channelId);
-			if (channel.setActive() == false) {
+			var attributes = model.getAttributes(channelId);
+			if (attributes.setActive() == false) {
 				_onError(409, data);
+				return;
+			}
+			
+			var punishment = attributes.getPunishment();
+			if (punishment != null && (punishment.code & 0x02) > 0) {
+				_onError(403, data);
 				return;
 			}
 			
@@ -1579,10 +1618,24 @@ chatease.debug = false;
 							model.user[k] = v;
 						}
 					});
-					var channel = model.getChannel(data.channel.id);
-					channel.setProperties(data.channel.role, data.channel.state);
+					view.show('已加入房间（' + data.channel.id + '）。');
 					
-					view.show('已加入房间（' + data.channel.id + '）！');
+					var attributes = model.getAttributes(data.channel.id);
+					attributes.setProperties(data.channel.role, data.channel.state);
+					if ((data.channel.state & 0x02) == 0) {
+						view.show('您所在的用户组不能发言！');
+					}
+					
+					if (data.channel.hasOwnProperty('punishment') == true) {
+						var punishment = data.channel.punishment;
+						attributes.setPunishment(punishment);
+						
+						if ((punishment.code & 0x02) > 0) {
+							var date = new Date();
+							date.setTime(punishment.time);
+							view.show('您已被禁言（' + utils.formatTime(date) + '）！');
+						}
+					}
 					_this.dispatchEvent(events.CHATEASE_INDENT, data);
 					break;
 				case 'message':

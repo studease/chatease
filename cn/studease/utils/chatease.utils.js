@@ -48,6 +48,21 @@
 		return null;
 	};
 	
+	utils.formatTime = function(date) {
+		var hours = date.getHours() + 1;
+		var minutes = date.getMinutes();
+		var seconds = date.getSeconds();
+		return date.toLocaleDateString() + ' ' + utils.pad(hours, 2) + ':' + utils.pad(minutes, 2) + ':' + utils.pad(seconds, 2);
+	};
+	
+	utils.pad = function(val, len) {
+		var str = val + '';
+		while (str.length < len) {
+			str = '0' + str;
+		}
+		return str;
+	};
+	
 	
 	utils.createElement = function(elem, className) {
 		var newElement = document.createElement(elem);

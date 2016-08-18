@@ -6,7 +6,8 @@
 	
 	core.model = function(config) {
 		 var _this = utils.extend(this, new events.eventdispatcher('core.model')),
-		 	_defaults = {};
+		 	_defaults = {},
+		 	_attributes = {};
 		
 		function _init() {
 			_this.config = utils.extend({}, _defaults, config);
@@ -16,7 +17,6 @@
 					id: NaN,
 					name: ''
 				},
-				channels: {},
 				state: states.CLOSED,
 				shieldMsg: false
 			}, _this.config);
@@ -42,11 +42,11 @@
 			return _this.config[name] || {};
 		};
 		
-		_this.getChannel = function(channelId) {
-			if (_this.channels.hasOwnProperty(channelId) == false) {
-				_this.channels[channelId] = new core.channel(_this, channelId);
+		_this.getAttributes = function(channelId) {
+			if (_attributes.hasOwnProperty(channelId) == false) {
+				_attributes[channelId] = new core.userattributes(_this, channelId);
 			}
-			return _this.channels[channelId];
+			return _attributes[channelId];
 		};
 		
 		_this.destroy = function() {
