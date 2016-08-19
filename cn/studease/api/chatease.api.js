@@ -33,6 +33,8 @@
 		_this.setup = function(options) {
 			utils.emptyElement(_this.container);
 			
+			chatease.debug = !!options.debug;
+			
 			_this.config = options;
 			_this.config.id = _this.id;
 			

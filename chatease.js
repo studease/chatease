@@ -4,8 +4,7 @@
 	}
 };
 
-chatease.version = '0.1.18';
-chatease.debug = false;
+chatease.version = '0.1.19';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -440,6 +439,8 @@ chatease.debug = false;
 		
 		_this.setup = function(options) {
 			utils.emptyElement(_this.container);
+			
+			chatease.debug = !!options.debug;
 			
 			_this.config = options;
 			_this.config.id = _this.id;
