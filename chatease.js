@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '0.1.21';
+chatease.version = '0.1.22';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -873,6 +873,8 @@ chatease.version = '0.1.21';
 	renders.def = function(view, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('renders.def')),
 			_defaults = {
+				minWidth: 300,
+		 		minHeight: 340,
 				skin: {
 					name: skinModes.DEFAULT // 'def'
 				},
@@ -896,6 +898,8 @@ chatease.version = '0.1.21';
 		
 		function _init() {
 			_this.config = utils.extend({}, _defaults, config);
+			_this.config.width = Math.max(_this.config.width, _this.config.minWidth);
+			_this.config.height = Math.max(_this.config.height, _this.config.minHeight);
 			
 			_renderLayer = utils.createElement('div', RENDER_CLASS);
 			_titleLayer = utils.createElement('div', TITLE_CLASS);
@@ -1156,7 +1160,7 @@ chatease.version = '0.1.21';
 			width = width || _renderLayer.offsetWidth || config.width;
 			height = height || _renderLayer.offsetHeight || config.height;
 			if (_skin) 
-				_skin.resize(width, height);
+				_skin.resize(Math.max(width, _this.config.minWidth), Math.max(height, _this.config.minHeight));
 		};
 		
 		_this.destroy = function() {
@@ -1372,7 +1376,6 @@ chatease.version = '0.1.21';
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		embed = chatease.embed,
 		core = chatease.core,
 		states = core.states,
 		renders = core.renders,

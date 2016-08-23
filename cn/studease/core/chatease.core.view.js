@@ -1,7 +1,6 @@
 ﻿(function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
-		embed = chatease.embed,
 		core = chatease.core,
 		states = core.states,
 		renders = core.renders,

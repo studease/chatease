@@ -11,6 +11,8 @@
 			width: 300,
 			height: 450,
 			channel: 1,
+			token: '',
+			keywords: '',
 	 		maxlength: 30, // 0: no limit, uint: n bytes
 	 		maxRetries: 0, // -1: never, 0: always, uint: n times
 	 		retryDelay: 3000, // ms
@@ -20,8 +22,6 @@
 					name: skinModes.DEFAULT // 'def'
 				}
 			},
-			token: '',
-			keywords: '',
 			maxRecords: 50
 		},
 		_config = utils.extend({}, _defaults, config);

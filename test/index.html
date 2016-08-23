@@ -1,9 +1,23 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no ,minimal-ui">
+	<!--<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-title" content="chatease">
+	<meta content="telephone=no" name="format-detection" />
+	<meta content="email=no" name="format-detection" />
+	<meta name="screen-orientation" content="portrait">-->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!--<meta name="x5-orientation" content="portrait">-->
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
 	<title>WebSocket Chat Demo</title>
 	<style>
-		//body { margin: 0px; padding: 0px; }
+		body { margin: 10px; }
 	</style>
 	<!--<link type="text/css" rel="stylesheet" href="css/style.css" />-->
 	<script type='text/javascript' src="../sockjs/sockjs-1.0.3.js"></script>
@@ -32,14 +46,14 @@
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>
 </head>
-<body>
+<body style="overflow: hidden;">
 	<div id='chatwrap'></div>
 	
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chatwrap').setup({
-			width: 300,
-			height: 464,
+			width: getWidth(),
+			height: getHeight(),
 			url: 'ws://localhost/websocket/websck',
 			channel: 1,
 			token: '',
@@ -61,7 +75,7 @@
 					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] joined channel ' + e.channel.id + '.');
 				},
 				onLeft: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
+					cblog('onLeft', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
 				},
 				onNickClick: function(e) {
 					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state+ '] in channel ' + e.channel.id + '.');
@@ -73,8 +87,19 @@
 					cblog('onClose');
 				}
 			},
+			onresize: function() {
+				chat.resize(getWidth(), getHeight());
+			},
 			debug: false
 		});
+		
+		function getWidth() {
+			return document.documentElement.clientWidth - 20;
+		}
+		
+		function getHeight() {
+			return document.documentElement.clientHeight - 20;
+		}
 		
 		function cblog(cb, msg) {
 			console.log('[cb.' + cb + '] ' + (msg || ''));
