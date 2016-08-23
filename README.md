@@ -32,7 +32,8 @@ var chat = chatease('chatwrap').setup({
 	width: 300,
 	height: 464,
 	url: 'ws://localhost/websocket/websck',
-	channel: 1
+	channel: 1,
+	token: ''
 });
 ```
 
@@ -46,6 +47,8 @@ _defaults = {
 	width: 300,
 	height: 450,
 	channel: 1,
+	token: '',
+	keywords: '',
 	maxlength: 30, // 0: no limit, uint: n bytes
 	maxRetries: 0, // -1: never, 0: always, uint: n times
 	retryDelay: 3000, // ms
@@ -55,7 +58,6 @@ _defaults = {
 			name: skinModes.DEFAULT // 'def'
 		}
 	},
-	keywords: '',
 	maxRecords: 50
 }
 ```

@@ -190,20 +190,20 @@
 				case 'string':
 					if (user === '') 
 						break;
-					user = { id: 0, name: user, role: 0 };
+					user = { id: 0, name: user, channel: { id: 0, role: 0, state: 3 } };
 					// fall through
 				case 'null':
-					user = { id: 0, name: '[系统]', role: 64 };
+					user = { id: 0, name: '[系统]', channel: { id: 0, role: 64, state: 3 } };
 					// fall through
 				case 'object':
 					if (utils.typeOf(user.id) == null) 
 						break;
 					
-					var boxclass = user.role >= 0 && (user.role & 0x40) ? NICK_SYSTEM_CLASS : (user.id == view.user().id ? NICK_MYSELF_CLASS : '');
+					var boxclass = user.channel.role >= 0 && (user.channel.role & 0x40) ? NICK_SYSTEM_CLASS : (user.id == view.user().id ? NICK_MYSELF_CLASS : '');
 					if (boxclass) 
 						box.className = boxclass;
 					
-					var clazz = _getIconClazz(user.role);
+					var clazz = _getIconClazz(user.channel.role);
 					if (clazz) {
 						var icon = utils.createElement('span', clazz);
 						icon.innerHTML = clazz.substr(0, 1);
@@ -215,11 +215,11 @@
 					a.innerHTML = user.name;
 					try {
 						a.addEventListener('click', function(e) {
-							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: { id: this.user.id, name: this.user.name }, channel: this.user.channel });
 						});
 					} catch(e) {
 						a.attachEvent('onclick', function(e) {
-							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: this.user });
+							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: { id: this.user.id, name: this.user.name }, channel: this.user.channel });
 						});
 					}
 					box.appendChild(a);

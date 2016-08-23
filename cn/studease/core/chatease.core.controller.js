@@ -127,7 +127,7 @@
 						utils.log('Failed to execute filter.');
 					}
 					
-					view.show(data, utils.extend({ role: data.channel.role, state: data.channel.state}, data.user));
+					view.show(data, utils.extend({}, data.user, { channel: data.channel }));
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 				case 'join':
@@ -282,9 +282,8 @@
 				cmd: 'join',
 				channel: { id: channelId }
 			};
-			var token = utils.getCookie('token');
-		  if (token) {
-		  	obj.token = token;
+		  if (model.token) {
+		  	obj.token = model.token;
 		  }
 			_this.send(obj);
 		};

@@ -20,6 +20,7 @@
 					name: skinModes.DEFAULT // 'def'
 				}
 			},
+			token: '',
 			keywords: '',
 			maxRecords: 50
 		},
