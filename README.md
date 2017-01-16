@@ -102,6 +102,7 @@ _eventMapping = {
 * **resize(width, height)**
 
 > 	width: Width in px.
+
 > 	height: Hieght in px.
 
 ### Websocket Server
