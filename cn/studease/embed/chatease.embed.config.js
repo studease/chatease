@@ -7,10 +7,10 @@
 	
 	embed.config = function(config) {
 		var _defaults = {
-			url: 'ws://' + window.location.host + '/websocket/websck',
+			url: 'ws://' + window.location.host + '/chatease/ch1',
 			width: 300,
 			height: 450,
-			channel: 1,
+			channel: 'ch1',
 			token: '',
 			keywords: '',
 	 		maxlength: 30, // 0: no limit, uint: n bytes

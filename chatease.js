@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '0.1.22';
+chatease.version = '0.1.24';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1748,9 +1748,6 @@ chatease.version = '0.1.22';
 					view.show('聊天室已连接…');
 					_retriesCount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
-					for (var i = 0; i < model.channel.length; i++) {
-						_this.join(model.channel[i]);
-					}
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
@@ -1800,17 +1797,6 @@ chatease.version = '0.1.22';
 				};
 			}
 		}
-		
-		_this.join = function(channelId) {
-			var obj = {
-				cmd: 'join',
-				channel: { id: channelId }
-			};
-		  if (model.token) {
-		  	obj.token = model.token;
-		  }
-			_this.send(obj);
-		};
 		
 		function _onSend(e) {
 			e.data.text = utils.trim(model.maxlength ? e.data.text.substr(0, model.maxlength) : e.data.text);
@@ -1936,10 +1922,12 @@ chatease.version = '0.1.22';
 	
 	embed.config = function(config) {
 		var _defaults = {
-			url: 'ws://' + window.location.host + '/websocket/websck',
+			url: 'ws://' + window.location.host + '/chatease/ch1',
 			width: 300,
 			height: 450,
-			channel: 1,
+			channel: 'ch1',
+			token: '',
+			keywords: '',
 	 		maxlength: 30, // 0: no limit, uint: n bytes
 	 		maxRetries: 0, // -1: never, 0: always, uint: n times
 	 		retryDelay: 3000, // ms
@@ -1949,8 +1937,6 @@ chatease.version = '0.1.22';
 					name: skinModes.DEFAULT // 'def'
 				}
 			},
-			token: '',
-			keywords: '',
 			maxRecords: 50
 		},
 		_config = utils.extend({}, _defaults, config);

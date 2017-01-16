@@ -54,9 +54,11 @@
 		var chat = chatease('chatwrap').setup({
 			width: getWidth(),
 			height: getHeight(),
-			url: 'ws://192.168.1.229/websocket/ch1',
+			url: 'ws://localhost/chatease/ch1',
+			channel: 'ch1',
 			token: '',
 			keywords: keywords,
+			maxRetries: -1,
 			events: {
 				onReady: function(e) {
 					cblog('onReady');
