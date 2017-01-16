@@ -10,6 +10,7 @@ This is a client-side script of chat room, transmitting through websocket, with 
 
 
 ## Tested
+---------
 
 * **Chrome**
 * **Firefox**
@@ -20,8 +21,9 @@ This is a client-side script of chat room, transmitting through websocket, with 
 
 
 ## Example
+----------
 
-### Basic configuraion:
+### Basic Configuraion
 
 The example below will find the element with an id of chatwrap and render a dialog into it.
 
@@ -31,22 +33,21 @@ The example below will find the element with an id of chatwrap and render a dial
 var chat = chatease('chatwrap').setup({
 	width: 300,
 	height: 464,
-	url: 'ws://localhost/websocket/websck',
-	channel: 1,
-	token: ''
+	url: 'ws://localhost/chatease/ch1',
+	channel: 'ch1'
 });
 ```
 
-### More configuration:
+### More Configuration
 
 Please have a look at cn/studease/embed/chatease.embed.config.js.
 
 ```js
 _defaults = {
-	url: 'ws://' + window.location.host + '/websocket/websck',
+	url: 'ws://' + window.location.host + '/chatease/ch1',
 	width: 300,
 	height: 450,
-	channel: 1,
+	channel: 'ch1',
 	token: '',
 	keywords: '',
 	maxlength: 30, // 0: no limit, uint: n bytes
@@ -62,7 +63,7 @@ _defaults = {
 }
 ```
 
-### Add callback:
+### Add Callback
 
 ```js
 var chat = chatease('chatwrap').setup({
@@ -92,7 +93,7 @@ _eventMapping = {
 }
 ```
 
-### Interface:
+### Interface
 
 * **send(data)**
 
@@ -101,14 +102,14 @@ _eventMapping = {
 * **resize(width, height)**
 
 > 	width: Width in px.
-
 > 	height: Hieght in px.
 
-### Server-side sample project:
+### Websocket Server
 
-[chatease-server](https://github.com/studease/chatease-server)
+[chatease-server https://github.com/studease/chatease-server](https://github.com/studease/chatease-server)
 
 
 ## Software License
+-------------------
 
 MIT.
