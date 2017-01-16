@@ -224,9 +224,6 @@
 					view.show('聊天室已连接…');
 					_retriesCount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
-					for (var i = 0; i < model.channel.length; i++) {
-						_this.join(model.channel[i]);
-					}
 					break;
 				case states.CLOSED:
 					view.show('聊天室连接已断开！');
@@ -276,17 +273,6 @@
 				};
 			}
 		}
-		
-		_this.join = function(channelId) {
-			var obj = {
-				cmd: 'join',
-				channel: { id: channelId }
-			};
-		  if (model.token) {
-		  	obj.token = model.token;
-		  }
-			_this.send(obj);
-		};
 		
 		function _onSend(e) {
 			e.data.text = utils.trim(model.maxlength ? e.data.text.substr(0, model.maxlength) : e.data.text);
