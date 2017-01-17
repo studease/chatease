@@ -75,13 +75,13 @@
 		function _getIntervalByRole(role) {
 			var val = -1;
 			if (role < 0) {
-				val = 3000;
+				val = 1000;
 			} else if (role == 0) {
-				val = 2000;
+				val = 1000;
 			} else if (role >= 8) {
 				val = 0;
 			} else if ((role & 0x07) > 0) {
-				val = 1000;
+				val = 500;
 			}
 			return val;
 		}
