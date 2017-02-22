@@ -6,8 +6,6 @@
 		roles = protocol.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
-		skins = core.skins,
-		skinmodes = skins.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',

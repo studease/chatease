@@ -98,6 +98,10 @@
 			_this.dispatchEvent(events.SLCIEASE_STATE, { state: state });
 		};
 		
+		_this.getState = function() {
+			return _state;
+		};
+		
 		_this.setProperty = function(key, value) {
 			if (_properties.hasOwnProperty(key) == true) {
 				_properties[key] = value;
