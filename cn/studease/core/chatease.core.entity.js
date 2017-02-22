@@ -11,9 +11,11 @@
 		
 		function _init() {
 			_this.id = config.id;
+			
 			_this.model = _model = new core.model(config);
 			_this.view = _view = new core.view(_this, _model);
 			_this.controller = _controller = new core.controller(_model, _view);
+			
 			_controller.addGlobalListener(_forward);
 			
 			_initializeAPI();
@@ -21,12 +23,16 @@
 		
 		function _initializeAPI() {
 			_this.send = _controller.send;
-			_this.join = _controller.join;
+			
+			_this.getState = _model.getState;
+			
 			_this.resize = _view.resize;
 		}
 		
 		_this.setup = function() {
-			_view.setup();
+			setTimeout(function() {
+				_view.setup();
+			}, 0);
 		};
 		
 		function _forward(e) {

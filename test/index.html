@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no ,minimal-ui">
-	<!--<meta name="apple-mobile-web-app-capable" content="yes" />
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no ,minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="apple-mobile-web-app-title" content="chatease">
 	<meta content="telephone=no" name="format-detection" />
@@ -31,13 +31,13 @@
 	<script type='text/javascript' src='../cn/studease/api/chatease.api.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.states.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.protocol.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.modes.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.modes.js'></script>
-	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.js'></script>
-	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.modes.js'></script>
-	<script type='text/javascript' src='../cn/studease/core/renders/skins/chatease.core.renders.skins.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.def.js'></script>
-	<script type='text/javascript' src='../cn/studease/core/chatease.core.userattributes.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.entity.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.model.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.view.js'></script>
@@ -52,13 +52,11 @@
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chatwrap').setup({
+			url: 'ws://192.168.1.107/chatease/ch1',
 			width: getWidth(),
 			height: getHeight(),
-			url: 'ws://localhost/chatease/ch1',
-			channel: 'ch1',
-			token: '',
 			keywords: keywords,
-			maxRetries: -1,
+			maxretries: -1,
 			events: {
 				onReady: function(e) {
 					cblog('onReady');
@@ -67,7 +65,7 @@
 					cblog('onConnect');
 				},
 				onIdent: function(e) {
-					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + '.');
+					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + '.');
 				},
 				onMessage: function(e) {
 					//cblog('onMessage', e.user.name + ': ' + e.data);
@@ -87,12 +85,12 @@
 				onClose: function(e) {
 					cblog('onClose');
 				}
-			},
-			onresize: function() {
-				chat.resize(getWidth(), getHeight());
-			},
-			debug: false
+			}
 		});
+		
+		window.onresize = function() {
+			chat.resize(getWidth(), getHeight());
+		};
 		
 		function getWidth() {
 			return document.documentElement.clientWidth - 20;

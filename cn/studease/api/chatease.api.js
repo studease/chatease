@@ -50,7 +50,6 @@
 			_this.renderName = renderName;
 			
 			_this.send = _entity.send;
-			_this.join = _entity.join;
 			_this.resize = _entity.resize;
 		};
 		

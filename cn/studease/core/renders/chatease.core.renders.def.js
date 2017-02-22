@@ -2,23 +2,39 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		core = chatease.core,
+		protocol = core.protocol,
+		roles = protocol.roles,
 		renders = core.renders,
-		skins = renders.skins,
-		skinModes = skins.modes,
+		rendermodes = renders.modes,
+		skins = core.skins,
+		skinmodes = skins.modes,
 		css = utils.css,
 		
-		RENDER_CLASS = 'render',
-		TITLE_CLASS = 'title',
-		MAIN_CLASS = 'main',
-		CONSOLE_CLASS = 'console',
-		DIALOG_CLASS = 'dialog',
-		CONTROL_CLASS = 'control',
-		INPUT_CLASS = 'input',
-		SUBMIT_CLASS = 'submit',
-		NICK_SYSTEM_CLASS = 'system',
-		NICK_MYSELF_CLASS = 'myself',
-		BUTTON_CLASS = 'btn',
-		CHECKBOX_CLASS = 'ch',
+		RENDER_CLASS = 'cha-render',
+		TITLE_CLASS = 'cha-title',
+		CONSOLE_CLASS = 'cha-console',
+		CONTROLS_CLASS = 'cha-controls',
+		DIALOG_CLASS = 'cha-dialog',
+		
+		CHECKBOX_CLASS = 'cha-checkbox',
+		BUTTON_CLASS = 'cha-button',
+		
+		INPUT_CLASS = 'cha-input',
+		
+		NICK_SYSTEM_CLASS = 'cha-system',
+		NICK_MYSELF_CLASS = 'cha-myself',
+		
+		ICON_VISITOR_CLASS = 'ico-visitor',
+		ICON_NORMAL_CLASS = 'ico-normal',
+		ICON_VIP_CLASS = 'ico-vip',
+		
+		ICON_ASSISTANT_CLASS = 'ico-assistant',
+		ICON_SECRETARY_CLASS = 'ico-secretary',
+		ICON_ANCHOR_CLASS = 'ico-anchor',
+		
+		ICON_ADMIN_CLASS = 'ico-admin',
+		ICON_SU_ADMIN_CLASS = 'ico-suadmin',
+		ICON_SYSTEM_CLASS = 'ico-system',
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -31,277 +47,277 @@
 	
 	renders.def = function(view, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('renders.def')),
-			_defaults = {
-				minWidth: 300,
-		 		minHeight: 340,
-				skin: {
-					name: skinModes.DEFAULT // 'def'
-				},
-				prefix: 'chat-'
-			},
+			_defaults = {},
 			_renderLayer,
 			_titleLayer,
-			_mainLayer,
 			_consoleLayer,
+			_controlsLayer,
 			_dialogLayer,
-			_controlLayer,
+			
 			_inputLayer,
-			
-			_titleIcon,
 			_textInput,
-			_sendButton,
-			
-			_defaultLayout = '[msgshield][clrscreen]',
-			_buttons,
-			_skin;
+			_sendButton;
 		
 		function _init() {
+			_this.name = rendermodes.DEFAULT;
+			
 			_this.config = utils.extend({}, _defaults, config);
-			_this.config.width = Math.max(_this.config.width, _this.config.minWidth);
-			_this.config.height = Math.max(_this.config.height, _this.config.minHeight);
 			
 			_renderLayer = utils.createElement('div', RENDER_CLASS);
-			_titleLayer = utils.createElement('div', TITLE_CLASS);
-			_mainLayer = utils.createElement('div', MAIN_CLASS);
-			_renderLayer.appendChild(_titleLayer);
-			_renderLayer.appendChild(_mainLayer);
-			
-			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
-			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
-			_mainLayer.appendChild(_consoleLayer);
-			_mainLayer.appendChild(_dialogLayer);
-			
-			_controlLayer = utils.createElement('div', CONTROL_CLASS);
-			_inputLayer = utils.createElement('div', INPUT_CLASS);
-			_dialogLayer.appendChild(_controlLayer);
-			_dialogLayer.appendChild(_inputLayer);
-			
-			_titleLayer.innerHTML = '聊天室';
-			/*_titleIcon = utils.createElement('span', 'glyphicon glyphicon-envelope');
-			_titleLayer.appendChild(_titleIcon);*/
 			
 			_buildComponents();
-			
-			_textInput = utils.createElement('textarea');
-			_textInput.setAttribute('placeholder', '输入聊天内容');
-			if (_this.config.maxlength) 
-				_textInput.setAttribute('maxlength', _this.config.maxlength);
-			try {
-				_textInput.addEventListener('keypress', _onKeyPress);
-			} catch(e) {
-				_textInput.attachEvent('onkeypress', _onKeyPress);
-			}
-			_inputLayer.appendChild(_textInput);
-			
-			_sendButton = utils.createElement('button');
-			_sendButton.innerHTML = '发送';
-			try {
-				_sendButton.addEventListener('click', _onClick);
-			} catch(e) {
-				_sendButton.attachEvent('onclick', _onClick);
-			}
-			_inputLayer.appendChild(_sendButton);
-			
-			_setElementIds();
-			
-			try {
-				_skin = new skins[_this.config.skin.name](_this.config);
-			} catch (e) {
-				utils.log('Failed to init skin[' + _this.config.skin.name + '].');
-			}
-			if (!_skin) {
-				_this.dispatchEvent(events.CHATEASE_RENDER_ERROR, { message: 'No suitable skin found!', skin: _this.config.skin.name });
-				return;
-			}
 		}
 		
 		function _buildComponents() {
-			_addCheckBox('msgshield', events.CHATEASE_VIEW_SHIELDMSG, null, '屏蔽消息', false);
-			_addButton('clrscreen', events.CHATEASE_VIEW_CLEARSCREEN, null, '清屏', 'glyphicon glyphicon-trash');
+			// title
+			_titleLayer = utils.createElement('div', TITLE_CLASS);
+			_renderLayer.appendChild(_titleLayer);
+			
+			_titleLayer.innerHTML = '聊天室';
+			
+			// console
+			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
+			_renderLayer.appendChild(_consoleLayer);
+			
+			// controls
+			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
+			_renderLayer.appendChild(_controlsLayer);
+			
+			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_SHIELDMSG, null, false);
+			_controlsLayer.appendChild(shieldChk);
+			
+			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			_controlsLayer.appendChild(clearBtn);
+			
+			// dialog
+			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
+			_renderLayer.appendChild(_dialogLayer);
+			
+			_inputLayer = utils.createElement('div', INPUT_CLASS);
+			_dialogLayer.appendChild(_inputLayer);
+			
+			_textInput = utils.createElement('textarea');
+			_inputLayer.appendChild(_textInput);
+			
+			_sendButton = utils.createElement('button');
+			_inputLayer.appendChild(_sendButton);
+			
+			// textarea
+			_textInput.setAttribute('placeholder', '输入聊天内容');
+			if (_this.config.maxlength) {
+				_textInput.setAttribute('maxlength', _this.config.maxlength);
+			}
+			
+			var handler = (function() {
+				return function(event) {
+					var e = window.event || event;
+					if (e.keyCode != 13){
+						return;
+					}
+					
+					if (e.ctrlKey){
+						_textInput.value += '\r\n';
+						return;
+					}
+					
+					_this.send();
+					
+					if (window.event) {
+						e.returnValue = false;
+					} else {
+						e.preventDefault();
+					}
+				};
+			})();
+			
+			try {
+				_textInput.addEventListener('keypress', handler);
+			} catch (err) {
+				_textInput.attachEvent('onkeypress', handler);
+			}
+			
+			// button
+			_sendButton.innerHTML = '发送';
+			
+			var clickHandler = (function() {
+				return function() {
+					_this.send();
+				}
+			})();
+			
+			try {
+				_sendButton.addEventListener('click', clickHandler);
+			} catch (err) {
+				_sendButton.attachEvent('onclick', clickHandler);
+			}
 		}
 		
-		function _addCheckBox(name, event, data, label, checked) {
-			var box = utils.createElement('div', name);
-			var lb = utils.createElement('label', CHECKBOX_CLASS);
-			var ch = utils.createElement('input');
-			ch.type = 'checkbox';
-			ch.checked = !!checked;
-			try {
-				ch.addEventListener('change', function(e) {
-					_this.dispatchEvent(event, utils.extend({ shield: ch.checked }, data));
-				});
-			} catch(e) {
-				ch.attachEvent('onchange', function(e) {
-					_this.dispatchEvent(event, utils.extend({ shield: ch.checked }, data));
-				});
-			}
-			lb.appendChild(ch);
-			//lb.insertAdjacentHTML('beforeend', label);
-			var txt = utils.createElement('a');
-			txt.innerHTML = label;
-			lb.appendChild(txt);
+		function _getCheckBox(label, clazz, event, data, checked) {
+			var box = utils.createElement('div', clazz);
+			
+			var lb = utils.createElement('label');
 			box.appendChild(lb);
-			_controlLayer.appendChild(box);
-		}
-		
-		function _addButton(name, event, data, label, iconclass) {
-			var box = utils.createElement('div', name);
-			var btn = utils.createElement('a', BUTTON_CLASS);
-			btn.innerHTML = label;
+			
+			// input
+			var input = utils.createElement('input');
+			lb.appendChild(input);
+			
+			input.type = 'checkbox';
+			input.checked = !!checked;
+			
+			var handler = (function(event, data) {
+				return function(e) {
+					_this.dispatchEvent(event, utils.extend({ checked: input.checked }, data));
+				};
+			})(event, data);
+			
 			try {
-				btn.addEventListener('click', function(e) {
-					_this.dispatchEvent(event, data);
-				});
-			} catch(e) {
-				btn.attachEvent('onclick', function(e) {
-					_this.dispatchEvent(event, data);
-				});
+				input.addEventListener('change', handler);
+			} catch (err) {
+				input.attachEvent('onchange', handler);
 			}
 			
-			/*var btnIcon = utils.createElement('span', iconclass);
-			btn.appendChild(btnIcon);*/
+			// label
+			var txt = utils.createElement('a');
+			lb.appendChild(txt);
+			
+			txt.innerHTML = label;
+			
+			return box;
+		}
+		
+		function _getButton(label, clazz, event, data) {
+			var box = utils.createElement('div', clazz);
+			
+			var btn = utils.createElement('a');
 			box.appendChild(btn);
-			_controlLayer.appendChild(box);
+			
+			btn.innerHTML = label;
+			
+			var handler = (function(event, data) {
+				return function(e) {
+					_this.dispatchEvent(event, data);
+				};
+			})(event, data);
+			
+			try {
+				btn.addEventListener('click', handler);
+			} catch (err) {
+				btn.attachEvent('onclick', handler);
+			}
+			
+			return box;
 		}
 		
-		function _setElementIds() {
-			_renderLayer.id = _this.config.prefix + RENDER_CLASS;
-			_mainLayer.id = _this.config.prefix + MAIN_CLASS;
-			_consoleLayer.id = _this.config.prefix + CONSOLE_CLASS;
-			_dialogLayer.id = _this.config.prefix + DIALOG_CLASS;
-			_textInput.id = _this.config.prefix + INPUT_CLASS;
-			_sendButton.id = _this.config.prefix + SUBMIT_CLASS;
-		}
+		_this.setup = function() {
+			
+		};
 		
-		_this.show = function(data, user) {
+		_this.show = function(text, user, type) {
+			// set default
+			if (utils.typeOf(user) != 'object') {
+				user = { id: 0, name: '[系统]', role: roles.SYSTEM };
+			}
+			if (type != 'uni') {
+				type = 'multi';
+			}
+			
+			// create box
 			var box = utils.createElement('div');
-			
-			var message;
-			switch (utils.typeOf(data)) {
-				case 'object':
-					message = data.text;
-					if (data.type == 'uni') {
-						var span = utils.createElement('span');
-						span.innerHTML = '[密语]';
-						box.appendChild(span);
-					}
-					break;
-				default:
-					message = data;
+			if (user.role & roles.SYSTEM) {
+				box.className = NICK_SYSTEM_CLASS;
 			}
 			
-			switch (utils.typeOf(user)) {
-				case 'string':
-					if (user === '') 
-						break;
-					user = { id: 0, name: user, channel: { id: 0, role: 0, state: 3 } };
-					// fall through
-				case 'null':
-					user = { id: 0, name: '[系统]', channel: { id: 0, role: 64, state: 3 } };
-					// fall through
-				case 'object':
-					if (utils.typeOf(user.id) == null) 
-						break;
-					
-					var boxclass = user.channel.role >= 0 && (user.channel.role & 0x40) ? NICK_SYSTEM_CLASS : (user.id == view.user().id ? NICK_MYSELF_CLASS : '');
-					if (boxclass) 
-						box.className = boxclass;
-					
-					var clazz = _getIconClazz(user.channel.role);
-					if (clazz) {
-						var icon = utils.createElement('span', clazz);
-						icon.innerHTML = clazz.substr(0, 1);
-						box.appendChild(icon);
-					}
-					
-					var a = utils.createElement('a');
-					a.user = utils.extend({}, user);
-					a.innerHTML = user.name;
-					try {
-						a.addEventListener('click', function(e) {
-							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: { id: this.user.id, name: this.user.name }, channel: this.user.channel });
-						});
-					} catch(e) {
-						a.attachEvent('onclick', function(e) {
-							_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: { id: this.user.id, name: this.user.name }, channel: this.user.channel });
-						});
-					}
-					box.appendChild(a);
-					break;
+			// private chat sign
+			if (type == 'uni') {
+				var span = utils.createElement('span');
+				span.innerHTML = '[密语]';
+				box.appendChild(span);
 			}
 			
-			//box.insertAdjacentHTML(user && user.id == view.user().id ? 'afterbegin' : 'beforeend', message);
-			box.insertAdjacentHTML('beforeend', message);
+			// set icon
+			var clazz = _getIconClazz(user.role);
+			if (clazz) {
+				var icon = utils.createElement('span', clazz);
+				box.appendChild(icon);
+			}
 			
-			if (_consoleLayer.childNodes.length >= _this.config.maxRecords) {
+			// set nickname
+			var a = utils.createElement('a');
+			a.innerHTML = user.name;
+			
+			var nickHandler = (function(user) {
+				return function(e) {
+					_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: user } );
+				};
+			})(user);
+			
+			try {
+				a.addEventListener('click', nickHandler);
+			} catch (err) {
+				a.attachEvent('onclick', nickHandler);
+			}
+			box.appendChild(a);
+			
+			// set text
+			box.insertAdjacentHTML('beforeend', text);
+			
+			// check records
+			if (_consoleLayer.childNodes.length >= _this.config.maxrecords) {
 				_consoleLayer.removeChild(_consoleLayer.childNodes[0]);
 			}
+			
+			// append this box
 			_consoleLayer.appendChild(box);
 			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
 		};
 		
 		function _getIconClazz(role) {
 			var clazz = '';
-			switch (utils.typeOf(role)) {
-				case 'string':
-					role = parseInt(role);
-					if (role == NaN || role < 0) break;
-				case 'number':
-					if (role & 0x80) {
-						clazz = 'admin';
-					} else if (role & 0x40) {
-						//clazz = 'system';
-					} else if (role & 0x20) {
-						clazz = 'owner';
-					} else if (role & 0x10) {
-						clazz = 'manager';
-					} else if (role & 0x08) {
-						clazz = 'temporary';
-					}
-					if (role & 0x07) {
-						clazz += (clazz.length ? ' ' : '') + 'vip' + (role & 0x07);
-					}
-					break;
-				default:
-					break;
+			
+			if (utils.typeOf(role) != 'number') {
+				role = parseInt(role);
+				if (role == NaN || role < 0) {
+					return '';
+				}
+			}
+			
+			if (role & roles.SYSTEM) {
+				if ((role & roles.SYSTEM) == roles.SYSTEM) {
+					clazz += ICON_SYSTEM_CLASS;
+				} else if (role & roles.SU_ADMIN) {
+					clazz += ICON_SU_ADMIN_CLASS;
+				} else {
+					clazz += ICON_ADMIN_CLASS;
+				}
+			} else if (role & roles.ANCHOR) {
+				if ((role & roles.ANCHOR) == roles.ANCHOR) {
+					clazz += ICON_ANCHOR_CLASS;
+				} else if (role & roles.SECRETARY) {
+					clazz += ICON_SECRETARY_CLASS;
+				} else {
+					clazz += ICON_ASSISTANT_CLASS;
+				}
+			} else if (role & roles.VIP) {
+				var lv = (role & roles.VIP) - 1;
+				clazz += ICON_VIP_CLASS + lv;
+			} else if ((role & roles.NORMAL) == roles.NORMAL) {
+				clazz += ICON_NORMAL_CLASS;
+			} else {
+				clazz += ICON_VISITOR_CLASS
 			}
 			
 			return clazz;
 		}
 		
-		function _onKeyPress(event) {
-			var e = window.event || event;
-			if (e.keyCode != 13){
-				return;
-			}
-			
-			if (e.ctrlKey){
-				_textInput.value += '\r\n';
-			} else {
-				_this.send();
-				
-				if (window.event) {
-					window.event.returnValue = false;
-				} else {
-					e.preventDefault();
-				}
-			}
-		}
-		
-		function _onClick(e) {
-			_this.send();
-		}
-		
 		_this.send = function() {
-			for (var i = 0; i < _this.config.channel.length; i++) {
-				_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
-					text: _textInput.value,
-					type: 'multi',
-					channel: _this.config.channel[i]
-				}});
-			}
+			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
+				text: _textInput.value,
+				type: 'multi' // TODO: uni
+			}});
+			
 			_this.clearInput();
-		}
+		};
 		
 		_this.clearInput = function() {
 			_textInput.value = '';
@@ -316,10 +332,7 @@
 		};
 		
 		_this.resize = function(width, height) {
-			width = width || _renderLayer.offsetWidth || config.width;
-			height = height || _renderLayer.offsetHeight || config.height;
-			if (_skin) 
-				_skin.resize(Math.max(width, _this.config.minWidth), Math.max(height, _this.config.minHeight));
+			
 		};
 		
 		_this.destroy = function() {

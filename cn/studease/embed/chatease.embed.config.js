@@ -2,42 +2,28 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		embed = chatease.embed,
-		renderModes = chatease.core.renders.modes,
-		skinModes = chatease.core.renders.skins.modes;
+		rendermodes = chatease.core.renders.modes,
+		skinmodes = chatease.core.skins.modes;
 	
 	embed.config = function(config) {
 		var _defaults = {
 			url: 'ws://' + window.location.host + '/chatease/ch1',
 			width: 300,
 			height: 450,
-			channel: 'ch1',
-			token: '',
 			keywords: '',
-	 		maxlength: 30, // 0: no limit, uint: n bytes
-	 		maxRetries: 0, // -1: never, 0: always, uint: n times
-	 		retryDelay: 3000, // ms
+	 		maxlength: 30,    // -1: no limit
+	 		maxrecords: 50,
+	 		maxretries: -1,   // -1: always
+	 		retrydelay: 3000,
 			render: {
-				name: renderModes.DEFAULT, // 'def'
-				skin: {
-					name: skinModes.DEFAULT // 'def'
-				}
+				name: rendermodes.DEFAULT
 			},
-			maxRecords: 50
+			skin: {
+				name: skinmodes.DEFAULT
+			}
 		},
-		_config = utils.extend({}, _defaults, config);
 		
-		switch (utils.typeOf(_config.channel)) {
-			case 'array':
-				break;
-			case 'number':
-				_config.channel = [_config.channel];
-				break;
-			case 'string':
-				_config.channel = _config.channel.split(',');
-				break;
-			default:
-				_config.channel = [1];
-		}
+		_config = utils.extend({}, _defaults, config);
 		
 		return _config;
 	};

@@ -2,8 +2,7 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		embed = chatease.embed,
-		core = chatease.core,
-		renderModes = core.renders.modes;
+		core = chatease.core;
 	
 	embed.embedder = function(api, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('embed.embedder'));

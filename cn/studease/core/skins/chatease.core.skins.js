@@ -1,3 +1,3 @@
 ﻿(function(chatease) {
-	chatease.core.renders.skins = {};
+	chatease.core.skins = {};
 })(chatease);

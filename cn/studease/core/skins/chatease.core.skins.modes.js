@@ -1,5 +1,5 @@
 ﻿(function(chatease) {
-	chatease.core.renders.skins.modes = {
+	chatease.core.skins.modes = {
 		DEFAULT: 'def'
 	};
 })(chatease);

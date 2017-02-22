@@ -1,13 +1,12 @@
 ﻿(function(chatease) {
 	var utils = chatease.utils,
-		events = chatease.events,
-		renderModes = chatease.core.renders.modes;
+		events = chatease.events;
 	
 	var embed = chatease.embed = function(api) {
 		var _this = utils.extend(this, new events.eventdispatcher('embed')),
 			_config = {},
-			_errorOccurred = false,
-			_embedder = null;
+			_embedder = null,
+			_errorOccurred = false;
 		
 		function _init() {
 			utils.foreach(api.config.events, function(e, cb) {
@@ -45,7 +44,6 @@
 				case events.ERROR:
 				case events.CHATEASE_SETUP_ERROR:
 				case events.CHATEASE_RENDER_ERROR:
-				case events.CHATEASE_ERROR:
 					_this.errorScreen(e.message);
 					_this.dispatchEvent(events.ERROR, e);
 					break;

@@ -31,10 +31,9 @@ The example below will find the element with an id of chatwrap and render a dial
 <div id='chatwrap'></div>
 ...
 var chat = chatease('chatwrap').setup({
-	width: 300,
-	height: 464,
 	url: 'ws://localhost/chatease/ch1',
-	channel: 'ch1'
+	width: 300,
+	height: 464
 });
 ```
 
@@ -47,19 +46,17 @@ _defaults = {
 	url: 'ws://' + window.location.host + '/chatease/ch1',
 	width: 300,
 	height: 450,
-	channel: 'ch1',
-	token: '',
 	keywords: '',
-	maxlength: 30, // 0: no limit, uint: n bytes
-	maxRetries: 0, // -1: never, 0: always, uint: n times
-	retryDelay: 3000, // ms
+	maxlength: 30,    // -1: no limit
+	maxrecords: 50,
+	maxretries: -1,   // -1: always
+	retrydelay: 3000,
 	render: {
-		name: renderModes.DEFAULT, // 'def'
-		skin: {
-			name: skinModes.DEFAULT // 'def'
-		}
+		name: rendermodes.DEFAULT
 	},
-	maxRecords: 50
+	skin: {
+		name: skinmodes.DEFAULT
+	}
 }
 ```
 
@@ -81,15 +78,15 @@ For more events, please check cn/studease/api/chatease.api.js, or the source of 
 
 ```js
 _eventMapping = {
-	onError: events.ERROR, // Error occured.
-	onReady: events.CHATEASE_READY, // Initialized, or UI is ready.
-	onConnect: events.CHATEASE_CONNECT, // Server connected.
-	onIdent: events.CHATEASE_INDENT, // Joined channel.
-	onMessage: events.CHATEASE_MESSAGE, // Got message.
-	onJoin: events.CHATEASE_JOIN, // Someone joined in.
-	onLeft: events.CHATEASE_LEFT, // Someone left.
-	onNickClick: events.CHATEASE_VIEW_NICKCLICK, // Clicked someone's nickname.
-	onClose: events.CHATEASE_CLOSE // Connection closed.
+	onError: events.ERROR,
+	onReady: events.CHATEASE_READY,
+	onConnect: events.CHATEASE_CONNECT,
+	onIdent: events.CHATEASE_INDENT,
+	onMessage: events.CHATEASE_MESSAGE,
+	onJoin: events.CHATEASE_JOIN,
+	onLeft: events.CHATEASE_LEFT,
+	onNickClick: events.CHATEASE_VIEW_NICKCLICK,
+	onClose: events.CHATEASE_CLOSE
 }
 ```
 
