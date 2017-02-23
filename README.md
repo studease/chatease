@@ -6,7 +6,7 @@
 
 > [[zh_doc] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
 
-This is a client-side script of chat room, transmitting through websocket, with skin build in.
+This is a client-side script for websocket chatting, with skin build in.
 
 
 ## Tested

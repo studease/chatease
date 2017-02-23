@@ -81,7 +81,7 @@
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			_renderLayer.appendChild(_controlsLayer);
 			
-			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_SHIELDMSG, null, false);
+			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
 			_controlsLayer.appendChild(shieldChk);
 			
 			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
@@ -165,7 +165,7 @@
 			
 			var handler = (function(event, data) {
 				return function(e) {
-					_this.dispatchEvent(event, utils.extend({ checked: input.checked }, data));
+					_this.dispatchEvent(event, utils.extend({ value: input.checked }, data));
 				};
 			})(event, data);
 			

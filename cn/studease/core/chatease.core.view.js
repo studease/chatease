@@ -3,7 +3,7 @@
 		events = chatease.events,
 		core = chatease.core,
 		states = core.states,
-		roles = core.model.roles,
+		roles = core.protocol.roles,
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
@@ -64,7 +64,7 @@
 			try {
 				_render = _this.render = new renders[cfg.name](_this, cfg);
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _forward);
+				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _forward);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);

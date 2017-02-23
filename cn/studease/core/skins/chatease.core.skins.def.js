@@ -210,6 +210,7 @@
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
 				padding: '3px 5px',
+				width: '45px',
 				color: '#FFFFFF',
 				'text-align': 'center',
 				'vertical-align': 'middle',
@@ -239,7 +240,7 @@
 				margin: '0',
 				padding: '5px 10px',
 				width: _width - 2 - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 - 2 + 'px',
+				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px',
 				resize: CSS_NONE,
 				border: '0 none',
 				'border-radius': '0 0 0 4px',

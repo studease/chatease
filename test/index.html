@@ -21,8 +21,8 @@
 	</style>
 	<!--<link type="text/css" rel="stylesheet" href="css/style.css" />-->
 	<script type='text/javascript' src="../sockjs/sockjs-1.0.3.js"></script>
-	<!--<script type='text/javascript' src='../chatease.min.js'></script>-->
-	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
+	<script type='text/javascript' src='../chatease.min.js'></script>
+	<!--<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.css.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.filter.js'></script>
@@ -44,7 +44,7 @@
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.controller.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
-	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>-->
 </head>
 <body style="overflow: hidden;">
 	<div id='chatwrap'></div>
@@ -52,11 +52,11 @@
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chatwrap').setup({
-			url: 'ws://192.168.1.107/chatease/ch1',
+			url: 'ws://192.168.1.229/chatease/ch1',
 			width: getWidth(),
 			height: getHeight(),
 			keywords: keywords,
-			maxretries: -1,
+			maxretries: 0,
 			events: {
 				onReady: function(e) {
 					cblog('onReady');
@@ -71,13 +71,13 @@
 					//cblog('onMessage', e.user.name + ': ' + e.data);
 				},
 				onJoin: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] joined channel ' + e.channel.id + '.');
+					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] joined channel ' + e.channel.id + '.');
 				},
 				onLeft: function(e) {
-					cblog('onLeft', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
+					cblog('onLeft', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
 				},
 				onNickClick: function(e) {
-					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.channel.role + ', ' + e.channel.state+ '] in channel ' + e.channel.id + '.');
+					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state+ '] in channel ' + e.channel.id + '.');
 				},
 				onError: function(e) {
 					cblog('onError', e.error ? e.error.explain : e.message);

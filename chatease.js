@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.00';
+chatease.version = '1.0.02';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -563,11 +563,17 @@ chatease.version = '1.0.00';
 	};
 	
 	protocol.errors = {
-		BAD_REQUEST:  400,
-		UNAUTHORIZED: 401,
-		FORBIDDED:    403,
-		NOT_FOUND:    404,
-		CONFLICT:     409
+		BAD_REQUEST:           400,
+		UNAUTHORIZED:          401,
+		FORBIDDED:             403,
+		NOT_FOUND:             404,
+		CONFLICT:              409,
+		
+		INTERNAL_SERVER_ERROR: 500,
+		NOT_IMPLEMENTED:       501,
+		BAD_GATEWAY:           502,
+		SERVICE_UNAVAILABLE:   503,
+		GATEWAY_TIMEOUT:       504
 	};
 })(chatease);
 
@@ -793,6 +799,7 @@ chatease.version = '1.0.00';
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
 				padding: '3px 5px',
+				width: '45px',
 				color: '#FFFFFF',
 				'text-align': 'center',
 				'vertical-align': 'middle',
@@ -822,7 +829,7 @@ chatease.version = '1.0.00';
 				margin: '0',
 				padding: '5px 10px',
 				width: _width - 2 - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 - 2 + 'px',
+				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px',
 				resize: CSS_NONE,
 				border: '0 none',
 				'border-radius': '0 0 0 4px',
@@ -924,8 +931,6 @@ chatease.version = '1.0.00';
 		roles = protocol.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
-		skins = core.skins,
-		skinmodes = skins.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',
@@ -1001,7 +1006,7 @@ chatease.version = '1.0.00';
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			_renderLayer.appendChild(_controlsLayer);
 			
-			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_SHIELDMSG, null, false);
+			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
 			_controlsLayer.appendChild(shieldChk);
 			
 			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
@@ -1085,7 +1090,7 @@ chatease.version = '1.0.00';
 			
 			var handler = (function(event, data) {
 				return function(e) {
-					_this.dispatchEvent(event, utils.extend({ checked: input.checked }, data));
+					_this.dispatchEvent(event, utils.extend({ value: input.checked }, data));
 				};
 			})(event, data);
 			
@@ -1418,6 +1423,10 @@ chatease.version = '1.0.00';
 			_this.dispatchEvent(events.CHATEASE_STATE, { state: state });
 		};
 		
+		_this.getState = function() {
+			return _state;
+		};
+		
 		_this.setProperty = function(key, value) {
 			if (_properties.hasOwnProperty(key) == true) {
 				_properties[key] = value;
@@ -1446,7 +1455,7 @@ chatease.version = '1.0.00';
 		events = chatease.events,
 		core = chatease.core,
 		states = core.states,
-		roles = core.model.roles,
+		roles = core.protocol.roles,
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
@@ -1507,7 +1516,7 @@ chatease.version = '1.0.00';
 			try {
 				_render = _this.render = new renders[cfg.name](_this, cfg);
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_SHIELDMSG, _forward);
+				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _forward);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
@@ -1722,7 +1731,6 @@ chatease.version = '1.0.00';
 					var userinfo = model.getProperty('userinfo');
 					userinfo.set(utils.extend({}, data.user, {
 						channel: data.channel.id,
-						role: data.channel.role,
 						state: data.channel.state
 					}));
 					
@@ -1856,6 +1864,22 @@ chatease.version = '1.0.00';
 				case errors.CONFLICT:
 					explain = '操作频繁！';
 					break;
+					
+				case errors.INTERNAL_SERVER_ERROR:
+					explain = '内部错误！';
+					break;
+				case errors.NOT_IMPLEMENTED:
+					explain = '无法识别！';
+					break;
+				case errors.BAD_GATEWAY:
+					explain = '响应无效！';
+					break;
+				case errors.SERVICE_UNAVAILABLE:
+					explain = '服务过载！';
+					break;
+				case errors.GATEWAY_TIMEOUT:
+					explain = '网关超时！';
+					break;
 				default:
 					break;
 			}
@@ -1938,7 +1962,9 @@ chatease.version = '1.0.00';
 				cmd: cmds.TEXT,
 				text: text,
 				type: e.data.type,
-				channel: userinfo.channel
+				channel: {
+					id: userinfo.channel
+				}
 			});
 		}
 		
@@ -1953,6 +1979,8 @@ chatease.version = '1.0.00';
 		
 		function _onNickClick(e) {
 			// TODO: control, private chat
+			var userinfo = model.getProperty('userinfo');
+			e.channel = { id: userinfo.channel, state: userinfo.state };
 			_forward(e);
 		}
 		

@@ -105,7 +105,6 @@
 					var userinfo = model.getProperty('userinfo');
 					userinfo.set(utils.extend({}, data.user, {
 						channel: data.channel.id,
-						role: data.channel.role,
 						state: data.channel.state
 					}));
 					
@@ -239,6 +238,22 @@
 				case errors.CONFLICT:
 					explain = '操作频繁！';
 					break;
+					
+				case errors.INTERNAL_SERVER_ERROR:
+					explain = '内部错误！';
+					break;
+				case errors.NOT_IMPLEMENTED:
+					explain = '无法识别！';
+					break;
+				case errors.BAD_GATEWAY:
+					explain = '响应无效！';
+					break;
+				case errors.SERVICE_UNAVAILABLE:
+					explain = '服务过载！';
+					break;
+				case errors.GATEWAY_TIMEOUT:
+					explain = '网关超时！';
+					break;
 				default:
 					break;
 			}
@@ -321,7 +336,9 @@
 				cmd: cmds.TEXT,
 				text: text,
 				type: e.data.type,
-				channel: userinfo.channel
+				channel: {
+					id: userinfo.channel
+				}
 			});
 		}
 		
@@ -336,6 +353,8 @@
 		
 		function _onNickClick(e) {
 			// TODO: control, private chat
+			var userinfo = model.getProperty('userinfo');
+			e.channel = { id: userinfo.channel, state: userinfo.state };
 			_forward(e);
 		}
 		
