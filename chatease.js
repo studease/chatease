@@ -1415,7 +1415,7 @@ chatease.version = '1.0.00';
 				return;
 			}
 			_state = state;
-			_this.dispatchEvent(events.SLCIEASE_STATE, { state: state });
+			_this.dispatchEvent(events.CHATEASE_STATE, { state: state });
 		};
 		
 		_this.setProperty = function(key, value) {

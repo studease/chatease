@@ -95,7 +95,7 @@
 				return;
 			}
 			_state = state;
-			_this.dispatchEvent(events.SLCIEASE_STATE, { state: state });
+			_this.dispatchEvent(events.CHATEASE_STATE, { state: state });
 		};
 		
 		_this.getState = function() {
