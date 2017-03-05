@@ -127,13 +127,13 @@
 						if (!_filter) {
 							_filter = new utils.filter(model.keywords);
 						}
-						data.text = _filter.replace(data.text);
+						data.data = _filter.replace(data.data);
 					} catch (err) {
 						// Ignore this failure.
 						utils.log('Failed to execute filter.');
 					}
 					
-					view.show(data.text, data.user, data.type);
+					view.show(data.data, data.user, data.type);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 					
@@ -319,7 +319,7 @@
 		}
 		
 		function _onViewSend(e) {
-			var text = e.data.text;
+			var text = e.data.data;
 			if (!text) {
 				view.show('请输入内容！');
 				return;
@@ -334,7 +334,7 @@
 			
 			_this.send({
 				cmd: cmds.TEXT,
-				text: text,
+				data: text,
 				type: e.data.type,
 				channel: {
 					id: userinfo.channel

@@ -310,7 +310,7 @@
 		
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
-				text: _textInput.value,
+				data: _textInput.value,
 				type: 'multi' // TODO: uni
 			}});
 			
