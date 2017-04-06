@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.02';
+chatease.version = '1.0.04';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -567,6 +567,8 @@ chatease.version = '1.0.02';
 		UNAUTHORIZED:          401,
 		FORBIDDED:             403,
 		NOT_FOUND:             404,
+		METHOD_NOT_ALLOWED:    405,
+		REQUEST_TIMEOUT:       408,
 		CONFLICT:              409,
 		
 		INTERNAL_SERVER_ERROR: 500,
@@ -1235,7 +1237,7 @@ chatease.version = '1.0.02';
 		
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
-				text: _textInput.value,
+				data: _textInput.value,
 				type: 'multi' // TODO: uni
 			}});
 			
@@ -1753,13 +1755,13 @@ chatease.version = '1.0.02';
 						if (!_filter) {
 							_filter = new utils.filter(model.keywords);
 						}
-						data.text = _filter.replace(data.text);
+						data.data = _filter.replace(data.data);
 					} catch (err) {
 						// Ignore this failure.
 						utils.log('Failed to execute filter.');
 					}
 					
-					view.show(data.text, data.user, data.type);
+					view.show(data.data, data.user, data.type);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 					
@@ -1945,7 +1947,7 @@ chatease.version = '1.0.02';
 		}
 		
 		function _onViewSend(e) {
-			var text = e.data.text;
+			var text = e.data.data;
 			if (!text) {
 				view.show('请输入内容！');
 				return;
@@ -1960,7 +1962,7 @@ chatease.version = '1.0.02';
 			
 			_this.send({
 				cmd: cmds.TEXT,
-				text: text,
+				data: text,
 				type: e.data.type,
 				channel: {
 					id: userinfo.channel
