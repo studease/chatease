@@ -149,6 +149,10 @@
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
 					break;
 					
+				case raws.USERS:
+					_this.dispatchEvent(events.CHATEASE_USERS, data);
+					break;
+					
 				case raws.ERROR:
 					_onError(data.error.code, data);
 					break;

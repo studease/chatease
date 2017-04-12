@@ -15,6 +15,7 @@
 		TEXT:    'text',
 		JOIN:    'join',
 		LEFT:    'left',
+		USERS:   'users',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
 		ERROR:   'error',

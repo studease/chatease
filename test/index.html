@@ -15,14 +15,14 @@
 	<!--<meta name="x5-orientation" content="portrait">-->
 	<meta name="x5-fullscreen" content="true">
 	<meta name="x5-page-mode" content="app">
-	<title>WebSocket Chat Demo</title>
+	<title>CHATEASE.JS</title>
 	<style>
 		body { margin: 10px; }
 	</style>
 	<!--<link type="text/css" rel="stylesheet" href="css/style.css" />-->
 	<script type='text/javascript' src="../sockjs/sockjs-1.0.3.js"></script>
-	<!--<script type='text/javascript' src='../chatease.min.js'></script>-->
-	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
+	<script type='text/javascript' src='../chatease.min.js'></script>
+	<!--<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.css.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.filter.js'></script>
@@ -44,7 +44,7 @@
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.controller.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
-	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>
+	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>-->
 </head>
 <body style="overflow: hidden;">
 	<div id='chatwrap'></div>
@@ -52,7 +52,7 @@
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chatwrap').setup({
-			url: 'ws://192.168.1.107/chatease/ch1',
+			url: 'ws://192.168.1.229/chatease/ch1?token=123456',
 			width: getWidth(),
 			height: getHeight(),
 			keywords: keywords,
@@ -65,7 +65,7 @@
 					cblog('onConnect');
 				},
 				onIdent: function(e) {
-					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + '.');
+					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + ', total: ' + e.channel.total + '.');
 				},
 				onMessage: function(e) {
 					//cblog('onMessage', e.user.name + ': ' + e.data);
@@ -75,6 +75,9 @@
 				},
 				onLeft: function(e) {
 					cblog('onLeft', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
+				},
+				onUsers: function(e) {
+					cblog('onUsers', 'channel[' + e.channel.id + ', ' + e.channel.state + '], total: ' + e.channel.total + '.');
 				},
 				onNickClick: function(e) {
 					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state+ '] in channel ' + e.channel.id + '.');

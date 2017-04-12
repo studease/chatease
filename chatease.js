@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.04';
+chatease.version = '1.0.05';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -276,6 +276,7 @@ chatease.version = '1.0.04';
 		CHATEASE_MESSAGE: 'chateaseMessage',
 		CHATEASE_JOIN: 'chateaseJoin',
 		CHATEASE_LEFT: 'chateaseLeft',
+		CHATEASE_USERS: 'chateaseUsers',
 		CHATEASE_CLOSE: 'chateaseClose',
 		
 		// View Events
@@ -420,6 +421,7 @@ chatease.version = '1.0.04';
 		onMessage: events.CHATEASE_MESSAGE,
 		onJoin: events.CHATEASE_JOIN,
 		onLeft: events.CHATEASE_LEFT,
+		onUsers: events.CHATEASE_USERS,
 		onNickClick: events.CHATEASE_VIEW_NICKCLICK,
 		onClose: events.CHATEASE_CLOSE
 	};
@@ -531,6 +533,7 @@ chatease.version = '1.0.04';
 		TEXT:    'text',
 		JOIN:    'join',
 		LEFT:    'left',
+		USERS:   'users',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
 		ERROR:   'error',
@@ -1775,6 +1778,10 @@ chatease.version = '1.0.04';
 					var title = _getUserTitle(data.user.role);
 					view.show((title ? title + ' ' : '') + data.user.name + ' 已离开。');
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
+					break;
+					
+				case raws.USERS:
+					_this.dispatchEvent(events.CHATEASE_USERS, data);
 					break;
 					
 				case raws.ERROR:
