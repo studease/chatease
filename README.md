@@ -6,7 +6,7 @@
 
 > [[zh_doc] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
 
-This is a client-side script for websocket chatting, with skin build in.
+This is a client-side script for websocket chatting, with skin built in.
 
 
 ## Tested
@@ -17,7 +17,7 @@ This is a client-side script for websocket chatting, with skin build in.
 * **Opera**
 * **Safari**
 * **IE10-11, Edge**
-* **IE7-9 (using sockjs)**
+* **IE7-9 (using sockjs, not supported by chatease-server for now)**
 
 
 ## Example
@@ -31,11 +31,13 @@ The example below will find the element with an id of chatwrap and render a dial
 <div id='chatwrap'></div>
 ...
 var chat = chatease('chatwrap').setup({
-	url: 'ws://localhost/chatease/ch1',
+	url: 'ws://localhost/ch1?token=123456',
 	width: 300,
 	height: 464
 });
 ```
+
+We append token right after the URL, while some browsers won't bring cookies when upgrading protocol.
 
 ### More Configuration
 
@@ -43,7 +45,7 @@ Please have a look at cn/studease/embed/chatease.embed.config.js.
 
 ```js
 _defaults = {
-	url: 'ws://' + window.location.host + '/chatease/ch1',
+	url: 'ws://' + window.location.host + '/ch1?token=123456',
 	width: 300,
 	height: 450,
 	keywords: '',
@@ -85,6 +87,7 @@ _eventMapping = {
 	onMessage: events.CHATEASE_MESSAGE,
 	onJoin: events.CHATEASE_JOIN,
 	onLeft: events.CHATEASE_LEFT,
+	onUsers: events.CHATEASE_USERS,
 	onNickClick: events.CHATEASE_VIEW_NICKCLICK,
 	onClose: events.CHATEASE_CLOSE
 }

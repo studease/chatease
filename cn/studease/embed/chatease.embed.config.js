@@ -7,7 +7,7 @@
 	
 	embed.config = function(config) {
 		var _defaults = {
-			url: 'ws://' + window.location.host + '/chatease/ch1',
+			url: 'ws://' + window.location.host + '/ch1?token=123456',
 			width: 300,
 			height: 450,
 			keywords: '',
