@@ -78,7 +78,7 @@
 	core.model = function(config) {
 		 var _this = utils.extend(this, new events.eventdispatcher('core.model')),
 		 	_defaults = {},
-		 	_state = states.STOPPED,
+		 	_state = states.CLOSED,
 		 	_properties;
 		
 		function _init() {
@@ -114,7 +114,7 @@
 		};
 		
 		_this.getConfig = function(name) {
-			return _this.config[name] || {};
+			return _this.config[name];
 		};
 		
 		_this.destroy = function() {

@@ -42,11 +42,7 @@
 		CSS_IMPORTANT = ' !important',
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
-		CSS_BLOCK = 'block',
-		
-		TITLE_HEIGHT = '40px',
-		CONTROLS_HEIGHT = '40px',
-		SENDBTN_WIDTH = '50px';
+		CSS_BLOCK = 'block';
 	
 	skins.def = function(config) {
 		var _this = utils.extend(this, new events.eventdispatcher('skins.def')),
@@ -59,9 +55,8 @@
 			SKIN_CLASS += '-' + _this.name;
 			
 			css('.' + WRAP_CLASS, {
-				width: _width + 'px',
-				height: _height + 'px',
-				'box-shadow': '0 1px 1px rgba(0, 0, 0, 0.05)'
+				width: CSS_100PCT,
+				height: CSS_100PCT
 			});
 			css('.' + WRAP_CLASS + ' *', {
 				margin: '0',
@@ -72,43 +67,59 @@
 				'box-sizing': 'content-box'
 			});
 			
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS, {
+				padding: '.6rem 1.4rem',
+				'font-style': CSS_NORMAL,
+				'font-weight': CSS_NORMAL,
+				'text-align': 'center',
+				'text-transform': 'uppercase',
+				'white-space': 'nowrap',
+				'word-spacing': CSS_NORMAL,
+				border: CSS_NONE,
+				'border-radius': '.1875rem',
+				cursor: 'pointer',
+				display: 'inline-block',
+				'-webkit-font-smoothing': 'subpixel-antialiased',
+				'-moz-osx-font-smoothing': 'grayscale',
+				transition: '150ms ease-in-out',
+				'transition-property': 'background-color, color'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red', {
+				color: '#FFFFFF',
+				'background-color': '#FF0046'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
+				'background-color': '#97052D'
+			});
+			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
-				width: _width - 2 + 'px',
-				height: _height - 2 + 'px',
-				border: '1px solid #1184ce',
-				'border-radius': '4px',
-				position: CSS_RELATIVE
+				width: CSS_100PCT,
+				height: CSS_100PCT,
+				display: 'flex',
+				'flex-flow': 'column nowrap'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + TITLE_CLASS, {
-				padding: 'auto 12px',
 				width: CSS_100PCT,
-				height: TITLE_HEIGHT,
-				
+				flex: '0 0 40px',
 				'font-family': 'inherit',
 				'font-weight': CSS_NORMAL,
-				color: '#FFFFFF',
-				
 				'text-align': 'center',
-				'line-height': TITLE_HEIGHT,
-				'vertical-align': 'middle',
-				
-				'box-shadow': CSS_NONE,
-				'background-color': '#1184CE',
-				
+				'line-height': '40px',
+				color: '#E6E6E6',
+				'background-color': '#171717',
 				cursor: 'not-allowed',
 				'pointer-events': CSS_NONE
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS, {
-				width: CSS_100PCT,
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.75 + 'px',
-				'max-height': (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.75 + 'px',
-				'overflow-y': 'auto',
-				'background-color': '#F8F8F8'
+				flex: '0 0 calc(100% - 140px)',
+				color: '#242424',
+				'background-color': '#F8F8F8',
+				'overflow-y': 'scroll'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
-				margin: '5px',
+				margin: '6px',
 				'word-break': 'break-all',
 				'word-wrap': 'break-word'
 			});
@@ -116,7 +127,7 @@
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS + ' > a', {
 				'font-style': CSS_NORMAL,
 				'font-weight': 'bold',
-				color: 'red'
+				color: '#FF0046'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_MYSELF_CLASS, {
 				//'text-align': 'right'
@@ -126,10 +137,10 @@
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VISITOR_CLASS, {
-				'margin-right': '5px'
+				'margin-right': '6px'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_NORMAL_CLASS, {
-				'margin-right': '5px'
+				'margin-right': '6px'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VIP_CLASS + '1', {
 				
@@ -171,153 +182,89 @@
 				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > a', {
-				'margin-right': '5px',
-				color: '#1184CE',
+				'margin-right': '6px',
+				color: '#0B7EF4',
 				'text-decoration': CSS_NONE,
 				cursor: 'pointer'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
 				width: CSS_100PCT,
-				height: parseInt(CONTROLS_HEIGHT) - 2 + 'px',
-				border: '1px solid #1184CE',
-				'border-width': '1px 0'
+				flex: '0 0 40px',
+				'line-height': CSS_100PCT,
+				display: 'flex',
+				'flex-flow': 'row nowrap',
+				'justify-content': 'space-between',
+				'align-items': 'stretch',
+				'background-color': '#171717',
+				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > *', {
-				'margin': '5px',
-				height: parseInt(CONTROLS_HEIGHT) - 12 + 'px',
-				'line-height': parseInt(CONTROLS_HEIGHT) - 12 + 'px',
+				margin: '6px 0',
 				'text-align': 'center',
-				'vertical-align': 'middle',
-				'box-sizing': 'border-box',
-				display: 'inline-block'
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS, {
-				color: '#666666',
-				'vertical-align': 'middle',
-				cursor: 'pointer'
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' > label', {
-				height: parseInt(CONTROLS_HEIGHT) - 12 + 'px',
 				display: 'block'
 			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS, {
+				color: '#E6E6E6',
+				cursor: 'pointer',
+				overflow: CSS_HIDDEN
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' > label', {
+				height: CSS_100PCT,
+				display: 'flex',
+				'flex-flow': 'row nowrap',
+				'justify-content': 'space-between',
+				'align-items': 'center',
+				cursor: 'pointer'
+			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' input[type=checkbox]', {
-				'margin-right': '5px',
+				'margin-right': '6px',
 				cursor: 'pointer'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' a', {
 				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
-				padding: '3px 5px',
-				width: '45px',
-				color: '#FFFFFF',
-				'text-align': 'center',
-				'vertical-align': 'middle',
-				'border-radius': '3px',
-				'background-color': '#1184CE',
-				cursor: 'pointer'
+				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
 				'float': 'left'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen', {
-				'float': 'right'
+				'float': 'right',
+				width: '3rem'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS, {
 				width: CSS_100PCT,
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px',
-				position: CSS_RELATIVE,
+				flex: '0 0 60px',
 				overflow: CSS_HIDDEN
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS, {
-				position: 'relative'
+				width: CSS_100PCT,
+				height: CSS_100PCT,
+				display: 'flex',
+				'flex-flow': 'row nowrap',
+				'justify-content': 'space-between',
+				'align-items': 'stretch',
+				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' textarea', {
-				'float': 'left',
-				margin: '0',
-				padding: '5px 10px',
-				width: _width - 2 - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px',
+				'margin-right': '6px',
+				padding: '6px 10px',
+				flex: '1 1 calc(100% - 3rem)',
 				resize: CSS_NONE,
 				border: '0 none',
-				'border-radius': '0 0 0 4px',
-				'box-sizing': 'border-box',
-				overflow: 'auto'
+				'background-color': '#E6E6E6'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' button', {
-				'float': 'left',
-				padding: 0,
-				width: SENDBTN_WIDTH,
-				height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px',
-				color: '#FFFFFF',
-				border: '0 none',
-				'box-sizing': 'border-box',
-				'background-color': '#1184CE',
-				cursor: 'pointer'
+				flex: '0 0 3rem'
 			});
-			
-			if (utils.isMSIE(7)) {
-				css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' textarea', {
-					width: _width - 2 - parseInt(SENDBTN_WIDTH) - 20 + 'px',
-					height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 - 12 + 'px'
-				});
-				css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' button', {
-					height: (_height - 2 - parseInt(TITLE_HEIGHT) - parseInt(CONTROLS_HEIGHT)) * 0.25 + 'px'
-				});
-			}
 		}
 		
 		_this.resize = function(width, height) {
-			utils.log('Resizing to ' + width + ', ' + height);
 			
-			_width = parseInt(width);
-			_height = parseInt(height);
-			/*
-			var _wrapper = document.getElementById(config.id),
-				_renderLayer = document.getElementById(config.prefix + RENDER_CLASS),
-				_mainLayer = document.getElementById(config.prefix + MAIN_CLASS),
-				_consoleLayer = document.getElementById(config.prefix + CONSOLE_CLASS),
-				_dialogLayer = document.getElementById(config.prefix + DIALOG_CLASS),
-				_textInput = document.getElementById(config.prefix + INPUT_CLASS),
-				_sendButton = document.getElementById(config.prefix + SUBMIT_CLASS);
-			
-			css.style(_wrapper, {
-				width: config.width + 'px',
-				height: config.height + 'px'
-			});
-			css.style(_renderLayer, {
-				width: config.width - 2 + 'px',
-				height: config.height - 2 + 'px'
-			});
-			css.style(_mainLayer, {
-				height: config.height -2 - parseInt(TITLE_HEIGHT) + 'px'
-			});
-			css.style(_consoleLayer, {
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.75 + 'px'
-			});
-			css.style(_dialogLayer, {
-				height: (config.height -1 - parseInt(TITLE_HEIGHT)) * 0.25 + 'px'
-			});
-			css.style(_textInput, {
-				width: config.width -2 - parseInt(SENDBTN_WIDTH) + 'px',
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROLS_HEIGHT) - 2 + 'px'
-			});
-			css.style(_sendButton, {
-				height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROLS_HEIGHT) -2 + 'px'
-			});
-			
-			if (utils.isMSIE(7)) {
-				css.style(_textInput, {
-					width: config.width -2 - parseInt(SENDBTN_WIDTH) - 20 + 'px',
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROLS_HEIGHT) - 12 + 'px'
-				});
-				css.style(_sendButton, {
-					height: (config.height - parseInt(TITLE_HEIGHT)) * 0.25 - parseInt(CONTROLS_HEIGHT) + 'px'
-				});
-			}*/
 		};
 		
 		_init();

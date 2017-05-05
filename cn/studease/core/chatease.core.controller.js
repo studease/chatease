@@ -309,6 +309,8 @@
 		
 		function _onReady(e) {
 			if (!_ready) {
+				utils.log('Chat ready!');
+				
 				_ready = true;
 				_forward(e);
 				

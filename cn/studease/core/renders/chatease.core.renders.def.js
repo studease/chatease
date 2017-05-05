@@ -43,10 +43,9 @@
 		CSS_NONE = 'none',
 		CSS_BLOCK = 'block';
 	
-	renders.def = function(view, config) {
+	renders.def = function(layer, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('renders.def')),
 			_defaults = {},
-			_renderLayer,
 			_titleLayer,
 			_consoleLayer,
 			_controlsLayer,
@@ -61,35 +60,33 @@
 			
 			_this.config = utils.extend({}, _defaults, config);
 			
-			_renderLayer = utils.createElement('div', RENDER_CLASS);
-			
 			_buildComponents();
 		}
 		
 		function _buildComponents() {
 			// title
 			_titleLayer = utils.createElement('div', TITLE_CLASS);
-			_renderLayer.appendChild(_titleLayer);
+			layer.appendChild(_titleLayer);
 			
 			_titleLayer.innerHTML = '聊天室';
 			
 			// console
 			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
-			_renderLayer.appendChild(_consoleLayer);
+			layer.appendChild(_consoleLayer);
 			
 			// controls
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
-			_renderLayer.appendChild(_controlsLayer);
+			layer.appendChild(_controlsLayer);
 			
 			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
 			_controlsLayer.appendChild(shieldChk);
 			
-			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' red clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
 			_controlsLayer.appendChild(clearBtn);
 			
 			// dialog
 			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
-			_renderLayer.appendChild(_dialogLayer);
+			layer.appendChild(_dialogLayer);
 			
 			_inputLayer = utils.createElement('div', INPUT_CLASS);
 			_dialogLayer.appendChild(_inputLayer);
@@ -97,7 +94,7 @@
 			_textInput = utils.createElement('textarea');
 			_inputLayer.appendChild(_textInput);
 			
-			_sendButton = utils.createElement('button');
+			_sendButton = utils.createElement('button', BUTTON_CLASS + ' red');
 			_inputLayer.appendChild(_sendButton);
 			
 			// textarea
@@ -208,7 +205,7 @@
 		}
 		
 		_this.setup = function() {
-			
+			_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 		};
 		
 		_this.show = function(text, user, type) {
@@ -326,7 +323,7 @@
 		};
 		
 		_this.element = function() {
-			return _renderLayer;
+			return null;
 		};
 		
 		_this.resize = function(width, height) {

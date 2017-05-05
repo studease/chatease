@@ -1,26 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" lang="en">
+﻿<!DOCTYPE HTML>
+<html>
 <head>
+	<title>ChatEase.JS</title>
+	
 	<meta charset="utf-8">
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no ,minimal-ui">
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<meta name="apple-mobile-web-app-title" content="chatease">
-	<meta content="telephone=no" name="format-detection" />
-	<meta content="email=no" name="format-detection" />
-	<meta name="screen-orientation" content="portrait">-->
-	<meta name="full-screen" content="yes">
-	<meta name="browsermode" content="application">
-	<!--<meta name="x5-orientation" content="portrait">-->
-	<meta name="x5-fullscreen" content="true">
-	<meta name="x5-page-mode" content="app">
-	<title>CHATEASE.JS</title>
-	<style>
-		body { margin: 10px; }
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="yes" name="apple-touch-fullscreen"/>
+	<meta content="telephone=no,email=no" name="format-detection"/>
+	<meta name="App-Config" content="fullscreen=yes, useHistoryState=yes, transition=yes"/>
+	
+	<style type='text/css' media='screen'>
+html {
+	font-size: 10px;
+}
+
+body {
+	margin: 0;
+	font-family: Karbon, Helvetica, Arial, sans-serif;
+	font-size: 1.4rem;
+	font-style: normal;
+	line-height: 1.6rem;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #E6E6E6;
+	background-color: #303030;
+}
 	</style>
-	<!--<link type="text/css" rel="stylesheet" href="css/style.css" />-->
-	<script type='text/javascript' src="../sockjs/sockjs-1.0.3.js"></script>
+	
 	<!--<script type='text/javascript' src='../chatease.min.js'></script>-->
 	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
@@ -46,65 +53,34 @@
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.config.js'></script>
 	<script type='text/javascript' src='../cn/studease/embed/chatease.embed.embedder.js'></script>
 </head>
-<body style="overflow: hidden;">
-	<div id='chatwrap'></div>
+<body ontouchstart=''>
+	<div id='chatwrap' style='margin: 2rem auto; width: 100%; height: 40rem; max-width: 640px;'>
+		<div id='chat'></div>
+	</div>
 	
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
-		var chat = chatease('chatwrap').setup({
+		var chat = chatease('chat').setup({
 			url: 'ws://192.168.1.229/ch1?token=123456',
-			width: getWidth(),
-			height: getHeight(),
+			width: '100%',
+			height: '100%',
 			keywords: keywords,
 			maxretries: 0,
 			events: {
-				onReady: function(e) {
-					cblog('onReady');
-				},
-				onConnect: function(e) {
-					cblog('onConnect');
-				},
 				onIdent: function(e) {
-					cblog('onIdent', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] in channel ' + e.channel.id + ', total: ' + e.channel.total + '.');
+					log('onIdent ' + e);
 				},
 				onMessage: function(e) {
-					//cblog('onMessage', e.user.name + ': ' + e.data);
-				},
-				onJoin: function(e) {
-					cblog('onJoin', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] joined channel ' + e.channel.id + '.');
-				},
-				onLeft: function(e) {
-					cblog('onLeft', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state + '] left channel ' + e.channel.id + '.');
+					//player.shoot(e.data);
 				},
 				onUsers: function(e) {
-					cblog('onUsers', 'channel[' + e.channel.id + ', ' + e.channel.state + '], total: ' + e.channel.total + '.');
-				},
-				onNickClick: function(e) {
-					cblog('onNickClick', e.user.name + '[' + e.user.id + ', ' + e.user.role + ', ' + e.channel.state+ '] in channel ' + e.channel.id + '.');
-				},
-				onError: function(e) {
-					cblog('onError', e.error ? e.error.explain : e.message);
-				},
-				onClose: function(e) {
-					cblog('onClose');
+					log('onUsers' + e);
 				}
 			}
 		});
 		
-		window.onresize = function() {
-			chat.resize(getWidth(), getHeight());
-		};
-		
-		function getWidth() {
-			return document.documentElement.clientWidth - 20;
-		}
-		
-		function getHeight() {
-			return document.documentElement.clientHeight - 20;
-		}
-		
-		function cblog(cb, msg) {
-			console.log('[cb.' + cb + '] ' + (msg || ''));
+		function log(text) {
+			console.log(text);
 		}
 	</script>
 </body>

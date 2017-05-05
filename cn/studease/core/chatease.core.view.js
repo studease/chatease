@@ -13,56 +13,55 @@
 		WRAP_CLASS = 'cha-wrapper',
 		SKIN_CLASS = 'cha-skin',
 		RENDER_CLASS = 'cha-render',
-		POSTER_CLASS = 'cha-poster',
 		CONTEXTMENU_CLASS = 'cha-contextmenu';
 	
-	core.view = function(entity, model) {
+	core.view = function(model) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.view')),
 			_wrapper,
 			_renderLayer,
-			_posterLayer,
 			_contextmenuLayer,
 			_render,
 			_skin,
 			_errorOccurred = false;
 		
 		function _init() {
-			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.config.skin.name);
-			_wrapper.id = entity.id;
+			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name);
+			_wrapper.id = model.getConfig('id');
 			_wrapper.tabIndex = 0;
 			
 			_renderLayer = utils.createElement('div', RENDER_CLASS);
-			_posterLayer = utils.createElement('div', POSTER_CLASS);
 			_contextmenuLayer = utils.createElement('div', CONTEXTMENU_CLASS);
 			
 			_wrapper.appendChild(_renderLayer);
-			_wrapper.appendChild(_posterLayer);
 			_wrapper.appendChild(_contextmenuLayer);
 			
 			_initRender();
 			_initSkin();
 			
-			var replace = document.getElementById(entity.id);
+			var replace = document.getElementById(model.getConfig('id'));
 			replace.parentNode.replaceChild(_wrapper, replace);
 			
-			window.onresize = function() {
-				if (utils.typeOf(model.config.onresize) == 'function') {
-					model.config.onresize.call(null);
-				}
-			};
+			try {
+				_wrapper.addEventListener('keydown', _onKeyDown);
+				window.addEventListener('resize', _onResize);
+			} catch (err) {
+				_wrapper.attachEvent('onkeydown', _onKeyDown);
+				window.attachEvent('onresize', _onResize);
+			}
 		}
 		
 		function _initRender() {
 			var cfg = utils.extend({}, model.getConfig('render'), {
-				id: entity.id,
-				width: model.config.width,
-				height: model.config.height,
-				maxlength: model.maxlength,
-				maxrecords: model.maxRecords
+				id: model.getConfig('id'),
+				width: model.getConfig('width'),
+				height: model.getConfig('height'),
+				maxlength: model.getConfig('maxlength'),
+				maxrecords: model.getConfig('maxrecords')
 			});
 			
 			try {
-				_render = _this.render = new renders[cfg.name](_this, cfg);
+				_render = _this.render = new renders[cfg.name](_renderLayer, cfg);
+				_render.addEventListener(events.CHATEASE_READY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
@@ -71,15 +70,11 @@
 			} catch (err) {
 				utils.log('Failed to init render ' + cfg.name + '!');
 			}
-			
-			if (_render) {
-				_wrapper.replaceChild(_render.element(), _renderLayer);
-			}
 		}
 		
 		function _initSkin() {
 			var cfg = utils.extend({}, model.getConfig('skin'), {
-				id: entity.id,
+				id: model.getConfig('id'),
 				width: model.config.width,
 				height: model.config.height
 			});
@@ -92,21 +87,13 @@
 		}
 		
 		_this.setup = function() {
+			// Ignore components & skin failure.
 			if (!_render) {
 				_this.dispatchEvent(events.CHATEASE_SETUP_ERROR, { message: 'Render not available!', name: model.config.render.name });
 				return;
 			}
+			
 			_render.setup();
-			
-			// Ignore skin failure.
-			
-			try {
-				_wrapper.addEventListener('keydown', _onKeyDown);
-			} catch (err) {
-				_wrapper.attachEvent('onkeydown', _onKeyDown);
-			}
-			
-			_this.dispatchEvent(events.CHATEASE_READY);
 		};
 		
 		_this.show = function(text, user, type) {
@@ -140,6 +127,10 @@
 				e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				return false;
 			}
+		}
+		
+		function _onResize(e) {
+			//_this.resize();
 		}
 		
 		_this.resize = function(width, height) {
