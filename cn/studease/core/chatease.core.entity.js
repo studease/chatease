@@ -22,6 +22,11 @@
 		}
 		
 		function _initializeAPI() {
+			_this.onSWFOpen = _controller.onOpen;
+			_this.onSWFMessage = _controller.onMessage;
+			_this.onSWFError = _controller.onError;
+			_this.onSWFClose = _controller.onClose;
+			
 			_this.send = _controller.send;
 			
 			_this.getState = _model.getState;

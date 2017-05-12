@@ -16,7 +16,8 @@
 	 		maxretries: -1,   // -1: always
 	 		retrydelay: 3000,
 			render: {
-				name: rendermodes.DEFAULT
+				name: rendermodes.DEFAULT,
+				swf: 'swf/chatease.swf'
 			},
 			skin: {
 				name: skinmodes.DEFAULT

@@ -60,6 +60,45 @@
 			
 			_this.config = utils.extend({}, _defaults, config);
 			
+			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+				layer.innerHTML = ''
+					+ '<object id="cha-swf" name="cha-swf" align="middle" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">'
+						+ '<param name="movie" value="' + _this.config.swf + '">'
+						+ '<param name="quality" value="high">'
+						+ '<param name="bgcolor" value="#ffffff">'
+						+ '<param name="allowscriptaccess" value="sameDomain">'
+						+ '<param name="allowfullscreen" value="true">'
+						+ '<param name="wmode" value="transparent">'
+						+ '<param name="FlashVars" value="id=' + _this.config.id + '">'
+					+ '</object>';
+				
+				_object = _this.WebSocket = layer.firstChild;
+				_object.style.display = 'none';
+			}/* else {
+				_object = utils.createElement('object');
+				_object.id = _object.name = 'cha-swf';
+				_object.align = 'middle';
+				_object.innerHTML = ''
+					+ '<param name="quality" value="high">'
+					+ '<param name="bgcolor" value="#ffffff">'
+					+ '<param name="allowscriptaccess" value="sameDomain">'
+					+ '<param name="allowfullscreen" value="true">'
+					+ '<param name="wmode" value="transparent">'
+					+ '<param name="FlashVars" value="id=' + _this.config.id + '">';
+				
+				if (utils.isMSIE()) {
+					_object.classid = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+					_object.movie = _this.config.swf;
+				} else {
+					_object.type = 'application/x-shockwave-flash';
+					_object.data = _this.config.swf;
+				}
+				
+				_this.WebSocket = _object;
+				_object.style.width = _object.style.height = '0';
+				layer.appendChild(_object);
+			}*/
+			
 			_buildComponents();
 		}
 		
@@ -106,11 +145,11 @@
 			var handler = (function() {
 				return function(event) {
 					var e = window.event || event;
-					if (e.keyCode != 13){
+					if (e.keyCode != 13) {
 						return;
 					}
 					
-					if (e.ctrlKey){
+					if (e.ctrlKey) {
 						_textInput.value += '\r\n';
 						return;
 					}
@@ -205,7 +244,16 @@
 		}
 		
 		_this.setup = function() {
-			_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+				setTimeout(function() {
+					if (_object.setup) {
+						_object.setup(_this.config);
+						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+					}
+				}, 0);
+			} else {
+				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+			}
 		};
 		
 		_this.show = function(text, user, type) {
@@ -323,7 +371,7 @@
 		};
 		
 		_this.element = function() {
-			return null;
+			return _object;
 		};
 		
 		_this.resize = function(width, height) {

@@ -33,24 +33,41 @@
 			view.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 		}
 		
+		function _onReady(e) {
+			if (!_ready) {
+				utils.log('Chat ready!');
+				
+				_ready = true;
+				_forward(e);
+				
+				_connect();
+				
+				window.onbeforeunload = function(e) {
+					if (_websocket && model.getState() == states.CONNECTED) {
+						_websocket.close();
+					}
+				};
+			}
+		}
+		
 		_this.send = function(data) {
-			if (!_websocket || model.state == states.CLOSED) {
+			if (!_websocket || model.getState() != states.CONNECTED) {
 				_connect();
 				return;
 			}
 			
 			if (utils.typeOf(data) != 'object' || data.hasOwnProperty('cmd') == false) {
-				_onError(errors.BAD_REQUEST, data);
+				_error(errors.BAD_REQUEST, data);
 				return;
 			}
 			
 			var userinfo = model.getProperty('userinfo');
 			if (userinfo.isActive() == false) {
-				_onError(errors.CONFLICT, data);
+				_error(errors.CONFLICT, data);
 				return;
 			}
 			if (userinfo.isMuted() == true) {
-				_onError(errors.FORBIDDED, data);
+				_error(errors.FORBIDDED, data);
 				return;
 			}
 			
@@ -58,7 +75,7 @@
 		};
 		
 		function _connect() {
-			if (_websocket && model.state != states.CONNECTED) {
+			if (_websocket && model.getState() == states.CONNECTED) {
 				utils.log('Websocket had connected already.');
 				return;
 			}
@@ -66,31 +83,27 @@
 			view.show('聊天室连接中…');
 			
 			try {
+				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
 					_websocket = new WebSocket(model.config.url);
-				} else if (window.MozWebSocket) {
-					_websocket = new MozWebSocket(model.config.url);
+					_websocket.onopen = _this.onOpen;
+					_websocket.onmessage = _this.onMessage;
+					_websocket.onerror = _this.onError;
+					_websocket.onclose = _this.onClose;
 				} else {
-					_websocket = new SockJS(model.config.url.replace(/^ws/, 'http') + '/sockjs');
+					_websocket = view.render.WebSocket;
+					_websocket.connect();
 				}
 			} catch (err) {
 				utils.log('Failed to initialize websocket: ' + err);
-				return;
 			}
-			
-			_websocket.onopen = function(e) {
-				model.setState(states.CONNECTED);
-			};
-			_websocket.onmessage = _onmessage;
-			_websocket.onerror = function(e) {
-				model.setState(states.ERROR);
-			};
-			_websocket.onclose = function(e) {
-				model.setState(states.CLOSED);
-			};
 		}
 		
-		function _onmessage(e) {
+		_this.onOpen = function(e) {
+			model.setState(states.CONNECTED);
+		};
+		
+		_this.onMessage = function(e) {
 			var data;
 			
 			try {
@@ -154,14 +167,22 @@
 					break;
 					
 				case raws.ERROR:
-					_onError(data.error.code, data);
+					_error(data.error.code, data);
 					break;
 					
 				default:
 					utils.log('Unknown data type: ' + data.raw + ', ignored.');
 					break;
 			}
-		}
+		};
+		
+		_this.onError = function(e) {
+			model.setState(states.ERROR);
+		};
+		
+		_this.onClose = function(e) {
+			model.setState(states.CLOSED);
+		};
 		
 		function _getUserTitle(role) {
 			var title = '';
@@ -201,7 +222,7 @@
 			return title;
 		}
 		
-		function _onError(code, params) {
+		function _error(code, params) {
 			var explain = _getErrorExplain(code);
 			if (explain) {
 				view.show(explain);
@@ -304,23 +325,6 @@
 				_websocket = null;
 				
 				setTimeout(_connect, delay);
-			}
-		}
-		
-		function _onReady(e) {
-			if (!_ready) {
-				utils.log('Chat ready!');
-				
-				_ready = true;
-				_forward(e);
-				
-				_connect();
-				
-				window.onbeforeunload = function(e) {
-					if (_websocket && model.state == states.CONNECTED) {
-						_websocket.close();
-					}
-				};
 			}
 		}
 		

@@ -18,6 +18,7 @@
 	core.view = function(model) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.view')),
 			_wrapper,
+			_object,
 			_renderLayer,
 			_contextmenuLayer,
 			_render,
@@ -53,6 +54,7 @@
 		function _initRender() {
 			var cfg = utils.extend({}, model.getConfig('render'), {
 				id: model.getConfig('id'),
+				url: model.getConfig('url'),
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
 				maxlength: model.getConfig('maxlength'),

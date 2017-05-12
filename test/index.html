@@ -61,11 +61,15 @@ body {
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var chat = chatease('chat').setup({
-			url: 'ws://192.168.1.229/ch1?token=123456',
+			url: 'ws://192.168.1.107/ch1?token=123456',
 			width: '100%',
 			height: '100%',
 			keywords: keywords,
 			maxretries: 0,
+			render: {
+				name: 'def',
+				swf: '../swf/chatease.swf'
+			},
 			events: {
 				onIdent: function(e) {
 					log('onIdent ' + e);
@@ -74,7 +78,7 @@ body {
 					//player.shoot(e.data);
 				},
 				onUsers: function(e) {
-					log('onUsers' + e);
+					log('onUsers ' + e);
 				}
 			}
 		});

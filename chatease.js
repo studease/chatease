@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.06';
+chatease.version = '1.0.07';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -458,7 +458,12 @@ chatease.version = '1.0.06';
 		
 		_this.setEntity = function(entity, renderName) {
 			_entity = entity;
-			_this.renderName = renderName;
+			
+			_this.onSWFLoaded = _entity.setup;
+			_this.onSWFOpen = _entity.onSWFOpen;
+			_this.onSWFMessage = _entity.onSWFMessage;
+			_this.onSWFError = _entity.onSWFError;
+			_this.onSWFClose = _entity.onSWFClose;
 			
 			_this.send = _entity.send;
 			_this.resize = _entity.resize;
@@ -937,6 +942,45 @@ chatease.version = '1.0.06';
 			
 			_this.config = utils.extend({}, _defaults, config);
 			
+			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+				layer.innerHTML = ''
+					+ '<object id="cha-swf" name="cha-swf" align="middle" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">'
+						+ '<param name="movie" value="' + _this.config.swf + '">'
+						+ '<param name="quality" value="high">'
+						+ '<param name="bgcolor" value="#ffffff">'
+						+ '<param name="allowscriptaccess" value="sameDomain">'
+						+ '<param name="allowfullscreen" value="true">'
+						+ '<param name="wmode" value="transparent">'
+						+ '<param name="FlashVars" value="id=' + _this.config.id + '">'
+					+ '</object>';
+				
+				_object = _this.WebSocket = layer.firstChild;
+				_object.style.display = 'none';
+			}/* else {
+				_object = utils.createElement('object');
+				_object.id = _object.name = 'cha-swf';
+				_object.align = 'middle';
+				_object.innerHTML = ''
+					+ '<param name="quality" value="high">'
+					+ '<param name="bgcolor" value="#ffffff">'
+					+ '<param name="allowscriptaccess" value="sameDomain">'
+					+ '<param name="allowfullscreen" value="true">'
+					+ '<param name="wmode" value="transparent">'
+					+ '<param name="FlashVars" value="id=' + _this.config.id + '">';
+				
+				if (utils.isMSIE()) {
+					_object.classid = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+					_object.movie = _this.config.swf;
+				} else {
+					_object.type = 'application/x-shockwave-flash';
+					_object.data = _this.config.swf;
+				}
+				
+				_this.WebSocket = _object;
+				_object.style.width = _object.style.height = '0';
+				layer.appendChild(_object);
+			}*/
+			
 			_buildComponents();
 		}
 		
@@ -983,11 +1027,11 @@ chatease.version = '1.0.06';
 			var handler = (function() {
 				return function(event) {
 					var e = window.event || event;
-					if (e.keyCode != 13){
+					if (e.keyCode != 13) {
 						return;
 					}
 					
-					if (e.ctrlKey){
+					if (e.ctrlKey) {
 						_textInput.value += '\r\n';
 						return;
 					}
@@ -1082,7 +1126,16 @@ chatease.version = '1.0.06';
 		}
 		
 		_this.setup = function() {
-			_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+				setTimeout(function() {
+					if (_object.setup) {
+						_object.setup(_this.config);
+						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+					}
+				}, 0);
+			} else {
+				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+			}
 		};
 		
 		_this.show = function(text, user, type) {
@@ -1200,7 +1253,7 @@ chatease.version = '1.0.06';
 		};
 		
 		_this.element = function() {
-			return null;
+			return _object;
 		};
 		
 		_this.resize = function(width, height) {
@@ -1239,6 +1292,11 @@ chatease.version = '1.0.06';
 		}
 		
 		function _initializeAPI() {
+			_this.onSWFOpen = _controller.onOpen;
+			_this.onSWFMessage = _controller.onMessage;
+			_this.onSWFError = _controller.onError;
+			_this.onSWFClose = _controller.onClose;
+			
 			_this.send = _controller.send;
 			
 			_this.getState = _model.getState;
@@ -1419,6 +1477,7 @@ chatease.version = '1.0.06';
 	core.view = function(model) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.view')),
 			_wrapper,
+			_object,
 			_renderLayer,
 			_contextmenuLayer,
 			_render,
@@ -1454,6 +1513,7 @@ chatease.version = '1.0.06';
 		function _initRender() {
 			var cfg = utils.extend({}, model.getConfig('render'), {
 				id: model.getConfig('id'),
+				url: model.getConfig('url'),
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
 				maxlength: model.getConfig('maxlength'),
@@ -1599,24 +1659,41 @@ chatease.version = '1.0.06';
 			view.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 		}
 		
+		function _onReady(e) {
+			if (!_ready) {
+				utils.log('Chat ready!');
+				
+				_ready = true;
+				_forward(e);
+				
+				_connect();
+				
+				window.onbeforeunload = function(e) {
+					if (_websocket && model.getState() == states.CONNECTED) {
+						_websocket.close();
+					}
+				};
+			}
+		}
+		
 		_this.send = function(data) {
-			if (!_websocket || model.state == states.CLOSED) {
+			if (!_websocket || model.getState() != states.CONNECTED) {
 				_connect();
 				return;
 			}
 			
 			if (utils.typeOf(data) != 'object' || data.hasOwnProperty('cmd') == false) {
-				_onError(errors.BAD_REQUEST, data);
+				_error(errors.BAD_REQUEST, data);
 				return;
 			}
 			
 			var userinfo = model.getProperty('userinfo');
 			if (userinfo.isActive() == false) {
-				_onError(errors.CONFLICT, data);
+				_error(errors.CONFLICT, data);
 				return;
 			}
 			if (userinfo.isMuted() == true) {
-				_onError(errors.FORBIDDED, data);
+				_error(errors.FORBIDDED, data);
 				return;
 			}
 			
@@ -1624,7 +1701,7 @@ chatease.version = '1.0.06';
 		};
 		
 		function _connect() {
-			if (_websocket && model.state != states.CONNECTED) {
+			if (_websocket && model.getState() == states.CONNECTED) {
 				utils.log('Websocket had connected already.');
 				return;
 			}
@@ -1632,31 +1709,27 @@ chatease.version = '1.0.06';
 			view.show('聊天室连接中…');
 			
 			try {
+				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
 					_websocket = new WebSocket(model.config.url);
-				} else if (window.MozWebSocket) {
-					_websocket = new MozWebSocket(model.config.url);
+					_websocket.onopen = _this.onOpen;
+					_websocket.onmessage = _this.onMessage;
+					_websocket.onerror = _this.onError;
+					_websocket.onclose = _this.onClose;
 				} else {
-					_websocket = new SockJS(model.config.url.replace(/^ws/, 'http') + '/sockjs');
+					_websocket = view.render.WebSocket;
+					_websocket.connect();
 				}
 			} catch (err) {
 				utils.log('Failed to initialize websocket: ' + err);
-				return;
 			}
-			
-			_websocket.onopen = function(e) {
-				model.setState(states.CONNECTED);
-			};
-			_websocket.onmessage = _onmessage;
-			_websocket.onerror = function(e) {
-				model.setState(states.ERROR);
-			};
-			_websocket.onclose = function(e) {
-				model.setState(states.CLOSED);
-			};
 		}
 		
-		function _onmessage(e) {
+		_this.onOpen = function(e) {
+			model.setState(states.CONNECTED);
+		};
+		
+		_this.onMessage = function(e) {
 			var data;
 			
 			try {
@@ -1720,14 +1793,22 @@ chatease.version = '1.0.06';
 					break;
 					
 				case raws.ERROR:
-					_onError(data.error.code, data);
+					_error(data.error.code, data);
 					break;
 					
 				default:
 					utils.log('Unknown data type: ' + data.raw + ', ignored.');
 					break;
 			}
-		}
+		};
+		
+		_this.onError = function(e) {
+			model.setState(states.ERROR);
+		};
+		
+		_this.onClose = function(e) {
+			model.setState(states.CLOSED);
+		};
 		
 		function _getUserTitle(role) {
 			var title = '';
@@ -1767,7 +1848,7 @@ chatease.version = '1.0.06';
 			return title;
 		}
 		
-		function _onError(code, params) {
+		function _error(code, params) {
 			var explain = _getErrorExplain(code);
 			if (explain) {
 				view.show(explain);
@@ -1870,23 +1951,6 @@ chatease.version = '1.0.06';
 				_websocket = null;
 				
 				setTimeout(_connect, delay);
-			}
-		}
-		
-		function _onReady(e) {
-			if (!_ready) {
-				utils.log('Chat ready!');
-				
-				_ready = true;
-				_forward(e);
-				
-				_connect();
-				
-				window.onbeforeunload = function(e) {
-					if (_websocket && model.state == states.CONNECTED) {
-						_websocket.close();
-					}
-				};
 			}
 		}
 		
@@ -2034,7 +2098,8 @@ chatease.version = '1.0.06';
 	 		maxretries: -1,   // -1: always
 	 		retrydelay: 3000,
 			render: {
-				name: rendermodes.DEFAULT
+				name: rendermodes.DEFAULT,
+				swf: 'swf/chatease.swf'
 			},
 			skin: {
 				name: skinmodes.DEFAULT

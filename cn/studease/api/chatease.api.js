@@ -48,7 +48,12 @@
 		
 		_this.setEntity = function(entity, renderName) {
 			_entity = entity;
-			_this.renderName = renderName;
+			
+			_this.onSWFLoaded = _entity.setup;
+			_this.onSWFOpen = _entity.onSWFOpen;
+			_this.onSWFMessage = _entity.onSWFMessage;
+			_this.onSWFError = _entity.onSWFError;
+			_this.onSWFClose = _entity.onSWFClose;
 			
 			_this.send = _entity.send;
 			_this.resize = _entity.resize;

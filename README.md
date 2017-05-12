@@ -6,7 +6,7 @@
 
 > [[zh_doc] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
 
-This is a client-side script for websocket chatting, with skin built in.
+This is a client-side script for websocket chat, with skin built in.
 
 
 ## Tested
@@ -17,7 +17,7 @@ This is a client-side script for websocket chatting, with skin built in.
 * **Opera**
 * **Safari**
 * **IE10-11, Edge**
-* **IE7-9 (using sockjs, not supported by chatease-server for now)**
+* **IE7-9 (Flash is needed.)**
 
 
 ## Example
@@ -25,7 +25,7 @@ This is a client-side script for websocket chatting, with skin built in.
 
 ### Basic Configuraion
 
-The example below will find the element with an id of chatwrap and render a dialog into it.
+The example below will find the element with an id of "chatwrap" and render a dialog into it.
 
 ```js
 <div id='chatwrap'></div>
