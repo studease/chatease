@@ -2081,8 +2081,8 @@ chatease.version = '1.0.09';
 	embed.config = function(config) {
 		var _defaults = {
 			url: 'ws://' + window.location.host + '/ch1?token=123456',
-			width: 300,
-			height: 450,
+			width: 640,
+			height: 400,
 			keywords: '',
 	 		maxlength: 30,    // -1: no limit
 	 		maxrecords: 50,

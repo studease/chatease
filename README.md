@@ -32,8 +32,8 @@ The example below will find the element with an id of "chatwrap" and render a di
 ...
 var chat = chatease('chatwrap').setup({
 	url: 'ws://localhost/ch1?token=123456',
-	width: 300,
-	height: 464
+	width: 640,
+	height: 400
 });
 ```
 
@@ -46,8 +46,8 @@ Please have a look at cn/studease/embed/chatease.embed.config.js.
 ```js
 _defaults = {
 	url: 'ws://' + window.location.host + '/ch1?token=123456',
-	width: 300,
-	height: 450,
+	width: 640,
+	height: 400,
 	keywords: '',
 	maxlength: 30,    // -1: no limit
 	maxrecords: 50,
