@@ -191,7 +191,10 @@
 			
 			var handler = (function(event, data) {
 				return function(e) {
-					_this.dispatchEvent(event, utils.extend({ value: input.checked }, data));
+					var isChecked = box.getAttribute('checked') == 'true' ? false : true;
+					box.setAttribute('checked', isChecked);
+					
+					_this.dispatchEvent(event, utils.extend({ value: isChecked }, data));
 				};
 			})(event, data);
 			
