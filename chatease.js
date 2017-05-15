@@ -664,6 +664,15 @@ chatease.version = '1.0.09';
 				'box-sizing': 'content-box'
 			});
 			
+			css('.' + SKIN_CLASS + ' .' + CHECKBOX_CLASS, {
+				padding: '6px 0 6px 18px',
+				color: '#E6E6E6',
+				'background-repeat': 'no-repeat',
+				'background-position': 'left center',
+				cursor: 'pointer',
+				overflow: CSS_HIDDEN
+			});
+			
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS, {
 				padding: '6px 14px',
 				'font-style': CSS_NORMAL,
@@ -798,14 +807,10 @@ chatease.version = '1.0.09';
 				display: 'block'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS, {
-				padding: '6px 0 6px 20px',
-				color: '#E6E6E6',
-				cursor: 'pointer',
-				background: 'url(../skins/checkbox.png) no-repeat left center',
-				overflow: CSS_HIDDEN
+				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOAgMAAABiJsVCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcebm5ubm5kbBEu0AAAACdFJOUwCgoEVu0AAAABpJREFUCNdjYAABqVWrHBi0Vq1qII0AawMBACnPF0kf/g8sAAAAAElFTkSuQmCC)'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + '[checked=true]', {
-				background: 'url(../skins/checkbox-on.png) no-repeat left center'
+				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAA40lEQVQ4T52SvXHCQBCF3wuUKDHp7QXYFZgOrBKgAqADOsDuRK7ALoEOGDqwk1UoSHSBZrTMMWhGY358w0YbvG9/3i7xYDByqloCmKfUMLPSe7/sQUuADmfNk4gwCTSzXZZli7ZtS5KvSWCE8jwvmqZZkVzHrv+CPRRCKAB89etcA38BjM+CA8lJzLuu25Ic3QJ/RORl4PBMRL5VdQPgbWjeRUcz+/Dev1dVVTjnNqo6HY54b1SQXDrnyrquRyGELYDnv6e6Z87MzCa9i8mgme2jeGjIrR2TXw7Ap4gsTp/zSBwBq1l6D5ci9L8AAAAASUVORK5CYII=)'
 			});
 			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
 				
