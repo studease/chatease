@@ -50,8 +50,6 @@
 			_consoleLayer,
 			_controlsLayer,
 			_dialogLayer,
-			
-			_inputLayer,
 			_textInput,
 			_sendButton;
 		
@@ -111,6 +109,7 @@
 			
 			// console
 			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
+			_consoleLayer.id = _this.config.id + '-console';
 			layer.appendChild(_consoleLayer);
 			
 			// controls
@@ -127,14 +126,12 @@
 			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
 			layer.appendChild(_dialogLayer);
 			
-			_inputLayer = utils.createElement('div', INPUT_CLASS);
-			_dialogLayer.appendChild(_inputLayer);
-			
 			_textInput = utils.createElement('textarea');
-			_inputLayer.appendChild(_textInput);
+			_textInput.id = _this.config.id + '-input';
+			_dialogLayer.appendChild(_textInput);
 			
 			_sendButton = utils.createElement('button', BUTTON_CLASS + ' red');
-			_inputLayer.appendChild(_sendButton);
+			_dialogLayer.appendChild(_sendButton);
 			
 			// textarea
 			_textInput.setAttribute('placeholder', '输入聊天内容');
@@ -189,15 +186,8 @@
 		function _getCheckBox(label, clazz, event, data, checked) {
 			var box = utils.createElement('div', clazz);
 			
-			var lb = utils.createElement('label');
-			box.appendChild(lb);
-			
-			// input
-			var input = utils.createElement('input');
-			lb.appendChild(input);
-			
-			input.setAttribute('type', 'checkbox');
-			input.checked = !!checked;
+			box.setAttribute('checked', !!checked);
+			box.innerHTML = label;
 			
 			var handler = (function(event, data) {
 				return function(e) {
@@ -206,16 +196,10 @@
 			})(event, data);
 			
 			try {
-				input.addEventListener('change', handler);
+				box.addEventListener('click', handler);
 			} catch (err) {
-				input.attachEvent('onchange', handler);
+				box.attachEvent('onclick', handler);
 			}
-			
-			// label
-			var txt = utils.createElement('a');
-			lb.appendChild(txt);
-			
-			txt.innerHTML = label;
 			
 			return box;
 		}
@@ -260,7 +244,7 @@
 		_this.show = function(text, user, type) {
 			// set default
 			if (utils.typeOf(user) != 'object') {
-				user = { id: 0, name: '[系统]', role: roles.SYSTEM };
+				user = { id: 0, name: '系统', role: roles.SYSTEM };
 			}
 			if (type != 'uni') {
 				type = 'multi';
@@ -288,11 +272,11 @@
 			
 			// set nickname
 			var a = utils.createElement('a');
-			a.innerHTML = user.name;
+			a.innerHTML = user.name + '：';
 			
 			var nickHandler = (function(user) {
 				return function(e) {
-					_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: user } );
+					_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: user });
 				};
 			})(user);
 			

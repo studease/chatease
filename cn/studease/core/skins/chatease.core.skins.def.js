@@ -16,8 +16,6 @@
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		INPUT_CLASS = 'cha-input',
-		
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
@@ -45,12 +43,12 @@
 		CSS_BLOCK = 'block';
 	
 	skins.def = function(config) {
-		var _this = utils.extend(this, new events.eventdispatcher('skins.def')),
-			_width = config.width,
-			_height = config.height;
+		var _this = utils.extend(this, new events.eventdispatcher('skins.def'));
 		
 		function _init() {
 			_this.name = skinmodes.DEFAULT;
+			
+			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
 			
@@ -61,14 +59,14 @@
 			css('.' + WRAP_CLASS + ' *', {
 				margin: '0',
 				padding: '0',
-				'font-family': '微软雅黑,arial,sans-serif',
+				'font-family': 'Microsoft YaHei,arial,sans-serif',
 				'font-size': '14px',
 				'font-weight': CSS_NORMAL,
 				'box-sizing': 'content-box'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS, {
-				padding: '.6rem 1.4rem',
+				padding: '6px 14px',
 				'font-style': CSS_NORMAL,
 				'font-weight': CSS_NORMAL,
 				'text-align': 'center',
@@ -76,7 +74,7 @@
 				'white-space': 'nowrap',
 				'word-spacing': CSS_NORMAL,
 				border: CSS_NONE,
-				'border-radius': '.1875rem',
+				'border-radius': '2px',
 				cursor: 'pointer',
 				display: 'inline-block',
 				'-webkit-font-smoothing': 'subpixel-antialiased',
@@ -94,26 +92,24 @@
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
 				width: CSS_100PCT,
-				height: CSS_100PCT,
-				display: 'flex',
-				'flex-flow': 'column nowrap'
+				height: CSS_100PCT
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + TITLE_CLASS, {
 				width: CSS_100PCT,
-				flex: '0 0 40px',
+				height: '40px',
 				'font-family': 'inherit',
 				'font-weight': CSS_NORMAL,
 				'text-align': 'center',
 				'line-height': '40px',
 				color: '#E6E6E6',
 				'background-color': '#171717',
-				cursor: 'not-allowed',
+				cursor: 'default',
 				'pointer-events': CSS_NONE
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS, {
-				flex: '0 0 calc(100% - 140px)',
+				height: _this.config.height - 140 + 'px',
 				color: '#242424',
 				'background-color': '#F8F8F8',
 				'overflow-y': 'scroll'
@@ -124,10 +120,13 @@
 				'word-wrap': 'break-word'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS + ' > a', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS + ' > a', {
 				'font-style': CSS_NORMAL,
-				'font-weight': 'bold',
-				color: '#FF0046'
+				'font-weight': CSS_NORMAL,
+				color: '#33CC00',
+				cursor: 'default',
+				'pointer-events': CSS_NONE
 			});
 			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_MYSELF_CLASS, {
 				
@@ -182,20 +181,15 @@
 				
 			});*/
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > a', {
-				'margin-right': '6px',
-				color: '#0B7EF4',
+				color: '#3C9CFE',
 				'text-decoration': CSS_NONE,
 				cursor: 'pointer'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
 				width: CSS_100PCT,
-				flex: '0 0 40px',
+				height: '40px',
 				'line-height': CSS_100PCT,
-				display: 'flex',
-				'flex-flow': 'row nowrap',
-				'justify-content': 'space-between',
-				'align-items': 'stretch',
 				'background-color': '#171717',
 				overflow: CSS_HIDDEN
 			});
@@ -205,26 +199,16 @@
 				display: 'block'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS, {
+				padding: '6px 0 6px 20px',
 				color: '#E6E6E6',
 				cursor: 'pointer',
+				background: 'url(../skins/checkbox.png) no-repeat left center',
 				overflow: CSS_HIDDEN
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' > label', {
-				height: CSS_100PCT,
-				display: 'flex',
-				'flex-flow': 'row nowrap',
-				'justify-content': 'space-between',
-				'align-items': 'center',
-				cursor: 'pointer'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + '[checked=true]', {
+				background: 'url(../skins/checkbox-on.png) no-repeat left center'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' input[type=checkbox]', {
-				'margin-right': '6px',
-				cursor: 'pointer'
-			});
-			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' a', {
-				
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
+			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
 				
 			});*/
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
@@ -232,39 +216,42 @@
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen', {
 				'float': 'right',
-				width: '3rem'
+				width: '42px'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS, {
 				width: CSS_100PCT,
-				flex: '0 0 60px',
+				height: '60px',
 				overflow: CSS_HIDDEN
 			});
-			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS, {
-				width: CSS_100PCT,
-				height: CSS_100PCT,
-				display: 'flex',
-				'flex-flow': 'row nowrap',
-				'justify-content': 'space-between',
-				'align-items': 'stretch',
-				overflow: CSS_HIDDEN
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' textarea', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' textarea', {
 				'margin-right': '6px',
 				padding: '6px 10px',
-				flex: '1 1 calc(100% - 3rem)',
+				width: _this.config.width - 124 + 'px',
+				height: '48px',
 				resize: CSS_NONE,
 				border: '0 none',
 				'background-color': '#E6E6E6'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .' + INPUT_CLASS + ' button', {
-				flex: '0 0 3rem'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' button', {
+				'float': 'right',
+				width: '42px',
+				height: '48px'
 			});
 		}
 		
 		_this.resize = function(width, height) {
+			var wrapper = document.getElementById(_this.config.id);
+			var consoleLayer = document.getElementById(_this.config.id + '-console');
+			var textInput = document.getElementById(_this.config.id + '-input');
 			
+			css.style(consoleLayer, {
+				height: wrapper.clientHeight - 140 + 'px'
+			});
+			
+			css.style(textInput, {
+				width: wrapper.clientWidth - 96 + 'px'
+			});
 		};
 		
 		_init();

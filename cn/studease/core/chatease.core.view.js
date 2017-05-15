@@ -96,6 +96,7 @@
 			}
 			
 			_render.setup();
+			_this.resize();
 		};
 		
 		_this.show = function(text, user, type) {

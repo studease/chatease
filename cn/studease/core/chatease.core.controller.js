@@ -91,7 +91,9 @@
 			try {
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
-					_websocket = new WebSocket(model.config.url);
+					if (!_websocket) {
+						_websocket = new WebSocket(model.config.url);
+					}
 					_websocket.onopen = _this.onOpen;
 					_websocket.onmessage = _this.onMessage;
 					_websocket.onerror = _this.onError;
