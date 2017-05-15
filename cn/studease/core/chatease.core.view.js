@@ -115,7 +115,9 @@
 			
 			switch (e.keyCode) {
 				case 13: // enter
-					_render.send();
+					if (_render) {
+						_render.send();
+					}
 					break;
 				case 32: // space
 					

@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.07';
+chatease.version = '1.0.08';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -728,12 +728,12 @@ chatease.version = '1.0.07';
 				'font-weight': 'bold',
 				color: '#FF0046'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_MYSELF_CLASS, {
-				//'text-align': 'right'
+			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_MYSELF_CLASS, {
+				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_MYSELF_CLASS + ' > a', {
 				
-			});
+			});*/
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VISITOR_CLASS, {
 				'margin-right': '6px'
@@ -741,7 +741,7 @@ chatease.version = '1.0.07';
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_NORMAL_CLASS, {
 				'margin-right': '6px'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VIP_CLASS + '1', {
+			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VIP_CLASS + '1', {
 				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_VIP_CLASS + '2', {
@@ -779,7 +779,7 @@ chatease.version = '1.0.07';
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > span.' + ICON_SYSTEM_CLASS, {
 				
-			});
+			});*/
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > a', {
 				'margin-right': '6px',
 				color: '#0B7EF4',
@@ -820,12 +820,12 @@ chatease.version = '1.0.07';
 				'margin-right': '6px',
 				cursor: 'pointer'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' a', {
+			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + CHECKBOX_CLASS + ' a', {
 				
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > .' + BUTTON_CLASS, {
 				
-			});
+			});*/
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
 				'float': 'left'
 			});
@@ -955,7 +955,7 @@ chatease.version = '1.0.07';
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-				_object.style.display = 'none';
+				_object.style.width = _object.style.height = '0';
 			}/* else {
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
@@ -1078,7 +1078,7 @@ chatease.version = '1.0.07';
 			var input = utils.createElement('input');
 			lb.appendChild(input);
 			
-			input.type = 'checkbox';
+			input.setAttribute('type', 'checkbox');
 			input.checked = !!checked;
 			
 			var handler = (function(event, data) {
@@ -1127,12 +1127,13 @@ chatease.version = '1.0.07';
 		
 		_this.setup = function() {
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
-				setTimeout(function() {
+				//setTimeout(function() {
 					if (_object.setup) {
+						_this.config.debug = false;
 						_object.setup(_this.config);
 						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 					}
-				}, 0);
+				//}, 0);
 			} else {
 				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 			}
@@ -1306,7 +1307,7 @@ chatease.version = '1.0.07';
 		
 		_this.setup = function() {
 			setTimeout(function() {
-				_view.setup();
+				_controller.setup();
 			}, 0);
 		};
 		
@@ -1574,7 +1575,9 @@ chatease.version = '1.0.07';
 			
 			switch (e.keyCode) {
 				case 13: // enter
-					_render.send();
+					if (_render) {
+						_render.send();
+					}
 					break;
 				case 32: // space
 					
@@ -1670,11 +1673,17 @@ chatease.version = '1.0.07';
 				
 				window.onbeforeunload = function(e) {
 					if (_websocket && model.getState() == states.CONNECTED) {
-						_websocket.close();
+						//_websocket.close();
 					}
 				};
 			}
 		}
+		
+		_this.setup = function(e) {
+			if (!_ready) {
+				view.setup();
+			}
+		};
 		
 		_this.send = function(data) {
 			if (!_websocket || model.getState() != states.CONNECTED) {

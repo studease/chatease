@@ -73,7 +73,7 @@
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-				_object.style.display = 'none';
+				_object.style.width = _object.style.height = '0';
 			}/* else {
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
@@ -196,7 +196,7 @@
 			var input = utils.createElement('input');
 			lb.appendChild(input);
 			
-			input.type = 'checkbox';
+			input.setAttribute('type', 'checkbox');
 			input.checked = !!checked;
 			
 			var handler = (function(event, data) {
@@ -245,12 +245,13 @@
 		
 		_this.setup = function() {
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
-				setTimeout(function() {
+				//setTimeout(function() {
 					if (_object.setup) {
+						_this.config.debug = false;
 						_object.setup(_this.config);
 						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 					}
-				}, 0);
+				//}, 0);
 			} else {
 				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 			}

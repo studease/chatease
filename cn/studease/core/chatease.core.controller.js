@@ -44,11 +44,17 @@
 				
 				window.onbeforeunload = function(e) {
 					if (_websocket && model.getState() == states.CONNECTED) {
-						_websocket.close();
+						//_websocket.close();
 					}
 				};
 			}
 		}
+		
+		_this.setup = function(e) {
+			if (!_ready) {
+				view.setup();
+			}
+		};
 		
 		_this.send = function(data) {
 			if (!_websocket || model.getState() != states.CONNECTED) {
