@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.09';
+chatease.version = '1.0.10';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -829,7 +829,6 @@ chatease.version = '1.0.09';
 				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' textarea', {
-				'margin-right': '6px',
 				padding: '6px 10px',
 				width: _this.config.width - 124 + 'px',
 				height: '48px',

@@ -230,7 +230,6 @@
 				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' textarea', {
-				'margin-right': '6px',
 				padding: '6px 10px',
 				width: _this.config.width - 124 + 'px',
 				height: '48px',
