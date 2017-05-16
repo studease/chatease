@@ -135,7 +135,7 @@
 		}
 		
 		function _onResize(e) {
-			//_this.resize();
+			_this.resize();
 		}
 		
 		_this.resize = function(width, height) {

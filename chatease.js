@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.10';
+chatease.version = '1.0.11';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1573,7 +1573,7 @@ chatease.version = '1.0.10';
 		}
 		
 		function _onResize(e) {
-			//_this.resize();
+			_this.resize();
 		}
 		
 		_this.resize = function(width, height) {
