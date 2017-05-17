@@ -62,8 +62,8 @@ body {
 	<script type="text/javaScript">
 		var chat = chatease('chat').setup({
 			url: 'ws://192.168.1.228/ch1?token=123456',
-			width: '100%',
-			height: '100%',
+			width: 640,
+			height: 400,
 			keywords: keywords,
 			maxretries: 0,
 			render: {
@@ -71,9 +71,6 @@ body {
 				swf: '../swf/chatease.swf'
 			},
 			events: {
-				onIdent: function(e) {
-					log('onIdent ' + e);
-				},
 				onMessage: function(e) {
 					//player.shoot(e.data);
 				},
