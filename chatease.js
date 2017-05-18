@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.11';
+chatease.version = '1.0.13';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -68,10 +68,55 @@ chatease.version = '1.0.11';
 		while (str.length < len) {
 			str = '0' + str;
 		}
+		
 		return str;
 	};
 	
+	utils.typeOf = function(value) {
+		if (value === null || value === undefined) {
+			return 'null';
+		}
+		
+		var typeofString = typeof value;
+		if (typeofString === 'object') {
+			try {
+				var str = toString.call(value);
+				var arr = str.match(/^\[object ([a-z]+)\]$/i);
+				if (arr && arr.length > 1 && arr[1]) {
+					return arr[1].toLowerCase();
+				}
+			} catch (err) {
+				/* void */
+			}
+		}
+		
+		return typeofString;
+	};
 	
+	utils.isInt = function(value) {
+		return parseFloat(value) % 1 === 0;
+	};
+	
+	utils.trim = function(inputString) {
+		return inputString.replace(/^\s+|\s+$/g, '');
+	};
+	
+	utils.indexOf = function(array, item) {
+		if (array == null) {
+			return -1;
+		}
+		
+		for (var i = 0; i < array.length; i++) {
+			if (array[i] === item) {
+				return i;
+			}
+		}
+		
+		return -1;
+	};
+	
+	
+	/* DOM */
 	utils.createElement = function(elem, className) {
 		var newElement = document.createElement(elem);
 		if (className) {
@@ -113,35 +158,8 @@ chatease.version = '1.0.11';
 		}
 	};
 	
-	utils.typeOf = function(value) {
-		if (value === null || value === undefined) {
-			return 'null';
-		}
-		var typeofString = typeof value;
-		if (typeofString === 'object') {
-			try {
-				if (toString.call(value) === '[object Array]') {
-					return 'array';
-				}
-			} catch (e) {}
-		}
-		return typeofString;
-	};
 	
-	utils.trim = function(inputString) {
-		return inputString.replace(/^\s+|\s+$/g, '');
-	};
-	
-	utils.indexOf = function(array, item) {
-		if (array == null) return -1;
-		for (var i = 0; i < array.length; i++) {
-			if (array[i] === item) {
-				return i;
-			}
-		}
-		return -1;
-	};
-	
+	/* Browser */
 	utils.isMSIE = function(version) {
 		if (version) {
 			version = parseFloat(version).toFixed(1);
@@ -150,12 +168,82 @@ chatease.version = '1.0.11';
 		return _userAgentMatch(/msie/i);
 	};
 	
+	utils.isSafari = function() {
+		return (_userAgentMatch(/safari/i) && !_userAgentMatch(/chrome/i) && !_userAgentMatch(/chromium/i) && !_userAgentMatch(/android/i));
+	};
+	
+	utils.isIOS = function(version) {
+		if (version) {
+			return _userAgentMatch(new RegExp('iP(hone|ad|od).+\\sOS\\s' + version, 'i'));
+		}
+		
+		return _userAgentMatch(/iP(hone|ad|od)/i);
+	};
+	
+	utils.isAndroid = function(version, excludeChrome) {
+		//Android Browser appears to include a user-agent string for Chrome/18
+		if (excludeChrome && _userAgentMatch(/chrome\/[123456789]/i) && !_userAgentMatch(/chrome\/18/)) {
+			return false;
+		}
+		
+		if (version) {
+			// make sure whole number version check ends with point '.'
+			if (utils.isInt(version) && !/\./.test(version)) {
+				version = '' + version + '.';
+			}
+			
+			return _userAgentMatch(new RegExp('Android\\s*' + version, 'i'));
+		}
+		
+		return _userAgentMatch(/Android/i);
+	};
+	
+	utils.isMobile = function() {
+		return utils.isIOS() || utils.isAndroid();
+	};
+	
 	function _userAgentMatch(regex) {
 		var agent = navigator.userAgent.toLowerCase();
 		return (agent.match(regex) !== null);
 	};
 	
-	/** Logger */
+	
+	/* protocol & extension */
+	utils.getProtocol = function(url) {
+		var protocol = 'http';
+		
+		var arr = url.match(/^([a-z]+)\:\/\//i);
+		if (arr && arr.length > 1) {
+			protocol = arr[1];
+		}
+		
+		return protocol;
+	};
+	
+	utils.getFileName = function(file) {
+		var name = '';
+		
+		var arr = file.match(/\/([a-z0-9\(\)\[\]\{\}\s\-_%]*(\.[a-z0-9]+)?)$/i);
+		if (arr && arr.length > 1) {
+			name = arr[1];
+		}
+		
+		return name;
+	};
+	
+	utils.getExtension = function(file) {
+		var extension = '';
+		
+		var arr = file.match(/\/?([a-z0-9\(\)\[\]\{\}\s\-_%]*(\.([a-z0-9]+))*)\??([a-z0-9\-_%&=]*)$/i);
+		if (arr && arr.length > 3) {
+			extension = arr[3];
+		}
+		
+		return extension;
+	};
+	
+	
+	/* Logger */
 	var console = window.console = window.console || {
 		log: function() {}
 	};
@@ -166,6 +254,177 @@ chatease.version = '1.0.11';
 		} else {
 			console.log.apply(console, args);
 		}
+	};
+})(chatease);
+
+(function(chatease) {
+	var utils = chatease.utils;
+	
+	var crypt = utils.crypt = {};
+	
+	/**
+	 * Turns a string into an array of bytes; a "byte" being a JS number in the
+	 * range 0-255.
+	 * @param {string} str String value to arrify.
+	 * @return {!Array<number>} Array of numbers corresponding to the
+	 *     UCS character codes of each character in str.
+	 */
+	crypt.stringToByteArray = function(str) {
+		var output = [], p = 0;
+		for (var i = 0; i < str.length; i++) {
+			var c = str.charCodeAt(i);
+			while (c > 0xff) {
+				output[p++] = c & 0xff;
+				c >>= 8;
+			}
+			output[p++] = c;
+		}
+		
+		return output;
+	};
+	
+	/**
+	 * Turns an array of numbers into the string given by the concatenation of the
+	 * characters to which the numbers correspond.
+	 * @param {!Uint8Array|!Array<number>} bytes Array of numbers representing characters.
+	 * @return {string} Stringification of the array.
+	 */
+	crypt.byteArrayToString = function(bytes) {
+		var CHUNK_SIZE = 8192;
+		
+		// Special-case the simple case for speed's sake.
+		if (bytes.length <= CHUNK_SIZE) {
+			return String.fromCharCode.apply(null, bytes);
+		}
+		
+		// The remaining logic splits conversion by chunks since
+		// Function#apply() has a maximum parameter count.
+		// See discussion: http://goo.gl/LrWmZ9
+		
+		var str = '';
+		for (var i = 0; i < bytes.length; i += CHUNK_SIZE) {
+			var chunk = Array.slice(bytes, i, i + CHUNK_SIZE);
+			str += String.fromCharCode.apply(null, chunk);
+		}
+		
+		return str;
+	};
+	
+	/**
+	 * Turns an array of numbers into the hex string given by the concatenation of
+	 * the hex values to which the numbers correspond.
+	 * @param {Uint8Array|Array<number>} array Array of numbers representing characters.
+	 * @return {string} Hex string.
+	 */
+	crypt.byteArrayToHex = function(array) {
+		return Array.map(array, function(numByte) {
+			var hexByte = numByte.toString(16);
+			return hexByte.length > 1 ? hexByte : '0' + hexByte;
+		}).join('');
+	};
+	
+	/**
+	 * Converts a hex string into an integer array.
+	 * @param {string} hexString Hex string of 16-bit integers (two characters per integer).
+	 * @return {!Array<number>} Array of {0,255} integers for the given string.
+	 */
+	crypt.hexToByteArray = function(hexString) {
+		if (hexString.length % 2 !== 0) {
+			utils.log('Key string length must be multiple of 2.');
+			return null;
+		}
+		
+		var arr = [];
+		for (var i = 0; i < hexString.length; i += 2) {
+			arr.push(parseInt(hexString.substring(i, i + 2), 16));
+		}
+		
+		return arr;
+	};
+	
+	/**
+	 * Converts a JS string to a UTF-8 "byte" array.
+	 * @param {string} str 16-bit unicode string.
+	 * @return {!Array<number>} UTF-8 byte array.
+	 */
+	crypt.stringToUTF8ByteArray = function(str) {
+		// TODO(user): Use native implementations if/when available
+		var out = [], p = 0;
+		for (var i = 0; i < str.length; i++) {
+			var c = str.charCodeAt(i);
+			if (c < 128) {
+				out[p++] = c;
+			} else if (c < 2048) {
+				out[p++] = (c >> 6) | 192;
+				out[p++] = (c & 63) | 128;
+			} else if (((c & 0xFC00) == 0xD800) && (i + 1) < str.length && ((str.charCodeAt(i + 1) & 0xFC00) == 0xDC00)) {
+				// Surrogate Pair
+				c = 0x10000 + ((c & 0x03FF) << 10) + (str.charCodeAt(++i) & 0x03FF);
+				out[p++] = (c >> 18) | 240;
+				out[p++] = ((c >> 12) & 63) | 128;
+				out[p++] = ((c >> 6) & 63) | 128;
+				out[p++] = (c & 63) | 128;
+			} else {
+				out[p++] = (c >> 12) | 224;
+				out[p++] = ((c >> 6) & 63) | 128;
+				out[p++] = (c & 63) | 128;
+			}
+		}
+		
+		return out;
+	};
+	
+	/**
+	 * Converts a UTF-8 byte array to JavaScript's 16-bit Unicode.
+	 * @param {Uint8Array|Array<number>} bytes UTF-8 byte array.
+	 * @return {string} 16-bit Unicode string.
+	 */
+	crypt.UTF8ByteArrayToString = function(bytes) {
+		// TODO(user): Use native implementations if/when available
+		var out = [], pos = 0, c = 0;
+		while (pos < bytes.length) {
+			var c1 = bytes[pos++];
+			if (c1 < 128) {
+				out[c++] = String.fromCharCode(c1);
+			} else if (c1 > 191 && c1 < 224) {
+				var c2 = bytes[pos++];
+				out[c++] = String.fromCharCode((c1 & 31) << 6 | c2 & 63);
+			} else if (c1 > 239 && c1 < 365) {
+				// Surrogate Pair
+				var c2 = bytes[pos++];
+				var c3 = bytes[pos++];
+				var c4 = bytes[pos++];
+				var u = ((c1 & 7) << 18 | (c2 & 63) << 12 | (c3 & 63) << 6 | c4 & 63) - 0x10000;
+				out[c++] = String.fromCharCode(0xD800 + (u >> 10));
+				out[c++] = String.fromCharCode(0xDC00 + (u & 1023));
+			} else {
+				var c2 = bytes[pos++];
+				var c3 = bytes[pos++];
+				out[c++] = String.fromCharCode((c1 & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+			}
+		}
+		
+		return out.join('');
+	};
+	
+	/**
+	 * XOR two byte arrays.
+	 * @param {!Uint8Array|!Int8Array|!Array<number>} bytes1 Byte array 1.
+	 * @param {!Uint8Array|!Int8Array|!Array<number>} bytes2 Byte array 2.
+	 * @return {!Array<number>} Resulting XOR of the two byte arrays.
+	 */
+	crypt.XORByteArray = function(bytes1, bytes2) {
+		if (bytes1.length !== bytes2.length) {
+			utils.log('XOR array lengths must match.');
+			return 
+		}
+		
+		var result = [];
+		for (var i = 0; i < bytes1.length; i++) {
+			result.push(bytes1[i] ^ bytes2[i]);
+		}
+		
+		return result;
 	};
 })(chatease);
 
@@ -1107,7 +1366,7 @@ chatease.version = '1.0.11';
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
 				//setTimeout(function() {
 					if (_object.setup) {
-						_this.config.debug = false;
+						_this.config.debug = true;
 						_object.setup(_this.config);
 						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 					}
@@ -1608,6 +1867,7 @@ chatease.version = '1.0.11';
 
 (function(chatease) {
 	var utils = chatease.utils,
+		crypt = utils.crypt,
 		events = chatease.events,
 		core = chatease.core,
 		states = core.states,
@@ -1685,7 +1945,24 @@ chatease.version = '1.0.11';
 				return;
 			}
 			
-			_websocket.send(JSON.stringify(data));
+			var json = JSON.stringify(data);
+			
+			try {
+				var arr = crypt.stringToUTF8ByteArray(json);
+				var ab = new Uint8Array(arr);
+				
+				_websocket.send(ab.buffer);
+				
+				return;
+			} catch (err) {
+				/* void */
+			}
+			
+			try {
+				_websocket.send(json);
+			} catch (err) {
+				/* void */
+			}
 		};
 		
 		function _connect() {
@@ -1700,7 +1977,8 @@ chatease.version = '1.0.11';
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
 					if (!_websocket) {
-						_websocket = new WebSocket(model.config.url);
+						_websocket = new WebSocket(model.config.url, 'binary');
+						_websocket.binaryType = 'arraybuffer';
 					}
 					_websocket.onopen = _this.onOpen;
 					_websocket.onmessage = _this.onMessage;
@@ -1720,10 +1998,16 @@ chatease.version = '1.0.11';
 		};
 		
 		_this.onMessage = function(e) {
-			var data;
+			var json = e.data;
 			
+			if (utils.typeOf(e.data) === 'arraybuffer') {
+				var tmp = new Uint8Array(e.data);
+				json = crypt.UTF8ByteArrayToString(tmp);
+			}
+			
+			var data;
 			try {
-				data = eval('(' + e.data + ')');
+				data = eval('(' + json + ')');
 			} catch (err) {
 				utils.log('Failed to parse JSON. \nError: ' + err + '\ndata: ' + e.data);
 				return;

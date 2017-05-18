@@ -1,5 +1,6 @@
 ﻿(function(chatease) {
 	var utils = chatease.utils,
+		crypt = utils.crypt,
 		events = chatease.events,
 		core = chatease.core,
 		states = core.states,
@@ -77,7 +78,24 @@
 				return;
 			}
 			
-			_websocket.send(JSON.stringify(data));
+			var json = JSON.stringify(data);
+			
+			try {
+				var arr = crypt.stringToUTF8ByteArray(json);
+				var ab = new Uint8Array(arr);
+				
+				_websocket.send(ab.buffer);
+				
+				return;
+			} catch (err) {
+				/* void */
+			}
+			
+			try {
+				_websocket.send(json);
+			} catch (err) {
+				/* void */
+			}
 		};
 		
 		function _connect() {
@@ -92,7 +110,8 @@
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
 					if (!_websocket) {
-						_websocket = new WebSocket(model.config.url);
+						_websocket = new WebSocket(model.config.url, 'binary');
+						_websocket.binaryType = 'arraybuffer';
 					}
 					_websocket.onopen = _this.onOpen;
 					_websocket.onmessage = _this.onMessage;
@@ -112,10 +131,16 @@
 		};
 		
 		_this.onMessage = function(e) {
-			var data;
+			var json = e.data;
 			
+			if (utils.typeOf(e.data) === 'arraybuffer') {
+				var tmp = new Uint8Array(e.data);
+				json = crypt.UTF8ByteArrayToString(tmp);
+			}
+			
+			var data;
 			try {
-				data = eval('(' + e.data + ')');
+				data = eval('(' + json + ')');
 			} catch (err) {
 				utils.log('Failed to parse JSON. \nError: ' + err + '\ndata: ' + e.data);
 				return;

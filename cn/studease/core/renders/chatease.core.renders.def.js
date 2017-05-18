@@ -234,7 +234,7 @@
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
 				//setTimeout(function() {
 					if (_object.setup) {
-						_this.config.debug = false;
+						_this.config.debug = true;
 						_object.setup(_this.config);
 						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 					}

@@ -60,10 +60,55 @@
 		while (str.length < len) {
 			str = '0' + str;
 		}
+		
 		return str;
 	};
 	
+	utils.typeOf = function(value) {
+		if (value === null || value === undefined) {
+			return 'null';
+		}
+		
+		var typeofString = typeof value;
+		if (typeofString === 'object') {
+			try {
+				var str = toString.call(value);
+				var arr = str.match(/^\[object ([a-z]+)\]$/i);
+				if (arr && arr.length > 1 && arr[1]) {
+					return arr[1].toLowerCase();
+				}
+			} catch (err) {
+				/* void */
+			}
+		}
+		
+		return typeofString;
+	};
 	
+	utils.isInt = function(value) {
+		return parseFloat(value) % 1 === 0;
+	};
+	
+	utils.trim = function(inputString) {
+		return inputString.replace(/^\s+|\s+$/g, '');
+	};
+	
+	utils.indexOf = function(array, item) {
+		if (array == null) {
+			return -1;
+		}
+		
+		for (var i = 0; i < array.length; i++) {
+			if (array[i] === item) {
+				return i;
+			}
+		}
+		
+		return -1;
+	};
+	
+	
+	/* DOM */
 	utils.createElement = function(elem, className) {
 		var newElement = document.createElement(elem);
 		if (className) {
@@ -105,35 +150,8 @@
 		}
 	};
 	
-	utils.typeOf = function(value) {
-		if (value === null || value === undefined) {
-			return 'null';
-		}
-		var typeofString = typeof value;
-		if (typeofString === 'object') {
-			try {
-				if (toString.call(value) === '[object Array]') {
-					return 'array';
-				}
-			} catch (e) {}
-		}
-		return typeofString;
-	};
 	
-	utils.trim = function(inputString) {
-		return inputString.replace(/^\s+|\s+$/g, '');
-	};
-	
-	utils.indexOf = function(array, item) {
-		if (array == null) return -1;
-		for (var i = 0; i < array.length; i++) {
-			if (array[i] === item) {
-				return i;
-			}
-		}
-		return -1;
-	};
-	
+	/* Browser */
 	utils.isMSIE = function(version) {
 		if (version) {
 			version = parseFloat(version).toFixed(1);
@@ -142,12 +160,82 @@
 		return _userAgentMatch(/msie/i);
 	};
 	
+	utils.isSafari = function() {
+		return (_userAgentMatch(/safari/i) && !_userAgentMatch(/chrome/i) && !_userAgentMatch(/chromium/i) && !_userAgentMatch(/android/i));
+	};
+	
+	utils.isIOS = function(version) {
+		if (version) {
+			return _userAgentMatch(new RegExp('iP(hone|ad|od).+\\sOS\\s' + version, 'i'));
+		}
+		
+		return _userAgentMatch(/iP(hone|ad|od)/i);
+	};
+	
+	utils.isAndroid = function(version, excludeChrome) {
+		//Android Browser appears to include a user-agent string for Chrome/18
+		if (excludeChrome && _userAgentMatch(/chrome\/[123456789]/i) && !_userAgentMatch(/chrome\/18/)) {
+			return false;
+		}
+		
+		if (version) {
+			// make sure whole number version check ends with point '.'
+			if (utils.isInt(version) && !/\./.test(version)) {
+				version = '' + version + '.';
+			}
+			
+			return _userAgentMatch(new RegExp('Android\\s*' + version, 'i'));
+		}
+		
+		return _userAgentMatch(/Android/i);
+	};
+	
+	utils.isMobile = function() {
+		return utils.isIOS() || utils.isAndroid();
+	};
+	
 	function _userAgentMatch(regex) {
 		var agent = navigator.userAgent.toLowerCase();
 		return (agent.match(regex) !== null);
 	};
 	
-	/** Logger */
+	
+	/* protocol & extension */
+	utils.getProtocol = function(url) {
+		var protocol = 'http';
+		
+		var arr = url.match(/^([a-z]+)\:\/\//i);
+		if (arr && arr.length > 1) {
+			protocol = arr[1];
+		}
+		
+		return protocol;
+	};
+	
+	utils.getFileName = function(file) {
+		var name = '';
+		
+		var arr = file.match(/\/([a-z0-9\(\)\[\]\{\}\s\-_%]*(\.[a-z0-9]+)?)$/i);
+		if (arr && arr.length > 1) {
+			name = arr[1];
+		}
+		
+		return name;
+	};
+	
+	utils.getExtension = function(file) {
+		var extension = '';
+		
+		var arr = file.match(/\/?([a-z0-9\(\)\[\]\{\}\s\-_%]*(\.([a-z0-9]+))*)\??([a-z0-9\-_%&=]*)$/i);
+		if (arr && arr.length > 3) {
+			extension = arr[3];
+		}
+		
+		return extension;
+	};
+	
+	
+	/* Logger */
 	var console = window.console = window.console || {
 		log: function() {}
 	};
