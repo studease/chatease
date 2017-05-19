@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.13';
+chatease.version = '1.0.14';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1817,14 +1817,12 @@ chatease.version = '1.0.13';
 						_render.send();
 					}
 					break;
-				case 32: // space
 					
-					break;
 				default:
 					break;
 			}
 			
-			if (/13|32/.test(e.keyCode)) {
+			if (/13/.test(e.keyCode)) {
 				// Prevent keypresses from scrolling the screen
 				e.preventDefault ? e.preventDefault() : e.returnValue = false;
 				return false;
