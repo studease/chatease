@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.15';
+chatease.version = '1.0.16';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -80,7 +80,7 @@ chatease.version = '1.0.15';
 		var typeofString = typeof value;
 		if (typeofString === 'object') {
 			try {
-				var str = toString.call(value);
+				var str = value.toString();
 				var arr = str.match(/^\[object ([a-z]+)\]$/i);
 				if (arr && arr.length > 1 && arr[1]) {
 					return arr[1].toLowerCase();
