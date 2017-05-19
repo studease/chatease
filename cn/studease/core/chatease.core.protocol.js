@@ -28,7 +28,7 @@
 		VIP:       0x0E,
 		
 		ASSISTANT: 0x10,
-		SECRETARY:  0x20,
+		SECRETARY: 0x20,
 		ANCHOR:    0x30,
 		
 		ADMIN:     0x40,

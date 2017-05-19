@@ -255,7 +255,7 @@
 			
 			// create box
 			var box = utils.createElement('div');
-			if (user.role & roles.SYSTEM) {
+			if ((user.role & roles.SYSTEM) == roles.SYSTEM) {
 				box.className = NICK_SYSTEM_CLASS;
 			}
 			
@@ -267,9 +267,8 @@
 			}
 			
 			// set icon
-			var clazz = _getIconClazz(user.role);
-			if (clazz) {
-				var icon = utils.createElement('span', clazz);
+			var icon = _getIcon(user.role);
+			if (icon) {
 				box.appendChild(icon);
 			}
 			
@@ -303,13 +302,13 @@
 			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
 		};
 		
-		function _getIconClazz(role) {
-			var clazz = '';
+		function _getIcon(role) {
+			var icon, clazz = '';
 			
 			if (utils.typeOf(role) != 'number') {
 				role = parseInt(role);
 				if (role == NaN || role < 0) {
-					return '';
+					return null;
 				}
 			}
 			
@@ -318,27 +317,48 @@
 					clazz += ICON_SYSTEM_CLASS;
 				} else if (role & roles.SU_ADMIN) {
 					clazz += ICON_SU_ADMIN_CLASS;
+					
+					icon = utils.createElement('span', clazz);
+					icon.innerText = '超管';
 				} else {
 					clazz += ICON_ADMIN_CLASS;
+					
+					icon = utils.createElement('span', clazz);
+					icon.innerText = '管理员';
 				}
 			} else if (role & roles.ANCHOR) {
 				if ((role & roles.ANCHOR) == roles.ANCHOR) {
 					clazz += ICON_ANCHOR_CLASS;
+					
+					icon = utils.createElement('span', clazz);
+					icon.innerText = '主播';
 				} else if (role & roles.SECRETARY) {
 					clazz += ICON_SECRETARY_CLASS;
+					
+					icon = utils.createElement('span', clazz);
+					icon.innerText = '秘书';
 				} else {
 					clazz += ICON_ASSISTANT_CLASS;
+					
+					icon = utils.createElement('span', clazz);
+					icon.innerText = '助理';
 				}
 			} else if (role & roles.VIP) {
-				var lv = (role & roles.VIP) - 1;
+				var lv = role >>> 1 & roles.VIP;
 				clazz += ICON_VIP_CLASS + lv;
+				
+				icon = utils.createElement('span', clazz);
+				icon.innerText = 'VIP' + lv;
 			} else if ((role & roles.NORMAL) == roles.NORMAL) {
 				clazz += ICON_NORMAL_CLASS;
 			} else {
-				clazz += ICON_VISITOR_CLASS
+				clazz += ICON_VISITOR_CLASS;
+				
+				icon = utils.createElement('span', clazz);
+				icon.innerText = '游客';
 			}
 			
-			return clazz;
+			return icon;
 		}
 		
 		_this.send = function() {
