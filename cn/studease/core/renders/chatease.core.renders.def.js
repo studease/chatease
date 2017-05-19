@@ -344,7 +344,7 @@
 					icon.innerText = '助理';
 				}
 			} else if (role & roles.VIP) {
-				var lv = role >>> 1 & roles.VIP;
+				var lv = (role & roles.VIP) >>> 1;
 				clazz += ICON_VIP_CLASS + lv;
 				
 				icon = utils.createElement('span', clazz);
@@ -353,9 +353,6 @@
 				clazz += ICON_NORMAL_CLASS;
 			} else {
 				clazz += ICON_VISITOR_CLASS;
-				
-				icon = utils.createElement('span', clazz);
-				icon.innerText = '游客';
 			}
 			
 			return icon;
