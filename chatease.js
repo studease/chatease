@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.16';
+chatease.version = '1.0.17';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -832,9 +832,9 @@ chatease.version = '1.0.16';
 	protocol.errors = {
 		BAD_REQUEST:           400,
 		UNAUTHORIZED:          401,
-		FORBIDDED:             403,
+		FORBIDDEN:             403,
 		NOT_FOUND:             404,
-		METHOD_NOT_ALLOWED:    405,
+		NOT_ACCEPTABLE:        406,
 		REQUEST_TIMEOUT:       408,
 		CONFLICT:              409,
 		
@@ -1894,9 +1894,14 @@ chatease.version = '1.0.16';
 			_ready = false,
 			_websocket,
 			_filter,
+			_responders,
+			_requestId,
 			_retrycount = 0;
 		
 		function _init() {
+			_responders = {};
+			_requestId = 0;
+			
 			model.addEventListener(events.CHATEASE_STATE, _modelStateHandler);
 			model.addEventListener(events.CHATEASE_PROPERTY, _modelPropertyHandler);
 			
@@ -1934,7 +1939,7 @@ chatease.version = '1.0.16';
 			}
 		};
 		
-		_this.send = function(data) {
+		_this.send = function(data, responder) {
 			if (!_websocket || model.getState() != states.CONNECTED) {
 				_connect();
 				return;
@@ -1951,8 +1956,15 @@ chatease.version = '1.0.16';
 				return;
 			}
 			if (userinfo.isMuted() == true) {
-				_error(errors.FORBIDDED, data);
+				_error(errors.FORBIDDEN, data);
 				return;
+			}
+			
+			if (responder) {
+				var req = _requestId++;
+				_responders[req] = responder;
+				
+				data.req = req;
 			}
 			
 			var json = JSON.stringify(data);
@@ -2000,6 +2012,7 @@ chatease.version = '1.0.16';
 				}
 			} catch (err) {
 				utils.log('Failed to initialize websocket: ' + err);
+				_error(errors.NOT_ACCEPTABLE, null);
 			}
 		}
 		
@@ -2021,6 +2034,20 @@ chatease.version = '1.0.16';
 			} catch (err) {
 				utils.log('Failed to parse JSON. \nError: ' + err + '\ndata: ' + e.data);
 				return;
+			}
+			
+			if (data.hasOwnProperty('req') && _responders.hasOwnProperty(data.req)) {
+				var responder = _responders[data.req];
+				var fn = responder.result;
+				if (data.raw == raws.ERROR) {
+					fn = responder.status;
+				}
+				
+				if (fn) {
+					fn.call(null, data);
+				}
+				
+				delete _responders[data.req];
 			}
 			
 			switch (data.raw) {
@@ -2164,11 +2191,17 @@ chatease.version = '1.0.16';
 				case errors.UNAUTHORIZED:
 					explain = '请先登录！';
 					break;
-				case errors.FORBIDDED:
+				case errors.FORBIDDEN:
 					explain = '权限错误！';
 					break;
 				case errors.NOT_FOUND:
 					explain = '未知请求！';
+					break;
+				case errors.NOT_ACCEPTABLE:
+					explain = '无法识别！';
+					break;
+				case errors.REQUEST_TIMEOUT:
+					explain = '请求超时！';
 					break;
 				case errors.CONFLICT:
 					explain = '操作频繁！';
