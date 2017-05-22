@@ -137,12 +137,14 @@
 		}
 		
 		_this.resize = function(width, height) {
-			if (_render) {
-				_render.resize(width, height);
-			}
-			if (_skin) {
-				_skin.resize(width, height);
-			}
+			setTimeout(function() {
+				if (_render) {
+					_render.resize(width, height);
+				}
+				if (_skin) {
+					_skin.resize(width, height);
+				}
+			}, 0);
 		};
 		
 		_this.destroy = function() {

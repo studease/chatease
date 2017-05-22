@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.17';
+chatease.version = '1.0.18';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1846,12 +1846,14 @@ chatease.version = '1.0.17';
 		}
 		
 		_this.resize = function(width, height) {
-			if (_render) {
-				_render.resize(width, height);
-			}
-			if (_skin) {
-				_skin.resize(width, height);
-			}
+			setTimeout(function() {
+				if (_render) {
+					_render.resize(width, height);
+				}
+				if (_skin) {
+					_skin.resize(width, height);
+				}
+			}, 0);
 		};
 		
 		_this.destroy = function() {
