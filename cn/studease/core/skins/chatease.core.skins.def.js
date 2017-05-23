@@ -54,7 +54,8 @@
 			
 			css('.' + WRAP_CLASS, {
 				width: CSS_100PCT,
-				height: CSS_100PCT
+				height: CSS_100PCT,
+				'background-color': '#171717'
 			});
 			css('.' + WRAP_CLASS + ' *', {
 				margin: '0',
@@ -112,7 +113,7 @@
 				'text-align': 'center',
 				'line-height': '40px',
 				color: '#E6E6E6',
-				'background-color': '#171717',
+				'background-color': 'inherit',
 				cursor: 'default',
 				'pointer-events': CSS_NONE
 			});
@@ -194,7 +195,7 @@
 				width: CSS_100PCT,
 				height: '40px',
 				'line-height': CSS_100PCT,
-				'background-color': '#171717',
+				'background-color': 'inherit',
 				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > *', {

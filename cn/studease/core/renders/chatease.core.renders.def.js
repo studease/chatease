@@ -209,11 +209,7 @@
 		
 		function _getButton(label, clazz, event, data) {
 			var box = utils.createElement('div', clazz);
-			
-			var btn = utils.createElement('a');
-			box.appendChild(btn);
-			
-			btn.innerHTML = label;
+			box.innerHTML = label;
 			
 			var handler = (function(event, data) {
 				return function(e) {
@@ -222,9 +218,9 @@
 			})(event, data);
 			
 			try {
-				btn.addEventListener('click', handler);
+				box.addEventListener('click', handler);
 			} catch (err) {
-				btn.attachEvent('onclick', handler);
+				box.attachEvent('onclick', handler);
 			}
 			
 			return box;

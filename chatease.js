@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.18';
+chatease.version = '1.0.19';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -912,7 +912,8 @@ chatease.version = '1.0.18';
 			
 			css('.' + WRAP_CLASS, {
 				width: CSS_100PCT,
-				height: CSS_100PCT
+				height: CSS_100PCT,
+				'background-color': '#171717'
 			});
 			css('.' + WRAP_CLASS + ' *', {
 				margin: '0',
@@ -970,7 +971,7 @@ chatease.version = '1.0.18';
 				'text-align': 'center',
 				'line-height': '40px',
 				color: '#E6E6E6',
-				'background-color': '#171717',
+				'background-color': 'inherit',
 				cursor: 'default',
 				'pointer-events': CSS_NONE
 			});
@@ -1052,7 +1053,7 @@ chatease.version = '1.0.18';
 				width: CSS_100PCT,
 				height: '40px',
 				'line-height': CSS_100PCT,
-				'background-color': '#171717',
+				'background-color': 'inherit',
 				overflow: CSS_HIDDEN
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > *', {
@@ -1336,11 +1337,7 @@ chatease.version = '1.0.18';
 		
 		function _getButton(label, clazz, event, data) {
 			var box = utils.createElement('div', clazz);
-			
-			var btn = utils.createElement('a');
-			box.appendChild(btn);
-			
-			btn.innerHTML = label;
+			box.innerHTML = label;
 			
 			var handler = (function(event, data) {
 				return function(e) {
@@ -1349,9 +1346,9 @@ chatease.version = '1.0.18';
 			})(event, data);
 			
 			try {
-				btn.addEventListener('click', handler);
+				box.addEventListener('click', handler);
 			} catch (err) {
-				btn.attachEvent('onclick', handler);
+				box.attachEvent('onclick', handler);
 			}
 			
 			return box;
