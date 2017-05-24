@@ -185,16 +185,22 @@
 		
 		function _getCheckBox(label, clazz, event, data, checked) {
 			var box = utils.createElement('div', clazz);
-			
-			box.setAttribute('checked', !!checked);
+			box.setAttribute('value', !!checked);
 			box.innerHTML = label;
 			
 			var handler = (function(event, data) {
 				return function(e) {
-					var isChecked = box.getAttribute('checked') == 'true' ? false : true;
-					box.setAttribute('checked', isChecked);
+					var value = box.getAttribute('value');
+					var checked = value == 'true' ? false : true;
 					
-					_this.dispatchEvent(event, utils.extend({ value: isChecked }, data));
+					box.setAttribute('value', checked);
+					if (checked) {
+						utils.addClass(box, 'checked');
+					} else {
+						utils.removeClass(box, 'checked');
+					}
+					
+					_this.dispatchEvent(event, utils.extend({ value: checked }, data));
 				};
 			})(event, data);
 			
