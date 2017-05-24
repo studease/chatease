@@ -109,6 +109,12 @@
 				height: CSS_100PCT
 			});
 			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' object', {
+				width: '0',
+				height: '0',
+				position: CSS_ABSOLUTE
+			});
+			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + TITLE_CLASS, {
 				width: CSS_100PCT,
 				height: '40px',

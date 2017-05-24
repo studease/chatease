@@ -967,6 +967,12 @@ chatease.version = '1.0.20';
 				height: CSS_100PCT
 			});
 			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' object', {
+				width: '0',
+				height: '0',
+				position: CSS_ABSOLUTE
+			});
+			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + TITLE_CLASS, {
 				width: CSS_100PCT,
 				height: '40px',
@@ -1194,7 +1200,6 @@ chatease.version = '1.0.20';
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-				_object.style.width = _object.style.height = '0';
 			}/* else {
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
@@ -1357,13 +1362,11 @@ chatease.version = '1.0.20';
 		
 		_this.setup = function() {
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
-				//setTimeout(function() {
-					if (_object.setup) {
-						_this.config.debug = true;
-						_object.setup(_this.config);
-						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
-					}
-				//}, 0);
+				if (_object.setup) {
+					_this.config.debug = true;
+					_object.setup(_this.config);
+					_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+				}
 			} else {
 				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 			}

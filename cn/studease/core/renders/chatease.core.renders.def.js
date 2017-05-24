@@ -71,7 +71,6 @@
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-				_object.style.width = _object.style.height = '0';
 			}/* else {
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
@@ -234,13 +233,11 @@
 		
 		_this.setup = function() {
 			if (utils.isMSIE(8) || utils.isMSIE(9)) {
-				//setTimeout(function() {
-					if (_object.setup) {
-						_this.config.debug = true;
-						_object.setup(_this.config);
-						_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
-					}
-				//}, 0);
+				if (_object.setup) {
+					_this.config.debug = true;
+					_object.setup(_this.config);
+					_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+				}
 			} else {
 				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 			}
