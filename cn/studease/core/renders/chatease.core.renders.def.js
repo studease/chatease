@@ -273,7 +273,7 @@
 			
 			// set nickname
 			var a = utils.createElement('a');
-			a.innerHTML = user.name + '：';
+			a.innerHTML = user.name + ': ';
 			
 			var nickHandler = (function(user) {
 				return function(e) {
@@ -289,7 +289,10 @@
 			box.appendChild(a);
 			
 			// set text
-			box.insertAdjacentHTML('beforeend', text);
+			var span = utils.createElement('span', 'context');
+			span.innerHTML = text;
+			box.appendChild(span);
+			//box.insertAdjacentHTML('beforeend', text);
 			
 			// check records
 			if (_consoleLayer.childNodes.length >= _this.config.maxrecords) {
@@ -302,7 +305,7 @@
 		};
 		
 		function _getIcon(role) {
-			var icon, clazz = '';
+			var icon, clazz = 'icon ';
 			
 			if (utils.typeOf(role) != 'number') {
 				role = parseInt(role);
