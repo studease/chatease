@@ -16,6 +16,7 @@
 		var _this = utils.extend(this, new events.eventdispatcher('core.controller')),
 			_ready = false,
 			_websocket,
+			_timer,
 			_filter,
 			_responders,
 			_requestId,
@@ -121,10 +122,9 @@
 			try {
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
 				if (window.WebSocket) {
-					if (!_websocket) {
-						_websocket = new WebSocket(model.config.url, 'binary');
-						_websocket.binaryType = 'arraybuffer';
-					}
+					_websocket = new WebSocket(model.config.url, 'binary');
+					_websocket.binaryType = 'arraybuffer';
+					
 					_websocket.onopen = _this.onOpen;
 					_websocket.onmessage = _this.onMessage;
 					_websocket.onerror = _this.onError;
@@ -388,9 +388,25 @@
 				view.show('正在准备重连，' + delay / 1000 + '秒...');
 				
 				_retrycount++;
-				_websocket = null;
-				
-				setTimeout(_connect, delay);
+				_startTimer(delay);
+			}
+		}
+		
+		function _startTimer(delay) {
+			if (!_timer) {
+				_timer = new utils.timer(delay, 1);
+				_timer.addEventListener(events.PLAYEASE_TIMER, function(e) {
+					_connect();
+				});
+			}
+			_timer.delay = delay;
+			_timer.reset();
+			_timer.start();
+		}
+		
+		function _stopTimer() {
+			if (_timer) {
+				_timer.stop();
 			}
 		}
 		
