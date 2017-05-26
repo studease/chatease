@@ -23,6 +23,10 @@
 		CHATEASE_VIEW_SEND: 'chateaseViewSend',
 		CHATEASE_VIEW_PROPERTY: 'chateaseViewProperty',
 		CHATEASE_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
-		CHATEASE_VIEW_NICKCLICK: 'chateaseViewNickClick'
+		CHATEASE_VIEW_NICKCLICK: 'chateaseViewNickClick',
+		
+		// Timer Events
+		CHATEASE_TIMER: 'chateaseTimer',
+		CHATEASE_TIMER_COMPLETE: 'chateaseTimerComplete'
 	};
 })(chatease);

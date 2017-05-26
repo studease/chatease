@@ -395,7 +395,7 @@
 		function _startTimer(delay) {
 			if (!_timer) {
 				_timer = new utils.timer(delay, 1);
-				_timer.addEventListener(events.PLAYEASE_TIMER, function(e) {
+				_timer.addEventListener(events.CHATEASE_TIMER, function(e) {
 					_connect();
 				});
 			}
