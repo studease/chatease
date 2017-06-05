@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.22';
+chatease.version = '1.0.23';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -898,6 +898,7 @@ chatease.version = '1.0.22';
 		NOT_ACCEPTABLE:        406,
 		REQUEST_TIMEOUT:       408,
 		CONFLICT:              409,
+		EXPECTATION_FAILED:    417,
 		
 		INTERNAL_SERVER_ERROR: 500,
 		NOT_IMPLEMENTED:       501,
@@ -1704,7 +1705,7 @@ chatease.version = '1.0.22';
 		}
 		
 		_this.isMuted = function() {
-			return !!(_this.state & channelStates.MUTED | _this.punishment.code & punishments.MUTED);
+			return _this.role < _this.state || !!(_this.punishment.code & punishments.MUTED);
 		};
 		
 		_this.isActive = function() {
@@ -2027,7 +2028,7 @@ chatease.version = '1.0.22';
 				return;
 			}
 			if (userinfo.isMuted() == true) {
-				_error(errors.FORBIDDEN, data);
+				_error(errors.EXPECTATION_FAILED, data);
 				return;
 			}
 			
@@ -2130,7 +2131,7 @@ chatease.version = '1.0.22';
 					
 					view.show('已加入房间（' + userinfo.channel + '）。');
 					
-					if (!!(userinfo.state & channelStates.MUTED)) {
+					if (userinfo.role < userinfo.state) {
 						view.show('您所在的用户组不能发言！');
 					}
 					if (!!(userinfo.punishment.code & punishments.MUTED)) {
@@ -2275,6 +2276,9 @@ chatease.version = '1.0.22';
 					break;
 				case errors.CONFLICT:
 					explain = '操作频繁！';
+					break;
+				case errors.EXPECTATION_FAILED:
+					explain = '操作失败！';
 					break;
 					
 				case errors.INTERNAL_SERVER_ERROR:

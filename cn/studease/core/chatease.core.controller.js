@@ -80,7 +80,7 @@
 				return;
 			}
 			if (userinfo.isMuted() == true) {
-				_error(errors.FORBIDDEN, data);
+				_error(errors.EXPECTATION_FAILED, data);
 				return;
 			}
 			
@@ -183,7 +183,7 @@
 					
 					view.show('已加入房间（' + userinfo.channel + '）。');
 					
-					if (!!(userinfo.state & channelStates.MUTED)) {
+					if (userinfo.role < userinfo.state) {
 						view.show('您所在的用户组不能发言！');
 					}
 					if (!!(userinfo.punishment.code & punishments.MUTED)) {
@@ -328,6 +328,9 @@
 					break;
 				case errors.CONFLICT:
 					explain = '操作频繁！';
+					break;
+				case errors.EXPECTATION_FAILED:
+					explain = '操作失败！';
 					break;
 					
 				case errors.INTERNAL_SERVER_ERROR:

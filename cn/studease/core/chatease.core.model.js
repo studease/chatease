@@ -54,7 +54,7 @@
 		}
 		
 		_this.isMuted = function() {
-			return !!(_this.state & channelStates.MUTED | _this.punishment.code & punishments.MUTED);
+			return _this.role < _this.state || !!(_this.punishment.code & punishments.MUTED);
 		};
 		
 		_this.isActive = function() {
