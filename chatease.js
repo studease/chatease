@@ -1669,7 +1669,7 @@ chatease.version = '1.0.24';
 					code: 0,
 					time: 0
 				}
-			}
+			},
 			_interval,
 			_active;
 		
