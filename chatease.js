@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.23';
+chatease.version = '1.0.24';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1670,11 +1670,14 @@ chatease.version = '1.0.23';
 					time: 0
 				}
 			}
-			_interval = -1,
-			_active = 0;
+			_interval,
+			_active;
 		
 		function _init() {
 			utils.extend(_this, _defaults);
+			
+			_interval = -1;
+			_active = 0;
 		}
 		
 		_this.set = function(info) {
@@ -1686,19 +1689,16 @@ chatease.version = '1.0.23';
 		};
 		
 		function _getIntervalByRole(role) {
-			if (role < 0) {
-				return -1;
-			}
+			var interval = 2000;
 			
-			var interval = -1;
-			if (role >= roles.ASSISTANT) {
+			if (role & 0xF0) {
 				interval = 0;
-			} else if (role & roles.VIP) {
-				interval = 500;
-			} else if (role == roles.NORMAL) {
-				interval = 1000;
-			} else {
-				interval = 2000;
+			} else if (role) {
+				interval *= .5;
+				var vip = role - 1;
+				if (vip) {
+					interval = interval >= vip * 100 ? interval - vip * 100 : 0;
+				}
 			}
 			
 			return interval;
