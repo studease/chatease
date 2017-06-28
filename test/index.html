@@ -78,7 +78,16 @@ body {
 		users = document.getElementById('ol-users');
 		
 		chat = chatease('chat').setup({
-			url: 'ws://127.0.0.1/001?name=tony',
+			url: 'ws://127.0.0.1/001?name=tony' + (function() { // 118.190.79.29
+				var params = window.location.search;
+				if (params) {
+					return params;
+				}
+				
+				var id = Math.ceil(Math.random() * 1000);
+				
+				return '?name=游客' + chatease.utils.pad(id, 3);
+			})(),
 			width: 640,
 			height: 400,
 			keywords: keywords,
@@ -96,6 +105,9 @@ body {
 				},
 				onUsers: function(e) {
 					users.innerText = e.channel.total;
+				},
+				onClose: function(e) {
+					users.innerText = 0;
 				}
 			}
 		});
