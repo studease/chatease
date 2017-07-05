@@ -18,7 +18,7 @@
 					code: 0,
 					time: 0
 				}
-			}
+			},
 			_interval,
 			_active;
 		
