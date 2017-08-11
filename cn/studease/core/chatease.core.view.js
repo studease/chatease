@@ -28,7 +28,7 @@
 		function _init() {
 			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name);
 			_wrapper.id = model.getConfig('id');
-			_wrapper.tabIndex = 0;
+			//_wrapper.tabIndex = 0;
 			
 			_renderLayer = utils.createElement('div', RENDER_CLASS);
 			_contextmenuLayer = utils.createElement('div', CONTEXTMENU_CLASS);
