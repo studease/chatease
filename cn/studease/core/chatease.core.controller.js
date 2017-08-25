@@ -226,6 +226,10 @@
 					_this.dispatchEvent(events.CHATEASE_USERS, data);
 					break;
 					
+				case raws.EXTERN:
+					_this.dispatchEvent(events.CHATEASE_EXTERN, data);
+					break;
+					
 				case raws.ERROR:
 					_error(data.error.code, data);
 					break;

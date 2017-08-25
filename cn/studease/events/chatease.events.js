@@ -17,6 +17,7 @@
 		CHATEASE_JOIN: 'chateaseJoin',
 		CHATEASE_LEFT: 'chateaseLeft',
 		CHATEASE_USERS: 'chateaseUsers',
+		CHATEASE_EXTERN: 'chateaseExtern',
 		CHATEASE_CLOSE: 'chateaseClose',
 		
 		// View Events

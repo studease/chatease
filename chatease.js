@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.25';
+chatease.version = '1.0.26';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -536,6 +536,7 @@ chatease.version = '1.0.25';
 		CHATEASE_JOIN: 'chateaseJoin',
 		CHATEASE_LEFT: 'chateaseLeft',
 		CHATEASE_USERS: 'chateaseUsers',
+		CHATEASE_EXTERN: 'chateaseExtern',
 		CHATEASE_CLOSE: 'chateaseClose',
 		
 		// View Events
@@ -742,6 +743,7 @@ chatease.version = '1.0.25';
 		onJoin: events.CHATEASE_JOIN,
 		onLeft: events.CHATEASE_LEFT,
 		onUsers: events.CHATEASE_USERS,
+		onExtern: events.CHATEASE_EXTERN,
 		onNickClick: events.CHATEASE_VIEW_NICKCLICK,
 		onClose: events.CHATEASE_CLOSE
 	};
@@ -850,6 +852,7 @@ chatease.version = '1.0.25';
 		TEXT:    'text',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
+		EXTERN:  'extern',
 		PING:    'ping'
 	};
 	
@@ -861,6 +864,7 @@ chatease.version = '1.0.25';
 		USERS:   'users',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
+		EXTERN:  'extern',
 		ERROR:   'error',
 		PONG:    'pong'
 	};
@@ -2172,6 +2176,10 @@ chatease.version = '1.0.25';
 					
 				case raws.USERS:
 					_this.dispatchEvent(events.CHATEASE_USERS, data);
+					break;
+					
+				case raws.EXTERN:
+					_this.dispatchEvent(events.CHATEASE_EXTERN, data);
 					break;
 					
 				case raws.ERROR:

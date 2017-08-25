@@ -7,6 +7,7 @@
 		TEXT:    'text',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
+		EXTERN:  'extern',
 		PING:    'ping'
 	};
 	
@@ -18,6 +19,7 @@
 		USERS:   'users',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
+		EXTERN:  'extern',
 		ERROR:   'error',
 		PONG:    'pong'
 	};
