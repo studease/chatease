@@ -4,4 +4,4 @@
 	}
 };
 
-chatease.version = '1.0.26';
+chatease.version = '1.0.27';

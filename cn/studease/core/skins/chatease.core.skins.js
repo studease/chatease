@@ -1,3 +1,8 @@
 ﻿(function(chatease) {
-	chatease.core.skins = {};
+	var core = chatease.core,
+		skins = core.skins = {};
+	
+	skins.modes = {
+		DEFAULT: 'def'
+	};
 })(chatease);

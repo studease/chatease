@@ -28,9 +28,8 @@
 			_this.onSWFClose = _controller.onClose;
 			
 			_this.send = _controller.send;
-			
+			_this.close = _controller.close;
 			_this.getState = _model.getState;
-			
 			_this.resize = _view.resize;
 		}
 		

@@ -57,6 +57,8 @@
 			_this.onSWFClose = _entity.onSWFClose;
 			
 			_this.send = _entity.send;
+			_this.close = _entity.close;
+			_this.getState = _entity.getState;
 			_this.resize = _entity.resize;
 		};
 		

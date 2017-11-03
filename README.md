@@ -88,7 +88,7 @@ _eventMapping = {
 	onJoin: events.CHATEASE_JOIN,
 	onLeft: events.CHATEASE_LEFT,
 	onUsers: events.CHATEASE_USERS,
-	onNickClick: events.CHATEASE_VIEW_NICKCLICK,
+	onNickClick: events.CHATEASE_NICKCLICK,
 	onClose: events.CHATEASE_CLOSE
 }
 ```
@@ -99,6 +99,8 @@ _eventMapping = {
 
 > 	data: An object which will be sent in json format.
 
+* **close()**
+* **getState()**
 * **resize(width, height)**
 
 > 	width: Width in px.

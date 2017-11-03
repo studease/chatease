@@ -18,6 +18,7 @@
 		CHATEASE_LEFT: 'chateaseLeft',
 		CHATEASE_USERS: 'chateaseUsers',
 		CHATEASE_EXTERN: 'chateaseExtern',
+		CHATEASE_NICKCLICK: 'chateaseNickClick',
 		CHATEASE_CLOSE: 'chateaseClose',
 		
 		// View Events

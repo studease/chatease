@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.26';
+chatease.version = '1.0.27';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -537,6 +537,7 @@ chatease.version = '1.0.26';
 		CHATEASE_LEFT: 'chateaseLeft',
 		CHATEASE_USERS: 'chateaseUsers',
 		CHATEASE_EXTERN: 'chateaseExtern',
+		CHATEASE_NICKCLICK: 'chateaseNickClick',
 		CHATEASE_CLOSE: 'chateaseClose',
 		
 		// View Events
@@ -788,6 +789,8 @@ chatease.version = '1.0.26';
 			_this.onSWFClose = _entity.onSWFClose;
 			
 			_this.send = _entity.send;
+			_this.close = _entity.close;
+			_this.getState = _entity.getState;
 			_this.resize = _entity.resize;
 		};
 		
@@ -917,7 +920,10 @@ chatease.version = '1.0.26';
 })(chatease);
 
 (function(chatease) {
-	chatease.core.skins.modes = {
+	var core = chatease.core,
+		skins = core.skins = {};
+	
+	skins.modes = {
 		DEFAULT: 'def'
 	};
 })(chatease);
@@ -943,17 +949,17 @@ chatease.version = '1.0.26';
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
-		ICON_VISITOR_CLASS = 'ico-visitor',
-		ICON_NORMAL_CLASS = 'ico-normal',
-		ICON_VIP_CLASS = 'ico-vip',
+		TITLE_VISITOR_CLASS = 'ttl-visitor',
+		TITLE_NORMAL_CLASS = 'ttl-normal',
+		TITLE_VIP_CLASS = 'ttl-vip',
 		
-		ICON_ASSISTANT_CLASS = 'ico-assistant',
-		ICON_SECRETARY_CLASS = 'ico-secretary',
-		ICON_ANCHOR_CLASS = 'ico-anchor',
+		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
+		TITLE_SECRETARY_CLASS = 'ttl-secretary',
+		TITLE_ANCHOR_CLASS = 'ttl-anchor',
 		
-		ICON_ADMIN_CLASS = 'ico-admin',
-		ICON_SU_ADMIN_CLASS = 'ico-suadmin',
-		ICON_SYSTEM_CLASS = 'ico-system',
+		TITLE_ADMIN_CLASS = 'ttl-admin',
+		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
+		TITLE_SYSTEM_CLASS = 'ttl-system',
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -964,7 +970,8 @@ chatease.version = '1.0.26';
 		CSS_IMPORTANT = ' !important',
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
-		CSS_BLOCK = 'block';
+		CSS_BLOCK = 'block',
+		CSS_INLINE_BLOCK = 'inline-block';
 	
 	skins.def = function(config) {
 		var _this = utils.extend(this, new events.eventdispatcher('skins.def'));
@@ -1079,6 +1086,17 @@ chatease.version = '1.0.26';
 			});*/
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon', {
+				'float': 'left',
+				'margin-right': '4px',
+				width: '20px',
+				height: '20px',
+				display: CSS_BLOCK
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon img', {
+				display: CSS_INLINE_BLOCK
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title', {
 				'margin-right': '2px',
 				padding: '0 2px',
 				font: 'normal 12px Microsoft YaHei,arial,sans-serif',
@@ -1088,32 +1106,32 @@ chatease.version = '1.0.26';
 				'border-radius': '2px',
 				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VISITOR_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_NORMAL_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SYSTEM_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VISITOR_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_NORMAL_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SYSTEM_CLASS, {
 				display: CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '1'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '2'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '3', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '1'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '2'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '3', {
 				color: '#3CAFAB',
 				'border-color': '#3CAFAB'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '4'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '5'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '6'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '7', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '4'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '5'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '6'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '7', {
 				color: '#77C773',
 				'border-color': '#77C773'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ASSISTANT_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SECRETARY_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ANCHOR_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ASSISTANT_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SECRETARY_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ANCHOR_CLASS, {
 				color: '#5382E2',
 				'border-color': '#5382E2'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ADMIN_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SU_ADMIN_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ADMIN_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SU_ADMIN_CLASS, {
 				color: '#F76767',
 				'border-color': '#F76767'
 			});
@@ -1191,8 +1209,12 @@ chatease.version = '1.0.26';
 })(chatease);
 
 (function(chatease) {
-	chatease.core.renders.modes = {
-		DEFAULT: 'def'
+	var core = chatease.core,
+		renders = core.renders = {};
+	
+	renders.modes = {
+		DEFAULT: 'def',
+		NONE: 'none'
 	};
 })(chatease);
 
@@ -1220,17 +1242,17 @@ chatease.version = '1.0.26';
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
-		ICON_VISITOR_CLASS = 'ico-visitor',
-		ICON_NORMAL_CLASS = 'ico-normal',
-		ICON_VIP_CLASS = 'ico-vip',
+		TITLE_VISITOR_CLASS = 'ttl-visitor',
+		TITLE_NORMAL_CLASS = 'ttl-normal',
+		TITLE_VIP_CLASS = 'ttl-vip',
 		
-		ICON_ASSISTANT_CLASS = 'ico-assistant',
-		ICON_SECRETARY_CLASS = 'ico-secretary',
-		ICON_ANCHOR_CLASS = 'ico-anchor',
+		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
+		TITLE_SECRETARY_CLASS = 'ttl-secretary',
+		TITLE_ANCHOR_CLASS = 'ttl-anchor',
 		
-		ICON_ADMIN_CLASS = 'ico-admin',
-		ICON_SU_ADMIN_CLASS = 'ico-suadmin',
-		ICON_SYSTEM_CLASS = 'ico-system',
+		TITLE_ADMIN_CLASS = 'ttl-admin',
+		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
+		TITLE_SYSTEM_CLASS = 'ttl-system',
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -1256,7 +1278,7 @@ chatease.version = '1.0.26';
 			
 			_this.config = utils.extend({}, _defaults, config);
 			
-			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+			if (utils.isMSIE('(8|9)')) {
 				layer.innerHTML = ''
 					+ '<object id="cha-swf" name="cha-swf" align="middle" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">'
 						+ '<param name="movie" value="' + _this.config.swf + '">'
@@ -1430,7 +1452,7 @@ chatease.version = '1.0.26';
 		}
 		
 		_this.setup = function() {
-			if (utils.isMSIE(8) || utils.isMSIE(9)) {
+			if (utils.isMSIE('(8|9)')) {
 				if (_object.setup) {
 					_this.config.debug = true;
 					_object.setup(_this.config);
@@ -1456,6 +1478,12 @@ chatease.version = '1.0.26';
 				box.className = NICK_SYSTEM_CLASS;
 			}
 			
+			// set icon
+			var icon = _getIcon(user.icon);
+			if (icon) {
+				box.appendChild(icon);
+			}
+			
 			// private chat sign
 			if (type == 'uni') {
 				var span = utils.createElement('span');
@@ -1463,10 +1491,10 @@ chatease.version = '1.0.26';
 				box.appendChild(span);
 			}
 			
-			// set icon
-			var icon = _getIcon(user.role);
-			if (icon) {
-				box.appendChild(icon);
+			// set title
+			var title = _getTitle(user.role);
+			if (title) {
+				box.appendChild(title);
 			}
 			
 			// set nickname
@@ -1502,8 +1530,19 @@ chatease.version = '1.0.26';
 			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
 		};
 		
-		function _getIcon(role) {
-			var icon, clazz = 'icon ';
+		function _getIcon(url) {
+			if (!url) {
+				return null;
+			}
+			
+			var icon = utils.createElement('span', 'icon');
+			icon.innerHTML = '<img src="' + url + '">';
+			
+			return icon;
+		}
+		
+		function _getTitle(role) {
+			var title, clazz = 'title ';
 			
 			if (utils.typeOf(role) != 'number') {
 				role = parseInt(role);
@@ -1514,48 +1553,48 @@ chatease.version = '1.0.26';
 			
 			if (role & roles.SYSTEM) {
 				if ((role & roles.SYSTEM) == roles.SYSTEM) {
-					clazz += ICON_SYSTEM_CLASS;
+					clazz += TITLE_SYSTEM_CLASS;
 				} else if (role & roles.SU_ADMIN) {
-					clazz += ICON_SU_ADMIN_CLASS;
+					clazz += TITLE_SU_ADMIN_CLASS;
 					
-					icon = utils.createElement('span', clazz);
-					icon.innerText = '超管';
+					title = utils.createElement('span', clazz);
+					title.innerText = '超管';
 				} else {
-					clazz += ICON_ADMIN_CLASS;
+					clazz += TITLE_ADMIN_CLASS;
 					
-					icon = utils.createElement('span', clazz);
-					icon.innerText = '管理员';
+					title = utils.createElement('span', clazz);
+					title.innerText = '管理员';
 				}
 			} else if (role & roles.ANCHOR) {
 				if ((role & roles.ANCHOR) == roles.ANCHOR) {
-					clazz += ICON_ANCHOR_CLASS;
+					clazz += TITLE_ANCHOR_CLASS;
 					
-					icon = utils.createElement('span', clazz);
-					icon.innerText = '主播';
+					title = utils.createElement('span', clazz);
+					title.innerText = '主播';
 				} else if (role & roles.SECRETARY) {
-					clazz += ICON_SECRETARY_CLASS;
+					clazz += TITLE_SECRETARY_CLASS;
 					
-					icon = utils.createElement('span', clazz);
-					icon.innerText = '秘书';
+					title = utils.createElement('span', clazz);
+					title.innerText = '秘书';
 				} else {
-					clazz += ICON_ASSISTANT_CLASS;
+					clazz += TITLE_ASSISTANT_CLASS;
 					
-					icon = utils.createElement('span', clazz);
-					icon.innerText = '助理';
+					title = utils.createElement('span', clazz);
+					title.innerText = '助理';
 				}
 			} else if (role & roles.VIP) {
 				var lv = (role & roles.VIP) >>> 1;
-				clazz += ICON_VIP_CLASS + lv;
+				clazz += TITLE_VIP_CLASS + lv;
 				
-				icon = utils.createElement('span', clazz);
-				icon.innerText = 'VIP' + lv;
+				title = utils.createElement('span', clazz);
+				title.innerText = 'VIP' + lv;
 			} else if ((role & roles.NORMAL) == roles.NORMAL) {
-				clazz += ICON_NORMAL_CLASS;
+				clazz += TITLE_NORMAL_CLASS;
 			} else {
-				clazz += ICON_VISITOR_CLASS;
+				clazz += TITLE_VISITOR_CLASS;
 			}
 			
-			return icon;
+			return title;
 		}
 		
 		_this.send = function() {
@@ -1573,6 +1612,149 @@ chatease.version = '1.0.26';
 		
 		_this.clearScreen = function() {
 			utils.emptyElement(_consoleLayer);
+		};
+		
+		_this.element = function() {
+			return _object;
+		};
+		
+		_this.resize = function(width, height) {
+			
+		};
+		
+		_this.destroy = function() {
+			
+		};
+		
+		_init();
+	};
+})(chatease);
+
+(function(chatease) {
+	var utils = chatease.utils,
+		events = chatease.events,
+		core = chatease.core,
+		protocol = core.protocol,
+		roles = protocol.roles,
+		renders = core.renders,
+		rendermodes = renders.modes,
+		css = utils.css,
+		
+		RENDER_CLASS = 'cha-render',
+		TITLE_CLASS = 'cha-title',
+		CONSOLE_CLASS = 'cha-console',
+		CONTROLS_CLASS = 'cha-controls',
+		DIALOG_CLASS = 'cha-dialog',
+		
+		CHECKBOX_CLASS = 'cha-checkbox',
+		BUTTON_CLASS = 'cha-button',
+		
+		INPUT_CLASS = 'cha-input',
+		
+		NICK_SYSTEM_CLASS = 'cha-system',
+		NICK_MYSELF_CLASS = 'cha-myself',
+		
+		TITLE_VISITOR_CLASS = 'ttl-visitor',
+		TITLE_NORMAL_CLASS = 'ttl-normal',
+		TITLE_VIP_CLASS = 'ttl-vip',
+		
+		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
+		TITLE_SECRETARY_CLASS = 'ttl-secretary',
+		TITLE_ANCHOR_CLASS = 'ttl-anchor',
+		
+		TITLE_ADMIN_CLASS = 'ttl-admin',
+		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
+		TITLE_SYSTEM_CLASS = 'ttl-system',
+		
+		// For all api instances
+		CSS_SMOOTH_EASE = 'opacity .25s ease',
+		CSS_100PCT = '100%',
+		CSS_ABSOLUTE = 'absolute',
+		CSS_IMPORTANT = ' !important',
+		CSS_HIDDEN = 'hidden',
+		CSS_NONE = 'none',
+		CSS_BLOCK = 'block';
+	
+	renders.none = function(layer, config) {
+		var _this = utils.extend(this, new events.eventdispatcher('renders.none')),
+			_defaults = {},
+			_titleLayer,
+			_consoleLayer,
+			_controlsLayer,
+			_dialogLayer,
+			_textInput,
+			_sendButton;
+		
+		function _init() {
+			_this.name = rendermodes.NONE;
+			
+			_this.config = utils.extend({}, _defaults, config);
+			
+			if (utils.isMSIE('(8|9)')) {
+				layer.innerHTML = ''
+					+ '<object id="cha-swf" name="cha-swf" align="middle" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">'
+						+ '<param name="movie" value="' + _this.config.swf + '">'
+						+ '<param name="quality" value="high">'
+						+ '<param name="bgcolor" value="#ffffff">'
+						+ '<param name="allowscriptaccess" value="sameDomain">'
+						+ '<param name="allowfullscreen" value="true">'
+						+ '<param name="wmode" value="transparent">'
+						+ '<param name="FlashVars" value="id=' + _this.config.id + '">'
+					+ '</object>';
+				
+				_object = _this.WebSocket = layer.firstChild;
+			}/* else {
+				_object = utils.createElement('object');
+				_object.id = _object.name = 'cha-swf';
+				_object.align = 'middle';
+				_object.innerHTML = ''
+					+ '<param name="quality" value="high">'
+					+ '<param name="bgcolor" value="#ffffff">'
+					+ '<param name="allowscriptaccess" value="sameDomain">'
+					+ '<param name="allowfullscreen" value="true">'
+					+ '<param name="wmode" value="transparent">'
+					+ '<param name="FlashVars" value="id=' + _this.config.id + '">';
+				
+				if (utils.isMSIE()) {
+					_object.classid = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+					_object.movie = _this.config.swf;
+				} else {
+					_object.type = 'application/x-shockwave-flash';
+					_object.data = _this.config.swf;
+				}
+				
+				_this.WebSocket = _object;
+				_object.style.width = _object.style.height = '0';
+				layer.appendChild(_object);
+			}*/
+		}
+		
+		_this.setup = function() {
+			if (utils.isMSIE('(8|9)')) {
+				if (_object.setup) {
+					_this.config.debug = true;
+					_object.setup(_this.config);
+					_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+				}
+			} else {
+				_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
+			}
+		};
+		
+		_this.show = function(text, user, type) {
+			
+		};
+		
+		_this.send = function() {
+			
+		};
+		
+		_this.clearInput = function() {
+			
+		};
+		
+		_this.clearScreen = function() {
+			
 		};
 		
 		_this.element = function() {
@@ -1621,9 +1803,8 @@ chatease.version = '1.0.26';
 			_this.onSWFClose = _controller.onClose;
 			
 			_this.send = _controller.send;
-			
+			_this.close = _controller.close;
 			_this.getState = _model.getState;
-			
 			_this.resize = _view.resize;
 		}
 		
@@ -1821,6 +2002,10 @@ chatease.version = '1.0.26';
 			_initRender();
 			_initSkin();
 			
+			if (_render && _render.name == renderModes.NONE) {
+				return;
+			}
+			
 			var replace = document.getElementById(model.getConfig('id'));
 			replace.parentNode.replaceChild(_wrapper, replace);
 			
@@ -1849,7 +2034,7 @@ chatease.version = '1.0.26';
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _forward);
+				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 			} catch (err) {
 				utils.log('Failed to init render ' + cfg.name + '!');
@@ -1938,6 +2123,10 @@ chatease.version = '1.0.26';
 			}
 		};
 		
+		function _onNickClick(e) {
+			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user });
+		}
+		
 		function _onRenderError(e) {
 			_forward(e);
 		}
@@ -1999,6 +2188,7 @@ chatease.version = '1.0.26';
 				_ready = true;
 				_forward(e);
 				
+				view.show('聊天室已连接！');
 				_connect();
 				
 				window.onbeforeunload = function(e) {
@@ -2064,12 +2254,19 @@ chatease.version = '1.0.26';
 		};
 		
 		function _connect() {
-			if (_websocket && model.getState() == states.CONNECTED) {
-				utils.log('Websocket had connected already.');
-				return;
+			if (_websocket) {
+				if (model.getState() == states.CONNECTED) {
+					utils.log('Websocket had connected already.');
+					return;
+				}
+				
+				if (_websocket.readyState == WebSocket.CONNECTING || _websocket.readyState == WebSocket.OPEN) {
+					_websocket.close();
+				}
 			}
 			
-			view.show('聊天室连接中…');
+			utils.log('聊天室连接中…');
+			//view.show('聊天室连接中…');
 			
 			try {
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -2133,7 +2330,8 @@ chatease.version = '1.0.26';
 						state: data.channel.state
 					}));
 					
-					view.show('已加入房间（' + userinfo.channel + '）。');
+					//view.show('已加入房间（' + userinfo.channel + '）。');
+					utils.log('已加入房间（' + userinfo.channel + '）。');
 					
 					if (userinfo.role < userinfo.state) {
 						view.show('您所在的用户组不能发言！');
@@ -2150,7 +2348,7 @@ chatease.version = '1.0.26';
 				case raws.TEXT:
 					try {
 						if (!_filter) {
-							_filter = new utils.filter(model.keywords);
+							_filter = new utils.filter(model.config.keywords);
 						}
 						data.data = _filter.replace(data.data);
 					} catch (err) {
@@ -2314,19 +2512,22 @@ chatease.version = '1.0.26';
 		function _modelStateHandler(e) {
 			switch (e.state) {
 				case states.CONNECTED:
-					view.show('聊天室已连接…');
+					utils.log('聊天室已连接…');
+					//view.show('聊天室已连接…');
 					_retrycount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
 					break;
 					
 				case states.CLOSED:
-					view.show('聊天室连接已断开！');
+					utils.log('聊天室连接已断开！');
+					//view.show('聊天室连接已断开！');
 					_this.dispatchEvent(events.CHATEASE_CLOSE, { channel: { id: model.channel } });
 					_reconnect();
 					break;
 					
 				case states.ERROR:
-					view.show('聊天室异常！');
+					utils.log('聊天室异常！');
+					//view.show('聊天室异常！');
 					_this.dispatchEvent(events.ERROR, { message: 'Chat room error!', channel: { id: model.channel } });
 					break;
 					
@@ -2342,9 +2543,10 @@ chatease.version = '1.0.26';
 		
 		function _reconnect() {
 			if (model.config.maxretries < 0 || _retrycount < model.config.maxretries) {
-				var delay = Math.ceil(model.config.retrydelay + Math.random() * 5000);
+				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
 				
-				view.show('正在准备重连，' + delay / 1000 + '秒...');
+				utils.log('正在准备重连，' + delay / 1000 + '秒...');
+				//view.show('正在准备重连，' + delay / 1000 + '秒...');
 				
 				_retrycount++;
 				_startTimer(delay);
@@ -2410,8 +2612,9 @@ chatease.version = '1.0.26';
 		}
 		
 		_this.close = function() {
-			if (_websocket) 
+			if (_websocket) {
 				_websocket.close();
+			}
 		};
 		
 		function _onSetupError(e) {

@@ -19,17 +19,17 @@
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
-		ICON_VISITOR_CLASS = 'ico-visitor',
-		ICON_NORMAL_CLASS = 'ico-normal',
-		ICON_VIP_CLASS = 'ico-vip',
+		TITLE_VISITOR_CLASS = 'ttl-visitor',
+		TITLE_NORMAL_CLASS = 'ttl-normal',
+		TITLE_VIP_CLASS = 'ttl-vip',
 		
-		ICON_ASSISTANT_CLASS = 'ico-assistant',
-		ICON_SECRETARY_CLASS = 'ico-secretary',
-		ICON_ANCHOR_CLASS = 'ico-anchor',
+		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
+		TITLE_SECRETARY_CLASS = 'ttl-secretary',
+		TITLE_ANCHOR_CLASS = 'ttl-anchor',
 		
-		ICON_ADMIN_CLASS = 'ico-admin',
-		ICON_SU_ADMIN_CLASS = 'ico-suadmin',
-		ICON_SYSTEM_CLASS = 'ico-system',
+		TITLE_ADMIN_CLASS = 'ttl-admin',
+		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
+		TITLE_SYSTEM_CLASS = 'ttl-system',
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -40,7 +40,8 @@
 		CSS_IMPORTANT = ' !important',
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
-		CSS_BLOCK = 'block';
+		CSS_BLOCK = 'block',
+		CSS_INLINE_BLOCK = 'inline-block';
 	
 	skins.def = function(config) {
 		var _this = utils.extend(this, new events.eventdispatcher('skins.def'));
@@ -155,6 +156,17 @@
 			});*/
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon', {
+				'float': 'left',
+				'margin-right': '4px',
+				width: '20px',
+				height: '20px',
+				display: CSS_BLOCK
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon img', {
+				display: CSS_INLINE_BLOCK
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title', {
 				'margin-right': '2px',
 				padding: '0 2px',
 				font: 'normal 12px Microsoft YaHei,arial,sans-serif',
@@ -164,32 +176,32 @@
 				'border-radius': '2px',
 				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VISITOR_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_NORMAL_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SYSTEM_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VISITOR_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_NORMAL_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SYSTEM_CLASS, {
 				display: CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '1'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '2'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '3', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '1'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '2'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '3', {
 				color: '#3CAFAB',
 				'border-color': '#3CAFAB'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '4'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '5'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '6'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_VIP_CLASS + '7', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '4'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '5'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '6'
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_VIP_CLASS + '7', {
 				color: '#77C773',
 				'border-color': '#77C773'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ASSISTANT_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SECRETARY_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ANCHOR_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ASSISTANT_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SECRETARY_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ANCHOR_CLASS, {
 				color: '#5382E2',
 				'border-color': '#5382E2'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_ADMIN_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon.' + ICON_SU_ADMIN_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_ADMIN_CLASS
+				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .title.' + TITLE_SU_ADMIN_CLASS, {
 				color: '#F76767',
 				'border-color': '#F76767'
 			});

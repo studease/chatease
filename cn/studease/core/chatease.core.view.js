@@ -39,6 +39,10 @@
 			_initRender();
 			_initSkin();
 			
+			if (_render && _render.name == renderModes.NONE) {
+				return;
+			}
+			
 			var replace = document.getElementById(model.getConfig('id'));
 			replace.parentNode.replaceChild(_wrapper, replace);
 			
@@ -67,7 +71,7 @@
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _forward);
+				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 			} catch (err) {
 				utils.log('Failed to init render ' + cfg.name + '!');
@@ -155,6 +159,10 @@
 				_render.destroy();
 			}
 		};
+		
+		function _onNickClick(e) {
+			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user });
+		}
 		
 		function _onRenderError(e) {
 			_forward(e);
