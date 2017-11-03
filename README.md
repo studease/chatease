@@ -88,6 +88,7 @@ _eventMapping = {
 	onJoin: events.CHATEASE_JOIN,
 	onLeft: events.CHATEASE_LEFT,
 	onUsers: events.CHATEASE_USERS,
+	onExtern: events.CHATEASE_EXTERN,
 	onNickClick: events.CHATEASE_NICKCLICK,
 	onClose: events.CHATEASE_CLOSE
 }
