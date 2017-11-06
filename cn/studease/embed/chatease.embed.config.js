@@ -17,6 +17,7 @@
 	 		retrydelay: 3000,
 			render: {
 				name: rendermodes.DEFAULT,
+				title: 'CHATEASE ' + chatease.version,
 				swf: 'swf/chatease.swf'
 			},
 			skin: {

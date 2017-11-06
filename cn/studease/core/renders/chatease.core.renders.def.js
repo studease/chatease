@@ -101,10 +101,12 @@
 		
 		function _buildComponents() {
 			// title
-			_titleLayer = utils.createElement('div', TITLE_CLASS);
-			layer.appendChild(_titleLayer);
-			
-			_titleLayer.innerHTML = '聊天室';
+			if (_this.config.title) {
+				_titleLayer = utils.createElement('div', TITLE_CLASS);
+				layer.appendChild(_titleLayer);
+				
+				_titleLayer.innerHTML = _this.config.title;
+			}
 			
 			// console
 			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);

@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.27';
+chatease.version = '1.0.28';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -916,10 +916,6 @@ chatease.version = '1.0.27';
 })(chatease);
 
 (function(chatease) {
-	chatease.core.skins = {};
-})(chatease);
-
-(function(chatease) {
 	var core = chatease.core,
 		skins = core.skins = {};
 	
@@ -1060,7 +1056,7 @@ chatease.version = '1.0.27';
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS, {
-				height: _this.config.height - 140 + 'px',
+				height: _this.config.height - 100 - (_this.config.title ? 40 : 0) + 'px',
 				color: '#242424',
 				'background-color': '#F8F8F8',
 				'overflow-x': CSS_HIDDEN,
@@ -1192,7 +1188,7 @@ chatease.version = '1.0.27';
 			var textInput = document.getElementById(_this.config.id + '-input');
 			
 			css.style(consoleLayer, {
-				height: wrapper.clientHeight - 140 + 'px'
+				height: wrapper.clientHeight - 100 - (_this.config.title ? 40 : 0) + 'px'
 			});
 			
 			css.style(textInput, {
@@ -1202,10 +1198,6 @@ chatease.version = '1.0.27';
 		
 		_init();
 	};
-})(chatease);
-
-(function(chatease) {
-	chatease.core.renders = {};
 })(chatease);
 
 (function(chatease) {
@@ -1321,10 +1313,12 @@ chatease.version = '1.0.27';
 		
 		function _buildComponents() {
 			// title
-			_titleLayer = utils.createElement('div', TITLE_CLASS);
-			layer.appendChild(_titleLayer);
-			
-			_titleLayer.innerHTML = '聊天室';
+			if (_this.config.title) {
+				_titleLayer = utils.createElement('div', TITLE_CLASS);
+				layer.appendChild(_titleLayer);
+				
+				_titleLayer.innerHTML = _this.config.title;
+			}
 			
 			// console
 			_consoleLayer = utils.createElement('div', CONSOLE_CLASS);
@@ -2045,7 +2039,8 @@ chatease.version = '1.0.27';
 			var cfg = utils.extend({}, model.getConfig('skin'), {
 				id: model.getConfig('id'),
 				width: model.config.width,
-				height: model.config.height
+				height: model.config.height,
+				title: !!model.getConfig('render').title
 			});
 			
 			try {
@@ -2717,6 +2712,7 @@ chatease.version = '1.0.27';
 	 		retrydelay: 3000,
 			render: {
 				name: rendermodes.DEFAULT,
+				title: 'CHATEASE ' + chatease.version,
 				swf: 'swf/chatease.swf'
 			},
 			skin: {

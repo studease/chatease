@@ -82,7 +82,8 @@
 			var cfg = utils.extend({}, model.getConfig('skin'), {
 				id: model.getConfig('id'),
 				width: model.config.width,
-				height: model.config.height
+				height: model.config.height,
+				title: !!model.getConfig('render').title
 			});
 			
 			try {

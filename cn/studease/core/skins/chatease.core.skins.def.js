@@ -130,7 +130,7 @@
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS, {
-				height: _this.config.height - 140 + 'px',
+				height: _this.config.height - 100 - (_this.config.title ? 40 : 0) + 'px',
 				color: '#242424',
 				'background-color': '#F8F8F8',
 				'overflow-x': CSS_HIDDEN,
@@ -262,7 +262,7 @@
 			var textInput = document.getElementById(_this.config.id + '-input');
 			
 			css.style(consoleLayer, {
-				height: wrapper.clientHeight - 140 + 'px'
+				height: wrapper.clientHeight - 100 - (_this.config.title ? 40 : 0) + 'px'
 			});
 			
 			css.style(textInput, {
