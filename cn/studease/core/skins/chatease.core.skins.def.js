@@ -104,6 +104,27 @@
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
 				'background-color': '#97052D'
 			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue', {
+				color: '#FFFFFF',
+				'background-color': '#0B7EF4'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue:hover', {
+				'background-color': '#0966C3'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white', {
+				color: '#000000',
+				'background-color': '#FFFFFF'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white:hover', {
+				'background-color': '#E0E0E0'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray', {
+				color: '#000000',
+				'background-color': '#E0E0E0'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray:hover', {
+				'background-color': '#96A0B4'
+			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
 				width: CSS_100PCT,

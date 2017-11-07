@@ -120,7 +120,7 @@
 			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
 			_controlsLayer.appendChild(shieldChk);
 			
-			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' red clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' gray clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
 			_controlsLayer.appendChild(clearBtn);
 			
 			// dialog
@@ -131,7 +131,7 @@
 			_textInput.id = _this.config.id + '-input';
 			_dialogLayer.appendChild(_textInput);
 			
-			_sendButton = utils.createElement('button', BUTTON_CLASS + ' red');
+			_sendButton = utils.createElement('button', BUTTON_CLASS + ' blue');
 			_dialogLayer.appendChild(_sendButton);
 			
 			// textarea

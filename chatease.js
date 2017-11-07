@@ -1030,6 +1030,27 @@ chatease.version = '1.0.30';
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
 				'background-color': '#97052D'
 			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue', {
+				color: '#FFFFFF',
+				'background-color': '#0B7EF4'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue:hover', {
+				'background-color': '#0966C3'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white', {
+				color: '#000000',
+				'background-color': '#FFFFFF'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white:hover', {
+				'background-color': '#E0E0E0'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray', {
+				color: '#000000',
+				'background-color': '#E0E0E0'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray:hover', {
+				'background-color': '#96A0B4'
+			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
 				width: CSS_100PCT,
@@ -1335,7 +1356,7 @@ chatease.version = '1.0.30';
 			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
 			_controlsLayer.appendChild(shieldChk);
 			
-			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' red clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' gray clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
 			_controlsLayer.appendChild(clearBtn);
 			
 			// dialog
@@ -1346,7 +1367,7 @@ chatease.version = '1.0.30';
 			_textInput.id = _this.config.id + '-input';
 			_dialogLayer.appendChild(_textInput);
 			
-			_sendButton = utils.createElement('button', BUTTON_CLASS + ' red');
+			_sendButton = utils.createElement('button', BUTTON_CLASS + ' blue');
 			_dialogLayer.appendChild(_sendButton);
 			
 			// textarea
