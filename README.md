@@ -28,13 +28,34 @@ This is a client-side script for websocket chat, with skin built in.
 The example below will find the element with an id of "chatwrap" and render a dialog into it.
 
 ```js
-<div id='chatwrap'></div>
+<div class='ol-status' style='width: 100%; max-width: 640px;'>
+	<label>Online: </label>
+	<span id='ol-users'>0</span>
+</div>
+<div id='chatwrap' style='width: 100%; height: 400px; max-width: 640px;'>
+	<div id='chat'></div>
+</div>
 ...
-var chat = chatease('chatwrap').setup({
+
+var users = document.getElementById('ol-users');
+var events = chatease.events;
+
+var chat = chatease('chat');
+chat.addEventListener(events.CHATEASE_INDENT, onIdent);
+chat.addEventListener(events.CHATEASE_CLOSE, onClose);
+chat.setup({
 	url: 'ws://localhost/ch1?token=123456',
 	width: 640,
 	height: 400
 });
+
+function onIdent(e) {
+	users.innerText = e.channel.total;
+}
+
+function onClose(e) {
+	users.innerText = 0;
+}
 ```
 
 We append token right after the URL, while some browsers won't bring cookies when upgrading protocol.
@@ -54,7 +75,9 @@ _defaults = {
 	maxretries: -1,   // -1: always
 	retrydelay: 3000,
 	render: {
-		name: rendermodes.DEFAULT
+		name: rendermodes.DEFAULT,
+		title: 'CHATEASE ' + chatease.version,
+		swf: 'swf/chatease.swf'
 	},
 	skin: {
 		name: skinmodes.DEFAULT
@@ -74,6 +97,19 @@ var chat = chatease('chatwrap').setup({
 		...
 	}
 });
+
+// or
+
+var events = chatease.events;
+var chat = chatease('chat');
+chat.addEventListener(events.CHATEASE_READY, onReady);
+chat.setup({
+	...
+});
+
+function onReady(e) {
+	console.log('onReady');
+}
 ```
 
 For more events, please check cn/studease/api/chatease.api.js, or the source of test/index.html.

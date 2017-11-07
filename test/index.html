@@ -72,11 +72,15 @@ body {
 	
 	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
-		var chat, users;
+		var users = document.getElementById('ol-users');
+		var events = chatease.events;
 		
-		users = document.getElementById('ol-users');
-		
-		chat = chatease('chat').setup({
+		var chat = chatease('chat');
+		chat.addEventListener(events.CHATEASE_INDENT, onIdent);
+		chat.addEventListener(events.CHATEASE_MESSAGE, onMessage);
+		chat.addEventListener(events.CHATEASE_USERS, onUsers);
+		chat.addEventListener(events.CHATEASE_CLOSE, onClose);
+		chat.setup({
 			url: 'ws://127.0.0.1/001' + (function() {
 				var params = window.location.search;
 				if (params) {
@@ -95,22 +99,24 @@ body {
 				name: 'def',
 				title: 'CHATEASE ' + chatease.version,
 				swf: '../swf/chatease.swf'
-			},
-			events: {
-				onIdent: function(e) {
-					users.innerText = e.channel.total;
-				},
-				onMessage: function(e) {
-					//player.shoot(e.data);
-				},
-				onUsers: function(e) {
-					users.innerText = e.channel.total;
-				},
-				onClose: function(e) {
-					users.innerText = 0;
-				}
 			}
 		});
+		
+		function onIdent(e) {
+			users.innerText = e.channel.total;
+		}
+		
+		function onMessage(e) {
+			console.log(e.user.name + ': ' + e.data);
+		}
+		
+		function onUsers(e) {
+			users.innerText = e.channel.total;
+		}
+		
+		function onClose(e) {
+			users.innerText = 0;
+		}
 	</script>
 </body>
 </html>
