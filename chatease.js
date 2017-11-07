@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.28';
+chatease.version = '1.0.29';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1063,7 +1063,8 @@ chatease.version = '1.0.28';
 				'overflow-y': 'scroll'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
-				margin: '6px'
+				margin: '6px',
+				'line-height': '20px'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS
@@ -1089,6 +1090,8 @@ chatease.version = '1.0.28';
 				display: CSS_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon img', {
+				width: CSS_100PCT,
+				height: CSS_100PCT,
 				display: CSS_INLINE_BLOCK
 			});
 			

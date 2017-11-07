@@ -137,7 +137,8 @@
 				'overflow-y': 'scroll'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
-				margin: '6px'
+				margin: '6px',
+				'line-height': '20px'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div.' + NICK_SYSTEM_CLASS
@@ -163,6 +164,8 @@
 				display: CSS_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div .icon img', {
+				width: CSS_100PCT,
+				height: CSS_100PCT,
 				display: CSS_INLINE_BLOCK
 			});
 			

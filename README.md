@@ -101,7 +101,9 @@ _eventMapping = {
 > 	data: An object which will be sent in json format.
 
 * **close()**
+
 * **getState()**
+
 * **resize(width, height)**
 
 > 	width: Width in px.
