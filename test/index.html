@@ -89,7 +89,7 @@ body {
 				
 				var id = Math.ceil(Math.random() * 1000);
 				
-				return '?name=游客' + chatease.utils.pad(id, 3) + '&icon=';
+				return '?name=游客' + chatease.utils.pad(id, 3);
 			})(),
 			width: 640,
 			height: 400,
@@ -107,7 +107,7 @@ body {
 		}
 		
 		function onMessage(e) {
-			console.log(e.user.name + ': ' + e.data);
+			//console.log(e.user.name + ': ' + e.data);
 		}
 		
 		function onUsers(e) {

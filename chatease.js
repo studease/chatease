@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.30';
+chatease.version = '1.0.31';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -161,11 +161,8 @@ chatease.version = '1.0.30';
 	
 	/* Browser */
 	utils.isMSIE = function(version) {
-		if (version) {
-			version = parseFloat(version).toFixed(1);
-			return _userAgentMatch(new RegExp('msie\\s*' + version, 'i'));
-		}
-		return _userAgentMatch(/msie/i);
+		version = version || '';
+		return _userAgentMatch(new RegExp('msie\\s*' + version, 'i'));
 	};
 	
 	utils.isSafari = function() {
@@ -1472,7 +1469,6 @@ chatease.version = '1.0.30';
 		_this.setup = function() {
 			if (utils.isMSIE('(8|9)')) {
 				if (_object.setup) {
-					_this.config.debug = true;
 					_object.setup(_this.config);
 					_this.dispatchEvent(events.CHATEASE_READY, { id: _this.config.id });
 				}

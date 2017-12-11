@@ -153,11 +153,8 @@
 	
 	/* Browser */
 	utils.isMSIE = function(version) {
-		if (version) {
-			version = parseFloat(version).toFixed(1);
-			return _userAgentMatch(new RegExp('msie\\s*' + version, 'i'));
-		}
-		return _userAgentMatch(/msie/i);
+		version = version || '';
+		return _userAgentMatch(new RegExp('msie\\s*' + version, 'i'));
 	};
 	
 	utils.isSafari = function() {
