@@ -47,7 +47,10 @@
 				_ready = true;
 				_forward(e);
 				
-				//view.show('聊天室已连接！');
+				if (!chatease.debug) {
+					view.show('聊天室已连接！');
+				}
+				
 				_connect();
 				
 				window.onbeforeunload = function(e) {
@@ -124,8 +127,11 @@
 				}
 			}
 			
-			//utils.log('聊天室连接中…');
-			view.show('聊天室连接中…');
+			if (chatease.debug) {
+				view.show('聊天室连接中…');
+			} else {
+				utils.log('聊天室连接中…');
+			}
 			
 			try {
 				window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -189,8 +195,11 @@
 						state: data.channel.state
 					}));
 					
-					view.show('已加入房间（' + userinfo.channel + '）。');
-					//utils.log('已加入房间（' + userinfo.channel + '）。');
+					if (chatease.debug) {
+						view.show('已加入房间（' + userinfo.channel + '）。');
+					} else {
+						utils.log('已加入房间（' + userinfo.channel + '）。');
+					}
 					
 					if (userinfo.role < userinfo.state) {
 						view.show('您所在的用户组不能发言！');
@@ -371,22 +380,34 @@
 		function _modelStateHandler(e) {
 			switch (e.state) {
 				case states.CONNECTED:
-					//utils.log('聊天室已连接…');
-					view.show('聊天室已连接…');
+					if (chatease.debug) {
+						view.show('聊天室已连接…');
+					} else {
+						utils.log('聊天室已连接…');
+					}
+					
 					_retrycount = 0;
 					_this.dispatchEvent(events.CHATEASE_CONNECT);
 					break;
 					
 				case states.CLOSED:
-					//utils.log('聊天室连接已断开！');
-					view.show('聊天室连接已断开！');
+					if (chatease.debug) {
+						view.show('聊天室连接已断开！');
+					} else {
+						utils.log('聊天室连接已断开！');
+					}
+					
 					_this.dispatchEvent(events.CHATEASE_CLOSE, { channel: { id: model.channel } });
 					_reconnect();
 					break;
 					
 				case states.ERROR:
-					//utils.log('聊天室异常！');
-					view.show('聊天室异常！');
+					if (chatease.debug) {
+						view.show('聊天室异常！');
+					} else {
+						utils.log('聊天室异常！');
+					}
+					
 					_this.dispatchEvent(events.ERROR, { message: 'Chat room error!', channel: { id: model.channel } });
 					break;
 					
@@ -404,8 +425,11 @@
 			if (model.config.maxretries < 0 || _retrycount < model.config.maxretries) {
 				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
 				
-				//utils.log('正在准备重连，' + delay / 1000 + '秒...');
-				view.show('正在准备重连，' + delay / 1000 + '秒...');
+				if (chatease.debug) {
+					view.show('正在准备重连，' + delay / 1000 + '秒...');
+				} else {
+					utils.log('正在准备重连，' + delay / 1000 + '秒...');
+				}
 				
 				_retrycount++;
 				_startTimer(delay);

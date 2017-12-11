@@ -90,7 +90,7 @@
 				version: chatease.version,
 				type: type
 			});
-			if (chatease.debug) {
+			if (chatease.debug === 'events') {
 				utils.log(type, data);
 			}
 			_dispatchEvent(_listeners[type], data, type);
