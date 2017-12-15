@@ -50,6 +50,7 @@ body {
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.protocol.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.def.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.mobile.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/renders/chatease.core.renders.none.js'></script>
@@ -99,6 +100,9 @@ body {
 				name: 'def',
 				title: 'CHATEASE ' + chatease.version,
 				swf: '../swf/chatease.swf'
+			},
+			skin: {
+				name: chatease.utils.isMobile() ? 'mobile' : 'def'
 			}
 		});
 		
