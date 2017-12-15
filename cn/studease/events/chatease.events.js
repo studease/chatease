@@ -24,6 +24,7 @@
 		// View Events
 		CHATEASE_VIEW_SEND: 'chateaseViewSend',
 		CHATEASE_VIEW_PROPERTY: 'chateaseViewProperty',
+		CHATEASE_VIEW_SHOWMORE: 'chateaseViewShowMore',
 		CHATEASE_VIEW_CLEARSCREEN: 'chateaseViewClearScreen',
 		CHATEASE_VIEW_NICKCLICK: 'chateaseViewNickClick',
 		

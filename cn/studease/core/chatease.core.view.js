@@ -69,7 +69,7 @@
 				_render = _this.render = new renders[cfg.name](_renderLayer, cfg);
 				_render.addEventListener(events.CHATEASE_READY, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _forward);
+				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _onViewProperty);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
@@ -160,6 +160,20 @@
 				_render.destroy();
 			}
 		};
+		
+		function _onViewProperty(e) {
+			switch (e.key) {
+				case 'more':
+					if (e.value) {
+						utils.addClass(_renderLayer, 'more');
+					} else {
+						utils.removeClass(_renderLayer, 'more');
+					}
+					break;
+			}
+			
+			_forward(e);
+		}
 		
 		function _onNickClick(e) {
 			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user });

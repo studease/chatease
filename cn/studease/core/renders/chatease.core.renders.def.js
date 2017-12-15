@@ -17,8 +17,6 @@
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		INPUT_CLASS = 'cha-input',
-		
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
@@ -50,6 +48,8 @@
 			_consoleLayer,
 			_controlsLayer,
 			_dialogLayer,
+			_moreLayer,
+			_moreButton,
 			_textInput,
 			_sendButton;
 		
@@ -117,21 +117,24 @@
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			layer.appendChild(_controlsLayer);
 			
-			var shieldChk = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
-			_controlsLayer.appendChild(shieldChk);
+			var shieldtext = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
+			_controlsLayer.appendChild(shieldtext);
 			
-			var clearBtn = _getButton('清屏', BUTTON_CLASS + ' gray clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
-			_controlsLayer.appendChild(clearBtn);
+			var clearscreen = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			_controlsLayer.appendChild(clearscreen);
 			
 			// dialog
 			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
 			layer.appendChild(_dialogLayer);
 			
+			_moreButton = _getCheckBox('', 'more', events.CHATEASE_VIEW_PROPERTY, { key: 'more' }, false);
+			_dialogLayer.appendChild(_moreButton);
+			
 			_textInput = utils.createElement('textarea');
 			_textInput.id = _this.config.id + '-input';
 			_dialogLayer.appendChild(_textInput);
 			
-			_sendButton = utils.createElement('button', BUTTON_CLASS + ' blue');
+			_sendButton = utils.createElement('button', BUTTON_CLASS + ' blue send');
 			_dialogLayer.appendChild(_sendButton);
 			
 			// textarea
@@ -168,13 +171,13 @@
 				_textInput.attachEvent('onkeypress', handler);
 			}
 			
-			// button
+			// send button
 			_sendButton.innerHTML = '发送';
 			
 			var clickHandler = (function() {
 				return function() {
 					_this.send();
-				}
+				};
 			})();
 			
 			try {
@@ -187,7 +190,7 @@
 		function _getCheckBox(label, clazz, event, data, checked) {
 			var box = utils.createElement('div', clazz);
 			box.setAttribute('value', !!checked);
-			box.innerHTML = label;
+			box.innerHTML = '<span class="icon"></span>' + label;
 			
 			var handler = (function(event, data) {
 				return function(e) {
@@ -216,7 +219,7 @@
 		
 		function _getButton(label, clazz, event, data) {
 			var box = utils.createElement('div', clazz);
-			box.innerHTML = label;
+			box.innerHTML = '<span class="icon"></span>' + label;
 			
 			var handler = (function(event, data) {
 				return function(e) {

@@ -43,11 +43,11 @@
 		CSS_BLOCK = 'block',
 		CSS_INLINE_BLOCK = 'inline-block';
 	
-	skins.def = function(config) {
-		var _this = utils.extend(this, new events.eventdispatcher('skins.def'));
+	skins.mobile = function(config) {
+		var _this = utils.extend(this, new events.eventdispatcher('skins.mobile'));
 		
 		function _init() {
-			_this.name = skinmodes.DEFAULT;
+			_this.name = skinmodes.MOBILE;
 			
 			_this.config = utils.extend({}, config);
 			
@@ -134,7 +134,8 @@
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
 				width: CSS_100PCT,
 				height: CSS_100PCT,
-				position: CSS_RELATIVE
+				position: CSS_RELATIVE,
+				overflow: CSS_HIDDEN
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' object', {
@@ -160,12 +161,15 @@
 				color: '#242424',
 				top: (_this.config.title ? 40 : 0) + 'px',
 				right: '0',
-				bottom: '100px',
+				bottom: '40px',
 				left: '0',
 				position: CSS_ABSOLUTE,
 				'background-color': '#F8F8F8',
 				'overflow-x': CSS_HIDDEN,
 				'overflow-y': 'scroll'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + '.more .' + CONSOLE_CLASS, {
+				bottom: '120px'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
 				margin: '6px',
@@ -251,57 +255,93 @@
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
-				height: '40px',
+				margin: '0',
+				padding: '0',
+				height: '90px',
+				bottom: '-90px',
 				right: '0',
-				bottom: '60px',
 				left: '0',
 				position: CSS_ABSOLUTE,
 				overflow: CSS_HIDDEN,
-				'line-height': CSS_100PCT,
-				'background-color': 'inherit'
+				'background-color': '#F8F8F8'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + '.more .' + CONTROLS_CLASS, {
+				bottom: '0'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > *', {
-				margin: '8px 0',
+				'float': 'left',
+				margin: '8px 0 0 8px',
+				padding: '0',
+				width: '60px',
+				color: '#8A8A8A',
+				'font-size': '12px',
 				'text-align': 'center',
-				'line-height': '24px',
-				display: 'block'
+				'white-space': CSS_NORMAL,
+				'background-color': 'transparent'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
-				'float': 'left'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > *:hover', {
+				'background-color': 'transparent'
 			});
-			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' > * .icon', {
+				'float': CSS_NONE,
+				margin: '0 4px',
+				padding: '0',
+				width: '50px',
+				height: '50px',
+				border: '1px solid #E6E6E6',
+				'border-radius': '5px',
+				'background-repeat': 'no-repeat',
+				'background-position': 'center',
+				display: 'inline-block'
+			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext .icon', {
-				padding: '5px'
+				'background-image': 'url(../skins/shieldtext-on.png)'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen', {
-				'float': 'right',
-				width: '50px'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext.checked .icon', {
+				'background-image': 'url(../skins/shieldtext.png)'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen .icon', {
+				'background-image': 'url(../skins/clearscreen.png)'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS, {
-				height: '60px',
+				height: '40px',
 				right: '0',
 				bottom: '0',
 				left: '0',
 				position: CSS_ABSOLUTE,
-				overflow: CSS_HIDDEN,
 				'background-color': '#E0E0E0'
 			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + '.more .' + DIALOG_CLASS, {
+				bottom: '90px'
+			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .more', {
-				display: CSS_NONE
+				'float': 'left',
+				margin: '8px 5px',
+				padding: '0',
+				width: '24px',
+				height: '24px',
+				'background-repeat': 'no-repeat',
+				'background-position': 'center',
+				'background-image': 'url(../skins/more.png)',
+				display: CSS_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' textarea', {
-				padding: '6px 10px',
-				width: _this.config.width - 124 + 'px',
-				height: '48px',
+				margin: '5px 0',
+				padding: '5px',
+				width: _this.config.width - 114 + 'px',
+				height: '20px',
 				resize: CSS_NONE,
 				border: '0 none',
-				'background-color': '#E6E6E6'
+				'line-height': '20px',
+				'background-color': '#F8F8F8'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .send', {
 				'float': 'right',
+				margin: '5px',
+				padding: '0 5px',
 				width: '50px',
-				height: CSS_100PCT
+				height: '30px'
 			});
 		}
 		
@@ -310,7 +350,7 @@
 			var textInput = document.getElementById(_this.config.id + '-input');
 			
 			css.style(textInput, {
-				width: wrapper.clientWidth - 90 + 'px'
+				width: wrapper.clientWidth - 114 + 'px'
 			});
 		};
 		

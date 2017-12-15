@@ -3,6 +3,7 @@
 		skins = core.skins = {};
 	
 	skins.modes = {
-		DEFAULT: 'def'
+		DEFAULT: 'def',
+		MOBILE: 'mobile'
 	};
 })(chatease);
