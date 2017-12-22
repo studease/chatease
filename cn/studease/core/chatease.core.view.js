@@ -62,7 +62,8 @@
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
 				maxlength: model.getConfig('maxlength'),
-				maxrecords: model.getConfig('maxrecords')
+				maxrecords: model.getConfig('maxrecords'),
+				smoothing: model.getConfig('smoothing')
 			});
 			
 			try {
@@ -83,7 +84,8 @@
 				id: model.getConfig('id'),
 				width: model.config.width,
 				height: model.config.height,
-				title: !!model.getConfig('render').title
+				title: !!model.getConfig('render').title,
+				smoothing: model.getConfig('smoothing')
 			});
 			
 			try {
@@ -169,6 +171,8 @@
 					} else {
 						utils.removeClass(_renderLayer, 'more');
 					}
+					
+					_render.refresh();
 					break;
 					
 				case 'shield':

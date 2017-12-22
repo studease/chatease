@@ -1089,10 +1089,14 @@ chatease.version = '1.0.34';
 				left: '0',
 				position: CSS_ABSOLUTE,
 				'background-color': '#F8F8F8',
-				'overflow': CSS_HIDDEN
+				'overflow-x': CSS_HIDDEN,
+				'overflow-y': _this.config.smoothing ? CSS_HIDDEN : 'scroll'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
+				padding: '0 6px ' + (_this.config.smoothing ? '6px' : '0') + ' 6px'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > div', {
-				margin: '6px',
+				margin: '6px 0',
 				'line-height': '20px'
 			});
 			
@@ -1410,13 +1414,17 @@ chatease.version = '1.0.34';
 				left: '0',
 				position: CSS_ABSOLUTE,
 				'background-color': '#F8F8F8',
-				'overflow': CSS_HIDDEN
+				'overflow-x': CSS_HIDDEN,
+				'overflow-y': _this.config.smoothing ? CSS_HIDDEN : 'scroll'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + '.more .' + CONSOLE_CLASS, {
 				bottom: '130px'
 			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
+				padding: '0 6px ' + (_this.config.smoothing ? '6px' : '0') + ' 6px'
+			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > div', {
-				margin: '6px',
+				margin: '6px 0',
 				'line-height': '20px'
 			});
 			
@@ -1670,7 +1678,8 @@ chatease.version = '1.0.34';
 			_moreLayer,
 			_moreButton,
 			_textInput,
-			_sendButton;
+			_sendButton,
+			_bscroll;
 		
 		function _init() {
 			_this.name = rendermodes.DEFAULT;
@@ -1734,6 +1743,10 @@ chatease.version = '1.0.34';
 			
 			_contentLayer = utils.createElement('div', CONTENT_CLASS);
 			_consoleLayer.appendChild(_contentLayer);
+			
+			if (_this.config.smoothing) {
+				_bscroll = new BScroll(_consoleLayer);
+			}
 			
 			// controls
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
@@ -1934,7 +1947,12 @@ chatease.version = '1.0.34';
 			
 			// append this box
 			_contentLayer.appendChild(box);
-			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			
+			if (_this.config.smoothing) {
+				_this.refresh();
+			} else {
+				_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			}
 		};
 		
 		function _getIcon(url) {
@@ -2011,6 +2029,22 @@ chatease.version = '1.0.34';
 			}});
 			
 			_this.clearInput();
+		};
+		
+		_this.refresh = function() {
+			if (_this.config.smoothing) {
+				if (_consoleLayer.clientHeight < _contentLayer.clientHeight) {
+					css.style(_contentLayer, {
+						'transition-timing-function': 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+						'transition-duration': '100ms',
+						'transform': 'translate(0px, ' + (_consoleLayer.clientHeight - _contentLayer.clientHeight) + 'px) translateZ(0px)'
+					});
+				}
+				
+				_bscroll.refresh();
+			} else {
+				_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			}
 		};
 		
 		_this.clearInput = function() {
@@ -2432,7 +2466,8 @@ chatease.version = '1.0.34';
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
 				maxlength: model.getConfig('maxlength'),
-				maxrecords: model.getConfig('maxrecords')
+				maxrecords: model.getConfig('maxrecords'),
+				smoothing: model.getConfig('smoothing')
 			});
 			
 			try {
@@ -2453,7 +2488,8 @@ chatease.version = '1.0.34';
 				id: model.getConfig('id'),
 				width: model.config.width,
 				height: model.config.height,
-				title: !!model.getConfig('render').title
+				title: !!model.getConfig('render').title,
+				smoothing: model.getConfig('smoothing')
 			});
 			
 			try {
@@ -2539,6 +2575,8 @@ chatease.version = '1.0.34';
 					} else {
 						utils.removeClass(_renderLayer, 'more');
 					}
+					
+					_render.refresh();
 					break;
 					
 				case 'shield':
@@ -3159,14 +3197,15 @@ chatease.version = '1.0.34';
 	
 	embed.config = function(config) {
 		var _defaults = {
-			url: 'ws://' + window.location.host + '/ch1?token=123456',
+			url: 'ws://' + window.location.host + '/ch1?token=',
 			width: 640,
 			height: 400,
 			keywords: '',
-	 		maxlength: 30,    // -1: no limit
+	 		maxlength: 50,  // -1: no limit
 	 		maxrecords: 50,
-	 		maxretries: -1,   // -1: always
+	 		maxretries: -1, // -1: always
 	 		retrydelay: 3000,
+	 		smoothing: false,
 			render: {
 				name: rendermodes.DEFAULT,
 				title: 'CHATEASE ' + chatease.version,
@@ -3178,6 +3217,7 @@ chatease.version = '1.0.34';
 		},
 		
 		_config = utils.extend({}, _defaults, config);
+		_config.smoothing = _config.smoothing && utils.isMobile() && BScroll;
 		
 		return _config;
 	};

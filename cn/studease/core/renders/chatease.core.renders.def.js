@@ -53,7 +53,8 @@
 			_moreLayer,
 			_moreButton,
 			_textInput,
-			_sendButton;
+			_sendButton,
+			_bscroll;
 		
 		function _init() {
 			_this.name = rendermodes.DEFAULT;
@@ -117,6 +118,10 @@
 			
 			_contentLayer = utils.createElement('div', CONTENT_CLASS);
 			_consoleLayer.appendChild(_contentLayer);
+			
+			if (_this.config.smoothing) {
+				_bscroll = new BScroll(_consoleLayer);
+			}
 			
 			// controls
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
@@ -317,7 +322,12 @@
 			
 			// append this box
 			_contentLayer.appendChild(box);
-			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			
+			if (_this.config.smoothing) {
+				_this.refresh();
+			} else {
+				_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			}
 		};
 		
 		function _getIcon(url) {
@@ -394,6 +404,22 @@
 			}});
 			
 			_this.clearInput();
+		};
+		
+		_this.refresh = function() {
+			if (_this.config.smoothing) {
+				if (_consoleLayer.clientHeight < _contentLayer.clientHeight) {
+					css.style(_contentLayer, {
+						'transition-timing-function': 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+						'transition-duration': '100ms',
+						'transform': 'translate(0px, ' + (_consoleLayer.clientHeight - _contentLayer.clientHeight) + 'px) translateZ(0px)'
+					});
+				}
+				
+				_bscroll.refresh();
+			} else {
+				_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
+			}
 		};
 		
 		_this.clearInput = function() {

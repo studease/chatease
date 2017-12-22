@@ -165,13 +165,17 @@
 				left: '0',
 				position: CSS_ABSOLUTE,
 				'background-color': '#F8F8F8',
-				'overflow': CSS_HIDDEN
+				'overflow-x': CSS_HIDDEN,
+				'overflow-y': _this.config.smoothing ? CSS_HIDDEN : 'scroll'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + '.more .' + CONSOLE_CLASS, {
 				bottom: '130px'
 			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div', {
+				padding: '0 6px ' + (_this.config.smoothing ? '6px' : '0') + ' 6px'
+			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' > div > div', {
-				margin: '6px',
+				margin: '6px 0',
 				'line-height': '20px'
 			});
 			

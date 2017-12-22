@@ -7,14 +7,15 @@
 	
 	embed.config = function(config) {
 		var _defaults = {
-			url: 'ws://' + window.location.host + '/ch1?token=123456',
+			url: 'ws://' + window.location.host + '/ch1?token=',
 			width: 640,
 			height: 400,
 			keywords: '',
-	 		maxlength: 30,    // -1: no limit
+	 		maxlength: 50,  // -1: no limit
 	 		maxrecords: 50,
-	 		maxretries: -1,   // -1: always
+	 		maxretries: -1, // -1: always
 	 		retrydelay: 3000,
+	 		smoothing: false,
 			render: {
 				name: rendermodes.DEFAULT,
 				title: 'CHATEASE ' + chatease.version,
@@ -26,6 +27,7 @@
 		},
 		
 		_config = utils.extend({}, _defaults, config);
+		_config.smoothing = _config.smoothing && utils.isMobile() && BScroll;
 		
 		return _config;
 	};
