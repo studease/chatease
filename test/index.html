@@ -35,6 +35,10 @@ body {
 }
 	</style>
 	
+	<!--<script type='text/javascript' src='js/bscroll.min.js'></script>-->
+	<script type='text/javascript' src='js/bscroll.js'></script>
+	<script type='text/javascript' src='js/keywords.js'></script>
+	
 	<!--<script type='text/javascript' src='../chatease.min.js'></script>-->
 	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
@@ -71,7 +75,6 @@ body {
 		<div id='chat'></div>
 	</div>
 	
-	<script type='text/javascript' src='js/keywords.js'></script>
 	<script type="text/javaScript">
 		var users = document.getElementById('ol-users');
 		var events = chatease.events;
@@ -96,6 +99,8 @@ body {
 			height: 400,
 			keywords: keywords,
 			maxretries: 0,
+			smoothing: chatease.utils.isMobile(),
+			debug: true,
 			render: {
 				name: 'def',
 				title: 'CHATEASE ' + chatease.version,
