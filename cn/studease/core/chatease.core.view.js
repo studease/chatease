@@ -170,6 +170,12 @@
 						utils.removeClass(_renderLayer, 'more');
 					}
 					break;
+					
+				case 'shield':
+					var label = e.value ? '取消屏蔽' : '屏蔽消息';
+					var shieldtext = document.getElementById(model.getConfig('id') + '-shieldtext');
+					shieldtext.innerHTML = '<span class="icon"></span>' + label;
+					break;
 			}
 			
 			_forward(e);

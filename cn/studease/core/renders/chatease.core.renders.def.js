@@ -11,6 +11,7 @@
 		RENDER_CLASS = 'cha-render',
 		TITLE_CLASS = 'cha-title',
 		CONSOLE_CLASS = 'cha-console',
+		CONTENT_CLASS = 'cha-content',
 		CONTROLS_CLASS = 'cha-controls',
 		DIALOG_CLASS = 'cha-dialog',
 		
@@ -46,6 +47,7 @@
 			_defaults = {},
 			_titleLayer,
 			_consoleLayer,
+			_contentLayer,
 			_controlsLayer,
 			_dialogLayer,
 			_moreLayer,
@@ -113,11 +115,15 @@
 			_consoleLayer.id = _this.config.id + '-console';
 			layer.appendChild(_consoleLayer);
 			
+			_contentLayer = utils.createElement('div', CONTENT_CLASS);
+			_consoleLayer.appendChild(_contentLayer);
+			
 			// controls
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			layer.appendChild(_controlsLayer);
 			
 			var shieldtext = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
+			shieldtext.id = _this.config.id + '-shieldtext';
 			_controlsLayer.appendChild(shieldtext);
 			
 			var clearscreen = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
@@ -305,12 +311,12 @@
 			//box.insertAdjacentHTML('beforeend', text);
 			
 			// check records
-			if (_consoleLayer.childNodes.length >= _this.config.maxrecords) {
-				_consoleLayer.removeChild(_consoleLayer.childNodes[0]);
+			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
+				_contentLayer.removeChild(_contentLayer.childNodes[0]);
 			}
 			
 			// append this box
-			_consoleLayer.appendChild(box);
+			_contentLayer.appendChild(box);
 			_consoleLayer.scrollTop = _consoleLayer.scrollHeight;
 		};
 		
