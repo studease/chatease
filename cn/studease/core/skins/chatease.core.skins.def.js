@@ -292,16 +292,18 @@
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' textarea', {
 				padding: '6px 10px',
-				width: _this.config.width - 124 + 'px',
+				width: _this.config.width - 90 + 'px',
 				height: '48px',
 				resize: CSS_NONE,
 				border: '0 none',
 				'background-color': '#E6E6E6'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + DIALOG_CLASS + ' .send', {
-				'float': 'right',
 				width: '50px',
-				height: CSS_100PCT
+				height: CSS_100PCT,
+				top: '0',
+				right: '0',
+				position: CSS_ABSOLUTE
 			});
 		}
 		
