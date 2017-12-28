@@ -19,6 +19,8 @@
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
 		
+		AREA_UNI_CLASS = 'area-uni',
+		
 		TITLE_VISITOR_CLASS = 'ttl-visitor',
 		TITLE_NORMAL_CLASS = 'ttl-normal',
 		TITLE_VIP_CLASS = 'ttl-vip',
@@ -201,6 +203,13 @@
 				width: CSS_100PCT,
 				height: CSS_100PCT,
 				display: CSS_INLINE_BLOCK
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area', {
+				'margin-right': '2px'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area.' + AREA_UNI_CLASS, {
+				color: '#F76767'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title', {

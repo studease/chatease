@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.34';
+chatease.version = '1.0.35';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -851,6 +851,7 @@ chatease.version = '1.0.34';
 	
 	protocol.cmds = {
 		TEXT:    'text',
+		HISTORY: 'history',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
 		EXTERN:  'extern',
@@ -860,6 +861,7 @@ chatease.version = '1.0.34';
 	protocol.raws = {
 		IDENT:   'ident',
 		TEXT:    'text',
+		HISTORY: 'history',
 		JOIN:    'join',
 		LEFT:    'left',
 		USERS:   'users',
@@ -868,6 +870,12 @@ chatease.version = '1.0.34';
 		EXTERN:  'extern',
 		ERROR:   'error',
 		PONG:    'pong'
+	};
+	
+	protocol.types = {
+		UNI:     0x00,
+		MULTI:   0x01,
+		HISTORY: 0x02
 	};
 	
 	protocol.roles = {
@@ -943,6 +951,8 @@ chatease.version = '1.0.34';
 		
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
+		
+		AREA_UNI_CLASS = 'area-uni',
 		
 		TITLE_VISITOR_CLASS = 'ttl-visitor',
 		TITLE_NORMAL_CLASS = 'ttl-normal',
@@ -1126,6 +1136,13 @@ chatease.version = '1.0.34';
 				width: CSS_100PCT,
 				height: CSS_100PCT,
 				display: CSS_INLINE_BLOCK
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area', {
+				'margin-right': '2px'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area.' + AREA_UNI_CLASS, {
+				color: '#F76767'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title', {
@@ -1628,6 +1645,7 @@ chatease.version = '1.0.34';
 		events = chatease.events,
 		core = chatease.core,
 		protocol = core.protocol,
+		types = protocol.types,
 		roles = protocol.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
@@ -1645,6 +1663,8 @@ chatease.version = '1.0.34';
 		
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
+		
+		AREA_UNI_CLASS = 'area-uni',
 		
 		TITLE_VISITOR_CLASS = 'ttl-visitor',
 		TITLE_NORMAL_CLASS = 'ttl-normal',
@@ -1888,9 +1908,6 @@ chatease.version = '1.0.34';
 			if (utils.typeOf(user) != 'object') {
 				user = { id: 0, name: '系统', role: roles.SYSTEM };
 			}
-			if (type != 'uni') {
-				type = 'multi';
-			}
 			
 			// create box
 			var box = utils.createElement('div');
@@ -1905,8 +1922,8 @@ chatease.version = '1.0.34';
 			}
 			
 			// private chat sign
-			if (type == 'uni') {
-				var span = utils.createElement('span');
+			if (type == types.UNI) {
+				var span = utils.createElement('span', 'area ' + AREA_UNI_CLASS);
 				span.innerHTML = '[密语]';
 				box.appendChild(span);
 			}
@@ -1923,6 +1940,7 @@ chatease.version = '1.0.34';
 			
 			var nickHandler = (function(user) {
 				return function(e) {
+					_textInput.value = '/r ' + user.name + ' ';
 					_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: user });
 				};
 			})(user);
@@ -1937,8 +1955,8 @@ chatease.version = '1.0.34';
 			// set text
 			var span = utils.createElement('span', 'context');
 			span.innerHTML = text;
+			
 			box.appendChild(span);
-			//box.insertAdjacentHTML('beforeend', text);
 			
 			// check records
 			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
@@ -1946,7 +1964,11 @@ chatease.version = '1.0.34';
 			}
 			
 			// append this box
-			_contentLayer.appendChild(box);
+			if (type == types.HISTORY) {
+				_contentLayer.insertBefore(box, _contentLayer.childNodes[0]);
+			} else {
+				_contentLayer.appendChild(box);
+			}
 			
 			if (_this.config.smoothing) {
 				_this.refresh();
@@ -2025,7 +2047,7 @@ chatease.version = '1.0.34';
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
 				data: _textInput.value,
-				type: 'multi' // TODO: uni
+				type: types.MULTI // TODO: uni
 			}});
 			
 			_this.clearInput();
@@ -2362,6 +2384,7 @@ chatease.version = '1.0.34';
 			_this.config = utils.extend({}, _defaults, config);
 			
 			_properties = {
+				userlist: {},
 				userinfo: new userinfo(),
 				shield: false
 			};
@@ -2476,7 +2499,7 @@ chatease.version = '1.0.34';
 				_render.addEventListener(events.CHATEASE_VIEW_SEND, _forward);
 				_render.addEventListener(events.CHATEASE_VIEW_PROPERTY, _onViewProperty);
 				_render.addEventListener(events.CHATEASE_VIEW_CLEARSCREEN, _forward);
-				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _onNickClick);
+				_render.addEventListener(events.CHATEASE_VIEW_NICKCLICK, _forward);
 				_render.addEventListener(events.CHATEASE_RENDER_ERROR, _onRenderError);
 			} catch (err) {
 				utils.log('Failed to init render ' + cfg.name + '!');
@@ -2589,10 +2612,6 @@ chatease.version = '1.0.34';
 			_forward(e);
 		}
 		
-		function _onNickClick(e) {
-			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user });
-		}
-		
 		function _onRenderError(e) {
 			_forward(e);
 		}
@@ -2614,6 +2633,7 @@ chatease.version = '1.0.34';
 		protocol = core.protocol,
 		cmds = protocol.cmds,
 		raws = protocol.raws,
+		types = protocol.types,
 		roles = protocol.roles,
 		channelStates = protocol.channelStates,
 		punishments = protocol.punishments,
@@ -2830,6 +2850,9 @@ chatease.version = '1.0.34';
 						// Ignore this failure.
 						utils.log('Failed to execute filter.');
 					}
+					
+					var userlist = model.getProperty('userlist');
+					userlist[data.user.name] = data.user;
 					
 					view.show(data.data, data.user, data.type);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
@@ -3068,21 +3091,44 @@ chatease.version = '1.0.34';
 				return;
 			}
 			
-			if (model.config.maxlength >= 0) {
-				text = text.substr(0, model.config.maxlength);
-			}
-			text = utils.trim(text);
-			
 			var userinfo = model.getProperty('userinfo');
-			
-			_this.send({
+			var data = {
 				cmd: cmds.TEXT,
 				data: text,
 				type: e.data.type,
 				channel: {
 					id: userinfo.channel
 				}
-			});
+			};
+			
+			var arr = text.match(/^\/r\s(.+)\s(.*)/i);
+			if (arr && arr.length > 2) {
+				var name = utils.trim(arr[1]);
+				var userlist = model.getProperty('userlist');
+				var user = userlist[name];
+				if (!user) {
+					_error(errors.NOT_FOUND, null);
+					return;
+				}
+				
+				data.type = types.UNI;
+				data.user = { id: user.id };
+				
+				text = arr[2];
+			}
+			
+			if (model.config.maxlength >= 0) {
+				text = text.substr(0, model.config.maxlength);
+			}
+			
+			text = utils.trim(text);
+			if (!text) {
+				return;
+			}
+			
+			data.data = text;
+			
+			_this.send(data);
 		}
 		
 		function _onViewProperty(e) {
@@ -3097,8 +3143,9 @@ chatease.version = '1.0.34';
 		function _onNickClick(e) {
 			// TODO: control, private chat
 			var userinfo = model.getProperty('userinfo');
-			e.channel = { id: userinfo.channel, state: userinfo.state };
-			_forward(e);
+			var channel = { id: userinfo.channel, state: userinfo.state };
+			
+			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user, channel: channel });
 		}
 		
 		_this.close = function() {

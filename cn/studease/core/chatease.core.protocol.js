@@ -5,6 +5,7 @@
 	
 	protocol.cmds = {
 		TEXT:    'text',
+		HISTORY: 'history',
 		MUTE:    'mute',
 		KICKOUT: 'kickout',
 		EXTERN:  'extern',
@@ -14,6 +15,7 @@
 	protocol.raws = {
 		IDENT:   'ident',
 		TEXT:    'text',
+		HISTORY: 'history',
 		JOIN:    'join',
 		LEFT:    'left',
 		USERS:   'users',
@@ -22,6 +24,12 @@
 		EXTERN:  'extern',
 		ERROR:   'error',
 		PONG:    'pong'
+	};
+	
+	protocol.types = {
+		UNI:     0x00,
+		MULTI:   0x01,
+		HISTORY: 0x02
 	};
 	
 	protocol.roles = {

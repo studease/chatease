@@ -7,6 +7,7 @@
 		protocol = core.protocol,
 		cmds = protocol.cmds,
 		raws = protocol.raws,
+		types = protocol.types,
 		roles = protocol.roles,
 		channelStates = protocol.channelStates,
 		punishments = protocol.punishments,
@@ -223,6 +224,9 @@
 						// Ignore this failure.
 						utils.log('Failed to execute filter.');
 					}
+					
+					var userlist = model.getProperty('userlist');
+					userlist[data.user.name] = data.user;
 					
 					view.show(data.data, data.user, data.type);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
@@ -461,21 +465,44 @@
 				return;
 			}
 			
-			if (model.config.maxlength >= 0) {
-				text = text.substr(0, model.config.maxlength);
-			}
-			text = utils.trim(text);
-			
 			var userinfo = model.getProperty('userinfo');
-			
-			_this.send({
+			var data = {
 				cmd: cmds.TEXT,
 				data: text,
 				type: e.data.type,
 				channel: {
 					id: userinfo.channel
 				}
-			});
+			};
+			
+			var arr = text.match(/^\/r\s(.+)\s(.*)/i);
+			if (arr && arr.length > 2) {
+				var name = utils.trim(arr[1]);
+				var userlist = model.getProperty('userlist');
+				var user = userlist[name];
+				if (!user) {
+					_error(errors.NOT_FOUND, null);
+					return;
+				}
+				
+				data.type = types.UNI;
+				data.user = { id: user.id };
+				
+				text = arr[2];
+			}
+			
+			if (model.config.maxlength >= 0) {
+				text = text.substr(0, model.config.maxlength);
+			}
+			
+			text = utils.trim(text);
+			if (!text) {
+				return;
+			}
+			
+			data.data = text;
+			
+			_this.send(data);
 		}
 		
 		function _onViewProperty(e) {
@@ -490,8 +517,9 @@
 		function _onNickClick(e) {
 			// TODO: control, private chat
 			var userinfo = model.getProperty('userinfo');
-			e.channel = { id: userinfo.channel, state: userinfo.state };
-			_forward(e);
+			var channel = { id: userinfo.channel, state: userinfo.state };
+			
+			_this.dispatchEvent(events.CHATEASE_NICKCLICK, { user: e.user, channel: channel });
 		}
 		
 		_this.close = function() {

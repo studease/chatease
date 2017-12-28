@@ -16,6 +16,7 @@
 	 		maxretries: -1, // -1: always
 	 		retrydelay: 3000,
 	 		smoothing: false,
+	 		debug: false,
 			render: {
 				name: rendermodes.DEFAULT,
 				title: 'CHATEASE ' + chatease.version,

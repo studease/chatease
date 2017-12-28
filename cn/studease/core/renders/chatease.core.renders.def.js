@@ -3,6 +3,7 @@
 		events = chatease.events,
 		core = chatease.core,
 		protocol = core.protocol,
+		types = protocol.types,
 		roles = protocol.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
@@ -20,6 +21,8 @@
 		
 		NICK_SYSTEM_CLASS = 'cha-system',
 		NICK_MYSELF_CLASS = 'cha-myself',
+		
+		AREA_UNI_CLASS = 'area-uni',
 		
 		TITLE_VISITOR_CLASS = 'ttl-visitor',
 		TITLE_NORMAL_CLASS = 'ttl-normal',
@@ -263,9 +266,6 @@
 			if (utils.typeOf(user) != 'object') {
 				user = { id: 0, name: '系统', role: roles.SYSTEM };
 			}
-			if (type != 'uni') {
-				type = 'multi';
-			}
 			
 			// create box
 			var box = utils.createElement('div');
@@ -280,8 +280,8 @@
 			}
 			
 			// private chat sign
-			if (type == 'uni') {
-				var span = utils.createElement('span');
+			if (type == types.UNI) {
+				var span = utils.createElement('span', 'area ' + AREA_UNI_CLASS);
 				span.innerHTML = '[密语]';
 				box.appendChild(span);
 			}
@@ -298,6 +298,7 @@
 			
 			var nickHandler = (function(user) {
 				return function(e) {
+					_textInput.value = '/r ' + user.name + ' ';
 					_this.dispatchEvent(events.CHATEASE_VIEW_NICKCLICK, { user: user });
 				};
 			})(user);
@@ -312,8 +313,8 @@
 			// set text
 			var span = utils.createElement('span', 'context');
 			span.innerHTML = text;
+			
 			box.appendChild(span);
-			//box.insertAdjacentHTML('beforeend', text);
 			
 			// check records
 			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
@@ -321,7 +322,11 @@
 			}
 			
 			// append this box
-			_contentLayer.appendChild(box);
+			if (type == types.HISTORY) {
+				_contentLayer.insertBefore(box, _contentLayer.childNodes[0]);
+			} else {
+				_contentLayer.appendChild(box);
+			}
 			
 			if (_this.config.smoothing) {
 				_this.refresh();
@@ -400,7 +405,7 @@
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
 				data: _textInput.value,
-				type: 'multi' // TODO: uni
+				type: types.MULTI // TODO: uni
 			}});
 			
 			_this.clearInput();

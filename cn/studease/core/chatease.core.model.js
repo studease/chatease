@@ -85,6 +85,7 @@
 			_this.config = utils.extend({}, _defaults, config);
 			
 			_properties = {
+				userlist: {},
 				userinfo: new userinfo(),
 				shield: false
 			};
