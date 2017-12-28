@@ -475,7 +475,7 @@
 				}
 			};
 			
-			var arr = text.match(/^\/r\s(.+)\s(.*)/i);
+			var arr = text.match(/^\/r\s(\S+)\s(.*)/i);
 			if (arr && arr.length > 2) {
 				var name = utils.trim(arr[1]);
 				var userlist = model.getProperty('userlist');
