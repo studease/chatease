@@ -1,14 +1,14 @@
-# chatease.js
+ï»¿# chatease.js
 
 > [[domain] http://studease.cn](http://studease.cn/chatease.html)
 
 > [[source] https://github.com/studease/chatease](https://github.com/studease/chatease)
 
-> [[ÖÐÎÄ] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
+> [[ä¸­æ–‡] http://blog.csdn.net/icysky1989/article/details/52138527](http://blog.csdn.net/icysky1989/article/details/52138527)
 
-> ¹«ÖÚºÅ£ºSTUDEASE
+> å…¬ä¼—å·ï¼šSTUDEASE
 
-> QQÈº£º528109813
+> QQç¾¤ï¼š528109813
 
 This is a client-side script for websocket chat, with skin built in.
 
