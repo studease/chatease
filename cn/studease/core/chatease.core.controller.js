@@ -128,6 +128,8 @@
 				}
 			}
 			
+			view.render.clearScreen();
+			
 			if (chatease.debug) {
 				view.show('聊天室连接中…');
 			} else {

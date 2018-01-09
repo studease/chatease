@@ -432,7 +432,7 @@
 		};
 		
 		_this.clearScreen = function() {
-			utils.emptyElement(_consoleLayer);
+			utils.emptyElement(_contentLayer);
 		};
 		
 		_this.element = function() {

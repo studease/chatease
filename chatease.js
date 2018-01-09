@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.0.35';
+chatease.version = '1.0.36';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -2083,7 +2083,7 @@ chatease.version = '1.0.35';
 		};
 		
 		_this.clearScreen = function() {
-			utils.emptyElement(_consoleLayer);
+			utils.emptyElement(_contentLayer);
 		};
 		
 		_this.element = function() {
@@ -2762,6 +2762,8 @@ chatease.version = '1.0.35';
 					_websocket.close();
 				}
 			}
+			
+			view.render.clearScreen();
 			
 			if (chatease.debug) {
 				view.show('聊天室连接中…');
