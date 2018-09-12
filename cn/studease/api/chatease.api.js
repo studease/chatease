@@ -7,11 +7,11 @@
 		onError: events.ERROR,
 		onReady: events.CHATEASE_READY,
 		onConnect: events.CHATEASE_CONNECT,
-		onIdent: events.CHATEASE_INDENT,
+		onIdent: events.CHATEASE_INFO,
 		onMessage: events.CHATEASE_MESSAGE,
 		onJoin: events.CHATEASE_JOIN,
 		onLeft: events.CHATEASE_LEFT,
-		onUsers: events.CHATEASE_USERS,
+		onUser: events.CHATEASE_USER,
 		onExtern: events.CHATEASE_EXTERN,
 		onNickClick: events.CHATEASE_VIEW_NICKCLICK,
 		onClose: events.CHATEASE_CLOSE

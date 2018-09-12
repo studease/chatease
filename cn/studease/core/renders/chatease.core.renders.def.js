@@ -2,9 +2,9 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		core = chatease.core,
-		protocol = core.protocol,
-		types = protocol.types,
-		roles = protocol.roles,
+		message = core.message,
+		modes = message.modes,
+		roles = message.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
 		css = utils.css,
@@ -54,6 +54,8 @@
 			_controlsLayer,
 			_dialogLayer,
 			_moreLayer,
+			_hiddenButton,
+			_clearButton,
 			_moreButton,
 			_textInput,
 			_sendButton,
@@ -130,12 +132,12 @@
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			layer.appendChild(_controlsLayer);
 			
-			var shieldtext = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
-			shieldtext.id = _this.config.id + '-shieldtext';
-			_controlsLayer.appendChild(shieldtext);
+			_hiddenButton = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' hidetext', events.CHATEASE_VIEW_PROPERTY, { key: 'hidden' }, false);
+			_hiddenButton.id = _this.config.id + '-hidetext';
+			_controlsLayer.appendChild(_hiddenButton);
 			
-			var clearscreen = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
-			_controlsLayer.appendChild(clearscreen);
+			_clearButton = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
+			_controlsLayer.appendChild(_clearButton);
 			
 			// dialog
 			_dialogLayer = utils.createElement('div', DIALOG_CLASS);
@@ -261,7 +263,7 @@
 			}
 		};
 		
-		_this.show = function(text, user, type) {
+		_this.show = function(text, user, mode) {
 			// set default
 			if (utils.typeOf(user) != 'object') {
 				user = { id: 0, name: '系统', role: roles.SYSTEM };
@@ -280,7 +282,7 @@
 			}
 			
 			// private chat sign
-			if (type == types.UNI) {
+			if (mode == modes.UNI) {
 				var span = utils.createElement('span', 'area ' + AREA_UNI_CLASS);
 				span.innerHTML = '[密语]';
 				box.appendChild(span);
@@ -322,7 +324,7 @@
 			}
 			
 			// append this box
-			if (type == types.HISTORY) {
+			if (mode == modes.OUTDATED) {
 				_contentLayer.insertBefore(box, _contentLayer.childNodes[0]);
 			} else {
 				_contentLayer.appendChild(box);
@@ -405,7 +407,7 @@
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
 				data: _textInput.value,
-				type: types.MULTI // TODO: uni
+				mode: modes.MULTI
 			}});
 			
 			_this.clearInput();

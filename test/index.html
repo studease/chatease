@@ -39,7 +39,7 @@ body {
 	<script type='text/javascript' src='js/bscroll.js'></script>
 	<script type='text/javascript' src='js/keywords.js'></script>
 	
-	<!--<script type='text/javascript' src='../chatease.min.js'></script>-->
+	<!--<script type='text/javascript' src='../chatease.js'></script>-->
 	<script type='text/javascript' src='../cn/studease/chatease.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.js'></script>
 	<script type='text/javascript' src='../cn/studease/utils/chatease.utils.crypt.js'></script>
@@ -51,7 +51,7 @@ body {
 	<script type='text/javascript' src='../cn/studease/api/chatease.api.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/chatease.core.states.js'></script>
-	<script type='text/javascript' src='../cn/studease/core/chatease.core.protocol.js'></script>
+	<script type='text/javascript' src='../cn/studease/core/chatease.core.message.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.def.js'></script>
 	<script type='text/javascript' src='../cn/studease/core/skins/chatease.core.skins.mobile.js'></script>
@@ -80,26 +80,18 @@ body {
 		var events = chatease.events;
 		
 		var chat = chatease('chat');
-		chat.addEventListener(events.CHATEASE_INDENT, onIdent);
+		chat.addEventListener(events.CHATEASE_INFO, onInfo);
 		chat.addEventListener(events.CHATEASE_MESSAGE, onMessage);
-		chat.addEventListener(events.CHATEASE_USERS, onUsers);
+		chat.addEventListener(events.CHATEASE_USER, onUser);
+		chat.addEventListener(events.CHATEASE_EXTERN, onExtern);
 		chat.addEventListener(events.CHATEASE_CLOSE, onClose);
 		chat.setup({
-			url: 'ws://127.0.0.1/001' + (function() {
-				var params = window.location.search;
-				if (params) {
-					return params;
-				}
-				
-				var id = Math.ceil(Math.random() * 1000);
-				
-				return '?name=游客' + chatease.utils.pad(id, 3);
-			})(),
+			url: 'ws://192.168.4.248/chat/001' + window.location.search,
 			width: 640,
 			height: 400,
 			keywords: keywords,
 			maxretries: 0,
-			smoothing: chatease.utils.isMobile(),
+			smoothing: false,
 			debug: true,
 			render: {
 				name: 'def',
@@ -111,7 +103,7 @@ body {
 			}
 		});
 		
-		function onIdent(e) {
+		function onInfo(e) {
 			users.innerText = e.channel.total;
 		}
 		
@@ -119,8 +111,12 @@ body {
 			//console.log(e.user.name + ': ' + e.data);
 		}
 		
-		function onUsers(e) {
+		function onUser(e) {
 			users.innerText = e.channel.total;
+		}
+		
+		function onExtern(e) {
+			console.log(e.data);
 		}
 		
 		function onClose(e) {

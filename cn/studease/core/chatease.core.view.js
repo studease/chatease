@@ -3,7 +3,8 @@
 		events = chatease.events,
 		core = chatease.core,
 		states = core.states,
-		roles = core.protocol.roles,
+		message = core.message,
+		roles = message.roles,
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
@@ -106,13 +107,13 @@
 			_this.resize();
 		};
 		
-		_this.show = function(text, user, type) {
-			if (user && !(user.role & roles.SYSTEM) && model.getProperty('shield')) {
+		_this.show = function(text, user, mode) {
+			if (user && !(user.role & roles.SYSTEM) && model.getProperty('hidden')) {
 				return;
 			}
 			
 			if (_render) {
-				_render.show(text, user, type);
+				_render.show(text, user, mode);
 			}
 		};
 		
@@ -175,7 +176,7 @@
 					_render.refresh();
 					break;
 					
-				case 'shield':
+				case 'hidden':
 					var label = e.value ? '取消屏蔽' : '屏蔽消息';
 					var shieldtext = document.getElementById(model.getConfig('id') + '-shieldtext');
 					shieldtext.innerHTML = '<span class="icon"></span>' + label;

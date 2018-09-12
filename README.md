@@ -45,15 +45,15 @@ var users = document.getElementById('ol-users');
 var events = chatease.events;
 
 var chat = chatease('chat');
-chat.addEventListener(events.CHATEASE_INDENT, onIdent);
+chat.addEventListener(events.CHATEASE_INFO, onInfo);
 chat.addEventListener(events.CHATEASE_CLOSE, onClose);
 chat.setup({
-	url: 'ws://localhost/ch1?token=123456',
+	url: 'ws://localhost/chat/ch1?token=123456',
 	width: 640,
 	height: 400
 });
 
-function onIdent(e) {
+function onInfo(e) {
 	users.innerText = e.channel.total;
 }
 
@@ -125,11 +125,11 @@ _eventMapping = {
 	onError: events.ERROR,
 	onReady: events.CHATEASE_READY,
 	onConnect: events.CHATEASE_CONNECT,
-	onIdent: events.CHATEASE_INDENT,
+	onInfo: events.CHATEASE_INFO,
 	onMessage: events.CHATEASE_MESSAGE,
 	onJoin: events.CHATEASE_JOIN,
 	onLeft: events.CHATEASE_LEFT,
-	onUsers: events.CHATEASE_USERS,
+	onUser: events.CHATEASE_USER,
 	onExtern: events.CHATEASE_EXTERN,
 	onNickClick: events.CHATEASE_NICKCLICK,
 	onClose: events.CHATEASE_CLOSE
@@ -154,7 +154,9 @@ _eventMapping = {
 
 ### Websocket Server
 
-[chatease-server https://github.com/studease/chatease-server](https://github.com/studease/chatease-server)
+> 	1.0 [kiwichatd https://github.com/studease/kiwichatd](https://github.com/studease/kiwichatd)
+
+> 	1.1 [rtmpmate https://github.com/studease/rtmpmate](https://github.com/studease/rtmpmate)
 
 
 ## License

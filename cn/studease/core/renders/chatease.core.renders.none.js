@@ -2,8 +2,9 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		core = chatease.core,
-		protocol = core.protocol,
-		roles = protocol.roles,
+		message = core.message,
+		modes = message.modes,
+		roles = message.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
 		css = utils.css,
@@ -109,7 +110,7 @@
 			}
 		};
 		
-		_this.show = function(text, user, type) {
+		_this.show = function(text, user, mode) {
 			
 		};
 		

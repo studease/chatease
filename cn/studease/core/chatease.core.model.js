@@ -2,74 +2,123 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		core = chatease.core,
-		states = core.states,
-		protocol = core.protocol,
-		roles = protocol.roles,
-		channelStates = protocol.channelStates,
-		punishments = protocol.punishments;
+		states = core.states;
 	
-	var userinfo = function() {
+	var user = function() {
 		var _this = this,
 			_defaults = {
-				channel: null,
-				role: -1,
-				state: 0,
-				punishment: {
-					code: 0,
-					time: 0
-				}
+				id: 0,
+				name: '',
+				icon: '',
+				role: 0
 			},
-			_interval,
-			_active;
+			_active,
+			_interval;
 		
 		function _init() {
 			utils.extend(_this, _defaults);
 			
-			_interval = -1;
 			_active = 0;
+			_interval = 0;
 		}
 		
-		_this.set = function(info) {
+		_this.update = function(info) {
 			utils.extend(_this, info);
 			
-			if (info.hasOwnProperty('role') == true) {
-				_interval = _getIntervalByRole(info.role);
-			}
+			_interval = _getInterval(_this.role);
 		};
 		
-		function _getIntervalByRole(role) {
-			var interval = 2000;
-			
+		function _getInterval(role) {
 			if (role & 0xF0) {
-				interval = 0;
-			} else if (role) {
-				interval *= .5;
-				var vip = role - 1;
-				if (vip) {
-					interval = interval >= vip * 100 ? interval - vip * 100 : 0;
-				}
+				return 0;
 			}
 			
-			return interval;
+			var d = 2000;
+			
+			if (role) {
+				var vip = role >> 1;
+				d = 1000 - vip * 100;
+			}
+			
+			return d;
 		}
 		
-		_this.isMuted = function() {
-			return _this.role < _this.state || !!(_this.punishment.code & punishments.MUTED);
-		};
-		
-		_this.isActive = function() {
-			if (_interval < 0) {
-				return false;
-			}
-			
+		_this.limited = function() {
 			var now = new Date().getTime();
-			if (_active && now - _active < _interval) {
-				return false;
+			if (now < _active + _interval) {
+				return true;
 			}
 			
 			_active = now;
+			return false;
+		};
+		
+		_init();
+	};
+	
+	var channel = function() {
+		var _this = this,
+			_defaults = {
+				id: 0,
+				stat: 0,
+				group: 0
+			},
+			_userlist,
+			_sanctions;
+		
+		function _init() {
+			utils.extend(_this, _defaults);
 			
-			return true;
+			_userlist = {};
+			_sanctions = {};
+		}
+		
+		_this.update = function(info) {
+			utils.extend(_this, info);
+		};
+		
+		_this.add = function(usr) {
+			_userlist[usr.id] = usr;
+		};
+		
+		_this.remove = function(usr) {
+			delete _userlist[usr.id];
+		};
+		
+		_this.find = function(id) {
+			return _userlist[id];
+		};
+		
+		_this.freeze = function(id, opt, mgr, d) {
+			var san = _sanctions[id];
+			if (san == undefined) {
+				san = {};
+				_sanctions[id] = san;
+			}
+			
+			san[opt] = {
+				manager: mgr,
+				until: Math.floor(new Date().getTime() / 1000) + d
+			}
+		};
+		
+		_this.unfreeze = function(id, opt) {
+			var san = _sanctions[id];
+			if (san) {
+				delete san[opt];
+			}
+		};
+		
+		_this.limited = function(id, opt) {
+			var san = _sanctions[id];
+			if (san) {
+				var item = san[opt];
+				if (item) {
+					return Math.floor(new Date().getTime() / 1000) < item.until;
+				}
+			}
+			
+			return false;
 		};
 		
 		_init();
@@ -85,9 +134,9 @@
 			_this.config = utils.extend({}, _defaults, config);
 			
 			_properties = {
-				userlist: {},
-				userinfo: new userinfo(),
-				shield: false
+				user: new user(),
+				channel: new channel(),
+				hidden: false
 			};
 		}
 		
