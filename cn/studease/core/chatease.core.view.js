@@ -108,7 +108,7 @@
 		};
 		
 		_this.show = function(text, user, mode) {
-			if (user && !(user.role & roles.SYSTEM) && model.getProperty('hidden')) {
+			if (user && !(user.role & roles.SYSTEM) && model.getProperty('shield')) {
 				return;
 			}
 			
@@ -176,7 +176,7 @@
 					_render.refresh();
 					break;
 					
-				case 'hidden':
+				case 'shield':
 					var label = e.value ? '取消屏蔽' : '屏蔽消息';
 					var shieldtext = document.getElementById(model.getConfig('id') + '-shieldtext');
 					shieldtext.innerHTML = '<span class="icon"></span>' + label;

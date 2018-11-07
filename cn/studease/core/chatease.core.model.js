@@ -136,7 +136,7 @@
 			_properties = {
 				user: new user(),
 				channel: new channel(),
-				hidden: false
+				shield: false
 			};
 		}
 		

@@ -54,7 +54,7 @@
 			_controlsLayer,
 			_dialogLayer,
 			_moreLayer,
-			_hiddenButton,
+			_shieldButton,
 			_clearButton,
 			_moreButton,
 			_textInput,
@@ -132,9 +132,9 @@
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			layer.appendChild(_controlsLayer);
 			
-			_hiddenButton = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' hidetext', events.CHATEASE_VIEW_PROPERTY, { key: 'hidden' }, false);
-			_hiddenButton.id = _this.config.id + '-hidetext';
-			_controlsLayer.appendChild(_hiddenButton);
+			_shieldButton = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
+			_shieldButton.id = _this.config.id + '-shieldtext';
+			_controlsLayer.appendChild(_shieldButton);
 			
 			_clearButton = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
 			_controlsLayer.appendChild(_clearButton);

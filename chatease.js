@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.00';
+chatease.version = '1.1.01';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1226,10 +1226,10 @@ chatease.version = '1.1.00';
 				'line-height': '24px',
 				display: 'block'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .hidetext', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
 				'float': 'left'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .hidetext .icon', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext .icon', {
 				padding: '5px'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen', {
@@ -1587,10 +1587,10 @@ chatease.version = '1.1.00';
 				'background-position': 'center',
 				display: 'inline-block'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .hidetext .icon', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACeklEQVRYR8VX0XUTMRAcVQAdQCrAVJCkAkIFkAqyqSChAg8VkFQAqQCnApwKEiqIXYF4c0h6ynG6k87mWe/dl6Td2dHu7J7DgZc7sH9UAzCzhXPu2Hv/GoC+BYCVAnDOrb33DySfWgMaBWBmbwFcATgLTqfsr51zXC6Xt1MH4/4gADNThEsAn2sN9c6JiUuSP6bu/wPAzE4AfK+MeMq+AJyT3JQOvgBgZor425TVxv01gNMSiATAzPTOivx/rBXJ0yHDHYDw5o97or0UwBeS1/3NCIAALvYQ+l0oTdGeL+WVGD7rl6oL0T/v6PwrgOuxZCsmoZlZKLk5GB5UqiRTxBIsAB9SnTu38d7flURKDEjNjmd4l/OTGHWoIImWxGtoyY/yoFPPBNDMhP5dI4CtHMl5eMKfQZprzNyQPM8B+JpbvTOq69UM59FMAqEnkEq9agBxT1JZrfKV0qX3brCho5JqzsmBj9L4INmifu5S4EcC0BLFlqQa1a7RR9CXAiA6ayPJ6e8/3W8AU/OAKuRNRtl9VEJdzDdKtHZyGuYESXdc73MtGHuTXs/ZRAC1jSgCyFlLrNQmg5mlysu7YU0/iACkdr9mMpDf3fbngSlVlKSKLSVhrh/Kh34DKhHSlXBYf3MgX2Z2A+BT4fYTyaO9VsGQo4kG1SVcY/UMuZGcL4pT8QgTtyS7YXWHRqbrXT6NARjTh8iCREkl3CLlcp4qZwzA0JygeV85olzoRCdogtS0tqPKhsU2Xvov6I/mUjldGpzzQ1cUYH0lNmRDU5MCSGuoCiSXGh5Fr0prXfODES0GpVOty47KU5+m4heDSDxf/W9Yq3Kt5w4O4A9JNgxutXqzoAAAAABJRU5ErkJggg==)'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .hidetext.checked .icon', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext.checked .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB0klEQVRYR81X0VHCUBDcV4F0oHYgFQAVqBUIFXh2YAdZKhA7wAqECsQOpAOtIM4ySSZ5JOQBedGbyUcyye3e3r27i8Mfm/tjfAQTMLOBc26UpukYwA2Aq+xSDF/ZtXHOrdI0XZP8DgmulYCZCegBgAEYhDgFIHACeCUpco12kICZCTQJBK19zTlnSZLMm3zUEpDcAF4A3J0DXvp2CWBWl5Y9Ahn4e5bnjvB3blYkJ77DOgKLLOddgue+FiRnZccVAmamClf0MW1CcpUD+ARUsZcx0XVcSV7vEegp+hx3SHKjm0IBM4uZe1/UOUkd8QoB5WUUWf7cvTql6q1CoI/85wQ2JIc+AbXPi54U2JJUi/9fKVC7vO1JAQ2pqa+AHqj/92H3JBVwJQUaQCrE2HXwQ7IY634n1Ax/jCzBE0nh7MwnIGbqULHacXH+awnooZlp3fqIoMIngLG/EzQtJCKhzthVPWy13OT9vxxc40qWKaFKPTcdbwCmTUtq2054znxYA3guz/66tHZNQHkW6WUbcGMRllmama/ATs7sHdVJbloyDq7fTUUdqoCKSHksVqmuTkkIAYGqdwT96RxLrI3AIBZwUA0cG80p77f+G57i9JhvfgHYZaIhgJsBwwAAAABJRU5ErkJggg==)'
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .clearscreen .icon', {
@@ -1720,7 +1720,7 @@ chatease.version = '1.1.00';
 			_controlsLayer,
 			_dialogLayer,
 			_moreLayer,
-			_hiddenButton,
+			_shieldButton,
 			_clearButton,
 			_moreButton,
 			_textInput,
@@ -1798,9 +1798,9 @@ chatease.version = '1.1.00';
 			_controlsLayer = utils.createElement('div', CONTROLS_CLASS);
 			layer.appendChild(_controlsLayer);
 			
-			_hiddenButton = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' hidetext', events.CHATEASE_VIEW_PROPERTY, { key: 'hidden' }, false);
-			_hiddenButton.id = _this.config.id + '-hidetext';
-			_controlsLayer.appendChild(_hiddenButton);
+			_shieldButton = _getCheckBox('屏蔽消息', CHECKBOX_CLASS + ' shieldtext', events.CHATEASE_VIEW_PROPERTY, { key: 'shield' }, false);
+			_shieldButton.id = _this.config.id + '-shieldtext';
+			_controlsLayer.appendChild(_shieldButton);
 			
 			_clearButton = _getButton('清屏', BUTTON_CLASS + ' white clearscreen', events.CHATEASE_VIEW_CLEARSCREEN, null);
 			_controlsLayer.appendChild(_clearButton);
@@ -2462,7 +2462,7 @@ chatease.version = '1.1.00';
 			_properties = {
 				user: new user(),
 				channel: new channel(),
-				hidden: false
+				shield: false
 			};
 		}
 		
@@ -2611,7 +2611,7 @@ chatease.version = '1.1.00';
 		};
 		
 		_this.show = function(text, user, mode) {
-			if (user && !(user.role & roles.SYSTEM) && model.getProperty('hidden')) {
+			if (user && !(user.role & roles.SYSTEM) && model.getProperty('shield')) {
 				return;
 			}
 			
@@ -2679,7 +2679,7 @@ chatease.version = '1.1.00';
 					_render.refresh();
 					break;
 					
-				case 'hidden':
+				case 'shield':
 					var label = e.value ? '取消屏蔽' : '屏蔽消息';
 					var shieldtext = document.getElementById(model.getConfig('id') + '-shieldtext');
 					shieldtext.innerHTML = '<span class="icon"></span>' + label;
