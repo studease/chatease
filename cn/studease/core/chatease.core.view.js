@@ -85,7 +85,7 @@
 				id: model.getConfig('id'),
 				width: model.config.width,
 				height: model.config.height,
-				title: !!model.getConfig('render').title,
+				title: !!_render.config.title,
 				smoothing: model.getConfig('smoothing')
 			});
 			

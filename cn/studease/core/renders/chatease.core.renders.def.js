@@ -47,7 +47,9 @@
 	
 	renders.def = function(layer, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('renders.def')),
-			_defaults = {},
+			_defaults = {
+				title: 'CHATEASE ' + chatease.version
+			},
 			_titleLayer,
 			_consoleLayer,
 			_contentLayer,

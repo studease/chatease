@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.01';
+chatease.version = '1.1.02';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -1713,7 +1713,9 @@ chatease.version = '1.1.01';
 	
 	renders.def = function(layer, config) {
 		var _this = utils.extend(this, new events.eventdispatcher('renders.def')),
-			_defaults = {},
+			_defaults = {
+				title: 'CHATEASE ' + chatease.version
+			},
 			_titleLayer,
 			_consoleLayer,
 			_contentLayer,
@@ -2588,7 +2590,7 @@ chatease.version = '1.1.01';
 				id: model.getConfig('id'),
 				width: model.config.width,
 				height: model.config.height,
-				title: !!model.getConfig('render').title,
+				title: !!_render.config.title,
 				smoothing: model.getConfig('smoothing')
 			});
 			
