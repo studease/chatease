@@ -82,7 +82,6 @@ _defaults = {
 	debug: false,
 	render: {
 		name: rendermodes.DEFAULT,
-		title: 'CHATEASE ' + chatease.version,
 		swf: 'swf/chatease.swf'
 	},
 	skin: {
