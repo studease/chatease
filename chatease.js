@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.02';
+chatease.version = '1.1.03';
 
 (function(chatease) {
 	var utils = chatease.utils = {};

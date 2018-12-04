@@ -81,7 +81,7 @@
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-			}/* else {
+			}/* else { 
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
 				_object.align = 'middle';
