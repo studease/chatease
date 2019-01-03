@@ -107,13 +107,9 @@
 			_this.resize();
 		};
 		
-		_this.show = function(text, user, mode) {
-			if (user && !(user.role & roles.SYSTEM) && model.getProperty('shield')) {
-				return;
-			}
-			
-			if (_render) {
-				_render.show(text, user, mode);
+		_this.show = function(user, text, mode) {
+			if (_render && ((user.role & roles.SYSTEM) || !model.getProperty('shield'))) {
+				_render.show(user, text, mode);
 			}
 		};
 		

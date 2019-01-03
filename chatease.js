@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.03';
+chatease.version = '1.1.04';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -949,6 +949,10 @@ chatease.version = '1.1.03';
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
+		core = chatease.core,
+		message = core.message,
+		modes = message.modes,
+		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
 		css = utils.css,
@@ -964,22 +968,30 @@ chatease.version = '1.1.03';
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		NICK_SYSTEM_CLASS = 'cha-system',
-		NICK_MYSELF_CLASS = 'cha-myself',
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
 		
-		AREA_UNI_CLASS = 'area-uni',
-		
-		TITLE_VISITOR_CLASS = 'ttl-visitor',
-		TITLE_NORMAL_CLASS = 'ttl-normal',
-		TITLE_VIP_CLASS = 'ttl-vip',
-		
-		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
-		TITLE_SECRETARY_CLASS = 'ttl-secretary',
-		TITLE_ANCHOR_CLASS = 'ttl-anchor',
-		
-		TITLE_ADMIN_CLASS = 'ttl-admin',
-		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
-		TITLE_SYSTEM_CLASS = 'ttl-system',
+		AREAS_CLASS = {
+			0: 'uni',
+			1: '',
+			2: '',
+			3: 'outdated'
+		},
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -1125,42 +1137,30 @@ chatease.version = '1.1.03';
 				'line-height': '20px'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS + ' > a', {
-				'font-style': CSS_NORMAL,
-				'font-weight': CSS_NORMAL,
-				color: '#33CC00',
-				cursor: 'default',
-				'pointer-events': CSS_NONE
-			});
-			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS, {
-				
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS + ' > a', {
-				
-			});*/
-			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon', {
-				'float': 'left',
-				'margin-right': '4px',
-				width: '20px',
-				height: '20px',
-				display: CSS_BLOCK
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon img', {
-				width: CSS_100PCT,
-				height: CSS_100PCT,
-				display: CSS_INLINE_BLOCK
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + USER_CLASS, {
+				cursor: 'pointer'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area', {
-				'margin-right': '2px'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS, {
+				'margin-right': '2px',
+				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area.' + AREA_UNI_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.uni', {
+				color: '#F76767'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.outdated', {
 				color: '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ICON_CLASS, {
+				'margin-right': '4px',
+				width: '20px',
+				height: '20px',
+				display: CSS_INLINE_BLOCK,
+				'vertical-align': 'middle'
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLE_CLASS, {
 				'margin-right': '2px',
 				padding: '0 2px',
 				font: 'normal 12px Microsoft YaHei,arial,sans-serif',
@@ -1170,43 +1170,48 @@ chatease.version = '1.1.03';
 				'border-radius': '2px',
 				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VISITOR_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_NORMAL_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SYSTEM_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VISITOR] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.NORMAL] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + ROLE_CLASS, {
 				display: CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '1'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '2'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '3', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '1' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '2' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '3' + ' .' + ROLE_CLASS, {
 				color: '#3CAFAB',
 				'border-color': '#3CAFAB'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '4'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '5'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '6'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '7', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '4' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '5' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '6' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '7' + ' .' + ROLE_CLASS, {
 				color: '#77C773',
 				'border-color': '#77C773'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ASSISTANT_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SECRETARY_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ANCHOR_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ASSISTANT] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SECRETARY] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ANCHOR] + ' .' + ROLE_CLASS, {
 				color: '#5382E2',
 				'border-color': '#5382E2'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ADMIN_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SU_ADMIN_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ADMIN] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SU_ADMIN] + ' .' + ROLE_CLASS, {
 				color: '#F76767',
 				'border-color': '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' a', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_CLASS, {
 				color: '#5382E2',
-				'text-decoration': CSS_NONE,
-				cursor: 'pointer'
+				'text-decoration': CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .context', {
-				'word-break': 'break-all',
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + NICK_CLASS, {
+				color: '#33CC00',
+				cursor: 'default',
+				'pointer-events': CSS_NONE
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
 				'word-wrap': 'break-word'
 			});
 			
@@ -1282,6 +1287,10 @@ chatease.version = '1.1.03';
 (function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
+		core = chatease.core,
+		message = core.message,
+		modes = message.modes,
+		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
 		css = utils.css,
@@ -1297,22 +1306,30 @@ chatease.version = '1.1.03';
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		NICK_SYSTEM_CLASS = 'cha-system',
-		NICK_MYSELF_CLASS = 'cha-myself',
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
 		
-		AREA_UNI_CLASS = 'area-uni',
-		
-		TITLE_VISITOR_CLASS = 'ttl-visitor',
-		TITLE_NORMAL_CLASS = 'ttl-normal',
-		TITLE_VIP_CLASS = 'ttl-vip',
-		
-		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
-		TITLE_SECRETARY_CLASS = 'ttl-secretary',
-		TITLE_ANCHOR_CLASS = 'ttl-anchor',
-		
-		TITLE_ADMIN_CLASS = 'ttl-admin',
-		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
-		TITLE_SYSTEM_CLASS = 'ttl-system',
+		AREAS_CLASS = {
+			0: 'uni',
+			1: '',
+			2: '',
+			3: 'outdated'
+		},
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -1462,42 +1479,30 @@ chatease.version = '1.1.03';
 				'line-height': '20px'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS + ' > a', {
-				'font-style': CSS_NORMAL,
-				'font-weight': CSS_NORMAL,
-				color: '#33CC00',
-				cursor: 'default',
-				'pointer-events': CSS_NONE
-			});
-			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS, {
-				
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS + ' > a', {
-				
-			});*/
-			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon', {
-				'float': 'left',
-				'margin-right': '4px',
-				width: '20px',
-				height: '20px',
-				display: CSS_BLOCK
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon img', {
-				width: CSS_100PCT,
-				height: CSS_100PCT,
-				display: CSS_INLINE_BLOCK
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + USER_CLASS, {
+				cursor: 'pointer'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area', {
-				'margin-right': '2px'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS, {
+				'margin-right': '2px',
+				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area.' + AREA_UNI_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.uni', {
+				color: '#F76767'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.outdated', {
 				color: '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ICON_CLASS, {
+				'margin-right': '4px',
+				width: '20px',
+				height: '20px',
+				display: CSS_INLINE_BLOCK,
+				'vertical-align': 'middle'
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLE_CLASS, {
 				'margin-right': '2px',
 				padding: '0 2px',
 				font: 'normal 12px Microsoft YaHei,arial,sans-serif',
@@ -1507,43 +1512,48 @@ chatease.version = '1.1.03';
 				'border-radius': '2px',
 				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VISITOR_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_NORMAL_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SYSTEM_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VISITOR] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.NORMAL] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + ROLE_CLASS, {
 				display: CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '1'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '2'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '3', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '1' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '2' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '3' + ' .' + ROLE_CLASS, {
 				color: '#3CAFAB',
 				'border-color': '#3CAFAB'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '4'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '5'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '6'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '7', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '4' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '5' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '6' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '7' + ' .' + ROLE_CLASS, {
 				color: '#77C773',
 				'border-color': '#77C773'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ASSISTANT_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SECRETARY_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ANCHOR_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ASSISTANT] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SECRETARY] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ANCHOR] + ' .' + ROLE_CLASS, {
 				color: '#5382E2',
 				'border-color': '#5382E2'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ADMIN_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SU_ADMIN_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ADMIN] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SU_ADMIN] + ' .' + ROLE_CLASS, {
 				color: '#F76767',
 				'border-color': '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' a', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_CLASS, {
 				color: '#5382E2',
-				'text-decoration': CSS_NONE,
-				cursor: 'pointer'
+				'text-decoration': CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .context', {
-				'word-break': 'break-all',
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + NICK_CLASS, {
+				color: '#33CC00',
+				cursor: 'default',
+				'pointer-events': CSS_NONE
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
 				'word-wrap': 'break-word'
 			});
 			
@@ -1685,22 +1695,48 @@ chatease.version = '1.1.03';
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		NICK_SYSTEM_CLASS = 'cha-system',
-		NICK_MYSELF_CLASS = 'cha-myself',
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
 		
-		AREA_UNI_CLASS = 'area-uni',
+		AREAS_CLASS = {
+			0: 'uni',
+			1: '',
+			2: '',
+			3: 'outdated'
+		},
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
 		
-		TITLE_VISITOR_CLASS = 'ttl-visitor',
-		TITLE_NORMAL_CLASS = 'ttl-normal',
-		TITLE_VIP_CLASS = 'ttl-vip',
-		
-		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
-		TITLE_SECRETARY_CLASS = 'ttl-secretary',
-		TITLE_ANCHOR_CLASS = 'ttl-anchor',
-		
-		TITLE_ADMIN_CLASS = 'ttl-admin',
-		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
-		TITLE_SYSTEM_CLASS = 'ttl-system',
+		areas = {
+			0: '[密语]',
+			1: '',
+			2: '',
+			3: '[历史]'
+		},
+		titles = {
+			0:   '',
+			1:   '',
+			14:  'VIP',
+			16:  '助理',
+			32:  '秘书',
+			48:  '主播',
+			64:  '管理员',
+			128: '超管',
+			192: ''
+		}
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -1747,7 +1783,7 @@ chatease.version = '1.1.03';
 					+ '</object>';
 				
 				_object = _this.WebSocket = layer.firstChild;
-			}/* else {
+			}/* else { 
 				_object = utils.createElement('object');
 				_object.id = _object.name = 'cha-swf';
 				_object.align = 'middle';
@@ -1931,39 +1967,40 @@ chatease.version = '1.1.03';
 			}
 		};
 		
-		_this.show = function(text, user, mode) {
-			// set default
-			if (utils.typeOf(user) != 'object') {
-				user = { id: 0, name: '系统', role: roles.SYSTEM };
-			}
+		_this.show = function(user, text, mode) {
+			var role = _parseRole(user.role);
 			
 			// create box
-			var box = utils.createElement('div');
-			if ((user.role & roles.SYSTEM) == roles.SYSTEM) {
-				box.className = NICK_SYSTEM_CLASS;
-			}
+			var box = utils.createElement('div', ROLES_CLASS[role]);
 			
-			// set icon
-			var icon = _getIcon(user.icon);
-			if (icon) {
-				box.appendChild(icon);
-			}
-			
-			// private chat sign
-			if (mode == modes.UNI) {
-				var span = utils.createElement('span', 'area ' + AREA_UNI_CLASS);
-				span.innerHTML = '[密语]';
+			// area
+			var area = areas[mode];
+			if (area && role != roles.SYSTEM) {
+				var span = utils.createElement('span', AREA_CLASS + ' ' + AREAS_CLASS[mode]);
+				span.innerHTML = area;
 				box.appendChild(span);
 			}
 			
-			// set title
-			var title = _getTitle(user.role);
-			if (title) {
-				box.appendChild(title);
+			var tmp = utils.createElement('span', USER_CLASS);
+			box.appendChild(tmp);
+			
+			// icon
+			if (user.icon) {
+				var icon = utils.createElement('img', ICON_CLASS);
+				icon.src = user.icon;
+				tmp.appendChild(icon);
 			}
 			
-			// set nickname
-			var a = utils.createElement('a');
+			// title
+			var title = titles[role];
+			if (title) {
+				var span = utils.createElement('span', ROLE_CLASS);
+				span.innerHTML = title;
+				tmp.appendChild(span);
+			}
+			
+			// nickname
+			var a = utils.createElement('a', NICK_CLASS);
 			a.innerHTML = user.name + ': ';
 			
 			var nickHandler = (function(user) {
@@ -1974,14 +2011,14 @@ chatease.version = '1.1.03';
 			})(user);
 			
 			try {
-				a.addEventListener('click', nickHandler);
+				tmp.addEventListener('click', nickHandler);
 			} catch (err) {
-				a.attachEvent('onclick', nickHandler);
+				tmp.attachEvent('onclick', nickHandler);
 			}
-			box.appendChild(a);
+			tmp.appendChild(a);
 			
-			// set text
-			var span = utils.createElement('span', 'context');
+			// context
+			var span = utils.createElement('span', CONTEXT_CLASS);
 			span.innerHTML = text;
 			
 			box.appendChild(span);
@@ -2005,71 +2042,27 @@ chatease.version = '1.1.03';
 			}
 		};
 		
-		function _getIcon(url) {
-			if (!url) {
-				return null;
-			}
-			
-			var icon = utils.createElement('span', 'icon');
-			icon.innerHTML = '<img src="' + url + '">';
-			
-			return icon;
-		}
-		
-		function _getTitle(role) {
-			var title, clazz = 'title ';
+		function _parseRole(role) {
+			var r = 0;
 			
 			if (utils.typeOf(role) != 'number') {
 				role = parseInt(role);
 				if (role == NaN || role < 0) {
-					return null;
+					return r;
 				}
 			}
 			
 			if (role & roles.SYSTEM) {
-				if ((role & roles.SYSTEM) == roles.SYSTEM) {
-					clazz += TITLE_SYSTEM_CLASS;
-				} else if (role & roles.SU_ADMIN) {
-					clazz += TITLE_SU_ADMIN_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '超管';
-				} else {
-					clazz += TITLE_ADMIN_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '管理员';
-				}
+				r = role & roles.SYSTEM;
 			} else if (role & roles.ANCHOR) {
-				if ((role & roles.ANCHOR) == roles.ANCHOR) {
-					clazz += TITLE_ANCHOR_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '主播';
-				} else if (role & roles.SECRETARY) {
-					clazz += TITLE_SECRETARY_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '秘书';
-				} else {
-					clazz += TITLE_ASSISTANT_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '助理';
-				}
+				r = role & roles.ANCHOR;
 			} else if (role & roles.VIP) {
-				var lv = (role & roles.VIP) >>> 1;
-				clazz += TITLE_VIP_CLASS + lv;
-				
-				title = utils.createElement('span', clazz);
-				title.innerText = 'VIP' + lv;
-			} else if ((role & roles.NORMAL) == roles.NORMAL) {
-				clazz += TITLE_NORMAL_CLASS;
-			} else {
-				clazz += TITLE_VISITOR_CLASS;
+				r = roles.VIP;
+			} else if (role & roles.NORMAL) {
+				r = roles.NORMAL;
 			}
 			
-			return title;
+			return r;
 		}
 		
 		_this.send = function() {
@@ -2534,7 +2527,7 @@ chatease.version = '1.1.03';
 		function _init() {
 			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name);
 			_wrapper.id = model.getConfig('id');
-			//_wrapper.tabIndex = 0;
+			//_wrapper.tabIndex = 0; 
 			
 			_renderLayer = utils.createElement('div', RENDER_CLASS);
 			_contextmenuLayer = utils.createElement('div', CONTEXTMENU_CLASS);
@@ -2612,13 +2605,9 @@ chatease.version = '1.1.03';
 			_this.resize();
 		};
 		
-		_this.show = function(text, user, mode) {
-			if (user && !(user.role & roles.SYSTEM) && model.getProperty('shield')) {
-				return;
-			}
-			
-			if (_render) {
-				_render.show(text, user, mode);
+		_this.show = function(user, text, mode) {
+			if (_render && ((user.role & roles.SYSTEM) || !model.getProperty('shield'))) {
+				_render.show(user, text, mode);
 			}
 		};
 		
@@ -2715,7 +2704,9 @@ chatease.version = '1.1.03';
 		opts = message.opts,
 		modes = message.modes,
 		roles = message.roles,
-		status = message.status;
+		status = message.status,
+		
+		SYSTEM = { 'id': -1, 'name': '[系统]', role: roles.SYSTEM };
 	
 	core.controller = function(model, view) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.controller')),
@@ -2751,7 +2742,7 @@ chatease.version = '1.1.03';
 			switch (e.state) {
 				case states.CONNECTED:
 					if (chatease.debug) {
-						view.show('聊天室已连接…');
+						view.show(SYSTEM, '聊天室已连接…');
 					} else {
 						utils.log('聊天室已连接…');
 					}
@@ -2762,7 +2753,7 @@ chatease.version = '1.1.03';
 					
 				case states.CLOSED:
 					if (chatease.debug) {
-						view.show('聊天室连接已断开！');
+						view.show(SYSTEM, '聊天室连接已断开！');
 					} else {
 						utils.log('聊天室连接已断开！');
 					}
@@ -2773,7 +2764,7 @@ chatease.version = '1.1.03';
 					
 				case states.ERROR:
 					if (chatease.debug) {
-						view.show('聊天室异常！');
+						view.show(SYSTEM, '聊天室异常！');
 					} else {
 						utils.log('聊天室异常！');
 					}
@@ -2799,7 +2790,7 @@ chatease.version = '1.1.03';
 				_forward(e);
 				
 				if (!chatease.debug) {
-					view.show('聊天室已连接！');
+					view.show(SYSTEM, '聊天室已连接！');
 				}
 				
 				_connect();
@@ -2833,7 +2824,7 @@ chatease.version = '1.1.03';
 			view.render.clearScreen();
 			
 			if (chatease.debug) {
-				view.show('聊天室连接中…');
+				view.show(SYSTEM, '聊天室连接中…');
 			} else {
 				utils.log('聊天室连接中…');
 			}
@@ -2951,13 +2942,13 @@ chatease.version = '1.1.03';
 					ch.update(utils.extend({}, data.channel));
 					
 					if (chatease.debug) {
-						view.show('已加入房间（' + ch.id + '）。');
+						view.show(SYSTEM, '已加入房间（' + ch.id + '）。');
 					} else {
 						utils.log('已加入房间（' + ch.id + '）。');
 					}
 					
 					if (usr.role < ch.stat) {
-						view.show('您所在的用户组不能发言！');
+						view.show(SYSTEM, '您所在的用户组不能发言！');
 					}
 					
 					_this.dispatchEvent(events.CHATEASE_INFO, data);
@@ -2976,7 +2967,7 @@ chatease.version = '1.1.03';
 					
 					ch.add(data.user);
 					
-					view.show(data.data, data.user, data.mode);
+					view.show(data.user, data.data, data.mode);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 					
@@ -2987,16 +2978,14 @@ chatease.version = '1.1.03';
 				case cmds.JOIN:
 					ch.add(data.user);
 					
-					var title = _getUserTitle(data.user.role);
-					view.show(title + data.user.name + ' 进入房间。');
+					view.show(data.user, data.user.name + ' 进入房间。');
 					_this.dispatchEvent(events.CHATEASE_JOIN, data);
 					break;
 					
 				case cmds.LEFT:
 					ch.remove(data.user);
 					
-					var title = _getUserTitle(data.user.role);
-					view.show(title + data.user.name + ' 离开房间。');
+					view.show(data.user, data.user.name + ' 离开房间。');
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
 					break;
 					
@@ -3013,11 +3002,11 @@ chatease.version = '1.1.03';
 						if (data.sub == usr.id) {
 							switch (opt) {
 								case opts.MUTE:
-									view.show('您已被' + (d ? '' : '解除') + '禁言' + (d ? d + '秒' : '') + '。');
+									view.show(SYSTEM, '您已被' + (d ? '' : '解除') + '禁言' + (d ? d + '秒' : '') + '。');
 									break;
 									
 								case opts.FORBID:
-									view.show('您已被限制进入该房间' + d + '秒。');
+									view.show(SYSTEM, '您已被限制进入该房间' + d + '秒。');
 									model.config.maxretries = 0;
 									_this.close();
 									break;
@@ -3048,48 +3037,10 @@ chatease.version = '1.1.03';
 			model.setState(states.CLOSED);
 		};
 		
-		function _getUserTitle(role) {
-			var title = '';
-			
-			if (utils.typeOf(role) != 'number') {
-				role = parseInt(role);
-				if (role == NaN || role < 0) {
-					return '';
-				}
-			}
-			
-			if (role & roles.SYSTEM) {
-				if ((role & roles.SYSTEM) == roles.SYSTEM) {
-					title += '[系统] ';
-				} else if (role & roles.SU_ADMIN) {
-					title += '[超管] ';
-				} else {
-					title += '[管理员] ';
-				}
-			} else if (role & roles.ANCHOR) {
-				if ((role & roles.ANCHOR) == roles.ANCHOR) {
-					title += '[主播] ';
-				} else if (role & roles.SECRETARY) {
-					title += '[助理] ';
-				} else {
-					title += '[房管] ';
-				}
-			} else if (role & roles.VIP) {
-				var lv = (role & roles.VIP) - 1;
-				title += '[VIP' + lv + '] ';
-			} else if ((role & roles.NORMAL) == roles.NORMAL) {
-				// no title here
-			} else {
-				title += '[游客] ';
-			}
-			
-			return title;
-		}
-		
 		function _error(code, params) {
 			var status = _getErrorStatus(code);
 			if (status) {
-				view.show(status);
+				view.show(SYSTEM, status);
 			}
 			
 			var data = {
@@ -3161,7 +3112,7 @@ chatease.version = '1.1.03';
 				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
 				
 				if (chatease.debug) {
-					view.show('正在准备重连，' + delay / 1000 + '秒...');
+					view.show(SYSTEM, '正在准备重连，' + delay / 1000 + '秒...');
 				} else {
 					utils.log('正在准备重连，' + delay / 1000 + '秒...');
 				}
@@ -3192,7 +3143,7 @@ chatease.version = '1.1.03';
 		function _onViewSend(e) {
 			var text = e.data.data;
 			if (!text) {
-				view.show('请输入内容！');
+				view.show(SYSTEM, '请输入内容！');
 				return;
 			}
 			

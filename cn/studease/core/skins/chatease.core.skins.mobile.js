@@ -1,6 +1,10 @@
 ﻿(function(chatease) {
 	var utils = chatease.utils,
 		events = chatease.events,
+		core = chatease.core,
+		message = core.message,
+		modes = message.modes,
+		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
 		css = utils.css,
@@ -16,22 +20,30 @@
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		NICK_SYSTEM_CLASS = 'cha-system',
-		NICK_MYSELF_CLASS = 'cha-myself',
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
 		
-		AREA_UNI_CLASS = 'area-uni',
-		
-		TITLE_VISITOR_CLASS = 'ttl-visitor',
-		TITLE_NORMAL_CLASS = 'ttl-normal',
-		TITLE_VIP_CLASS = 'ttl-vip',
-		
-		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
-		TITLE_SECRETARY_CLASS = 'ttl-secretary',
-		TITLE_ANCHOR_CLASS = 'ttl-anchor',
-		
-		TITLE_ADMIN_CLASS = 'ttl-admin',
-		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
-		TITLE_SYSTEM_CLASS = 'ttl-system',
+		AREAS_CLASS = {
+			0: 'uni',
+			1: '',
+			2: '',
+			3: 'outdated'
+		},
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -181,42 +193,30 @@
 				'line-height': '20px'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_SYSTEM_CLASS + ' > a', {
-				'font-style': CSS_NORMAL,
-				'font-weight': CSS_NORMAL,
-				color: '#33CC00',
-				cursor: 'default',
-				'pointer-events': CSS_NONE
-			});
-			/*css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS, {
-				
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_MYSELF_CLASS + ' > a', {
-				
-			});*/
-			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon', {
-				'float': 'left',
-				'margin-right': '4px',
-				width: '20px',
-				height: '20px',
-				display: CSS_BLOCK
-			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .icon img', {
-				width: CSS_100PCT,
-				height: CSS_100PCT,
-				display: CSS_INLINE_BLOCK
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + USER_CLASS, {
+				cursor: 'pointer'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area', {
-				'margin-right': '2px'
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS, {
+				'margin-right': '2px',
+				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .area.' + AREA_UNI_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.uni', {
+				color: '#F76767'
+			});
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS + '.outdated', {
 				color: '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ICON_CLASS, {
+				'margin-right': '4px',
+				width: '20px',
+				height: '20px',
+				display: CSS_INLINE_BLOCK,
+				'vertical-align': 'middle'
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLE_CLASS, {
 				'margin-right': '2px',
 				padding: '0 2px',
 				font: 'normal 12px Microsoft YaHei,arial,sans-serif',
@@ -226,43 +226,48 @@
 				'border-radius': '2px',
 				'vertical-align': 'middle'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VISITOR_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_NORMAL_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SYSTEM_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VISITOR] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.NORMAL] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + ROLE_CLASS, {
 				display: CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '1'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '2'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '3', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '1' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '2' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '3' + ' .' + ROLE_CLASS, {
 				color: '#3CAFAB',
 				'border-color': '#3CAFAB'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '4'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '5'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '6'
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_VIP_CLASS + '7', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '4' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '5' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '6' + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.VIP] + '7' + ' .' + ROLE_CLASS, {
 				color: '#77C773',
 				'border-color': '#77C773'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ASSISTANT_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SECRETARY_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ANCHOR_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ASSISTANT] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SECRETARY] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ANCHOR] + ' .' + ROLE_CLASS, {
 				color: '#5382E2',
 				'border-color': '#5382E2'
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_ADMIN_CLASS
-				+ ', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .title.' + TITLE_SU_ADMIN_CLASS, {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.ADMIN] + ' .' + ROLE_CLASS +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SU_ADMIN] + ' .' + ROLE_CLASS, {
 				color: '#F76767',
 				'border-color': '#F76767'
 			});
 			
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' a', {
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + NICK_CLASS, {
 				color: '#5382E2',
-				'text-decoration': CSS_NONE,
-				cursor: 'pointer'
+				'text-decoration': CSS_NONE
 			});
-			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .context', {
-				'word-break': 'break-all',
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] +
+				', .' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + NICK_CLASS, {
+				color: '#33CC00',
+				cursor: 'default',
+				'pointer-events': CSS_NONE
+			});
+			
+			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
 				'word-wrap': 'break-word'
 			});
 			

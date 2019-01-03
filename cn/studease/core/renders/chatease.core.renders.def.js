@@ -19,22 +19,48 @@
 		CHECKBOX_CLASS = 'cha-checkbox',
 		BUTTON_CLASS = 'cha-button',
 		
-		NICK_SYSTEM_CLASS = 'cha-system',
-		NICK_MYSELF_CLASS = 'cha-myself',
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
 		
-		AREA_UNI_CLASS = 'area-uni',
+		AREAS_CLASS = {
+			0: 'uni',
+			1: '',
+			2: '',
+			3: 'outdated'
+		},
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
 		
-		TITLE_VISITOR_CLASS = 'ttl-visitor',
-		TITLE_NORMAL_CLASS = 'ttl-normal',
-		TITLE_VIP_CLASS = 'ttl-vip',
-		
-		TITLE_ASSISTANT_CLASS = 'ttl-assistant',
-		TITLE_SECRETARY_CLASS = 'ttl-secretary',
-		TITLE_ANCHOR_CLASS = 'ttl-anchor',
-		
-		TITLE_ADMIN_CLASS = 'ttl-admin',
-		TITLE_SU_ADMIN_CLASS = 'ttl-suadmin',
-		TITLE_SYSTEM_CLASS = 'ttl-system',
+		areas = {
+			0: '[密语]',
+			1: '',
+			2: '',
+			3: '[历史]'
+		},
+		titles = {
+			0:   '',
+			1:   '',
+			14:  'VIP',
+			16:  '助理',
+			32:  '秘书',
+			48:  '主播',
+			64:  '管理员',
+			128: '超管',
+			192: ''
+		}
 		
 		// For all api instances
 		CSS_SMOOTH_EASE = 'opacity .25s ease',
@@ -265,39 +291,40 @@
 			}
 		};
 		
-		_this.show = function(text, user, mode) {
-			// set default
-			if (utils.typeOf(user) != 'object') {
-				user = { id: 0, name: '系统', role: roles.SYSTEM };
-			}
+		_this.show = function(user, text, mode) {
+			var role = _parseRole(user.role);
 			
 			// create box
-			var box = utils.createElement('div');
-			if ((user.role & roles.SYSTEM) == roles.SYSTEM) {
-				box.className = NICK_SYSTEM_CLASS;
-			}
+			var box = utils.createElement('div', ROLES_CLASS[role]);
 			
-			// set icon
-			var icon = _getIcon(user.icon);
-			if (icon) {
-				box.appendChild(icon);
-			}
-			
-			// private chat sign
-			if (mode == modes.UNI) {
-				var span = utils.createElement('span', 'area ' + AREA_UNI_CLASS);
-				span.innerHTML = '[密语]';
+			// area
+			var area = areas[mode];
+			if (area && role != roles.SYSTEM) {
+				var span = utils.createElement('span', AREA_CLASS + ' ' + AREAS_CLASS[mode]);
+				span.innerHTML = area;
 				box.appendChild(span);
 			}
 			
-			// set title
-			var title = _getTitle(user.role);
-			if (title) {
-				box.appendChild(title);
+			var tmp = utils.createElement('span', USER_CLASS);
+			box.appendChild(tmp);
+			
+			// icon
+			if (user.icon) {
+				var icon = utils.createElement('img', ICON_CLASS);
+				icon.src = user.icon;
+				tmp.appendChild(icon);
 			}
 			
-			// set nickname
-			var a = utils.createElement('a');
+			// title
+			var title = titles[role];
+			if (title) {
+				var span = utils.createElement('span', ROLE_CLASS);
+				span.innerHTML = title;
+				tmp.appendChild(span);
+			}
+			
+			// nickname
+			var a = utils.createElement('a', NICK_CLASS);
 			a.innerHTML = user.name + ': ';
 			
 			var nickHandler = (function(user) {
@@ -308,14 +335,14 @@
 			})(user);
 			
 			try {
-				a.addEventListener('click', nickHandler);
+				tmp.addEventListener('click', nickHandler);
 			} catch (err) {
-				a.attachEvent('onclick', nickHandler);
+				tmp.attachEvent('onclick', nickHandler);
 			}
-			box.appendChild(a);
+			tmp.appendChild(a);
 			
-			// set text
-			var span = utils.createElement('span', 'context');
+			// context
+			var span = utils.createElement('span', CONTEXT_CLASS);
 			span.innerHTML = text;
 			
 			box.appendChild(span);
@@ -339,71 +366,27 @@
 			}
 		};
 		
-		function _getIcon(url) {
-			if (!url) {
-				return null;
-			}
-			
-			var icon = utils.createElement('span', 'icon');
-			icon.innerHTML = '<img src="' + url + '">';
-			
-			return icon;
-		}
-		
-		function _getTitle(role) {
-			var title, clazz = 'title ';
+		function _parseRole(role) {
+			var r = 0;
 			
 			if (utils.typeOf(role) != 'number') {
 				role = parseInt(role);
 				if (role == NaN || role < 0) {
-					return null;
+					return r;
 				}
 			}
 			
 			if (role & roles.SYSTEM) {
-				if ((role & roles.SYSTEM) == roles.SYSTEM) {
-					clazz += TITLE_SYSTEM_CLASS;
-				} else if (role & roles.SU_ADMIN) {
-					clazz += TITLE_SU_ADMIN_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '超管';
-				} else {
-					clazz += TITLE_ADMIN_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '管理员';
-				}
+				r = role & roles.SYSTEM;
 			} else if (role & roles.ANCHOR) {
-				if ((role & roles.ANCHOR) == roles.ANCHOR) {
-					clazz += TITLE_ANCHOR_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '主播';
-				} else if (role & roles.SECRETARY) {
-					clazz += TITLE_SECRETARY_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '秘书';
-				} else {
-					clazz += TITLE_ASSISTANT_CLASS;
-					
-					title = utils.createElement('span', clazz);
-					title.innerText = '助理';
-				}
+				r = role & roles.ANCHOR;
 			} else if (role & roles.VIP) {
-				var lv = (role & roles.VIP) >>> 1;
-				clazz += TITLE_VIP_CLASS + lv;
-				
-				title = utils.createElement('span', clazz);
-				title.innerText = 'VIP' + lv;
-			} else if ((role & roles.NORMAL) == roles.NORMAL) {
-				clazz += TITLE_NORMAL_CLASS;
-			} else {
-				clazz += TITLE_VISITOR_CLASS;
+				r = roles.VIP;
+			} else if (role & roles.NORMAL) {
+				r = roles.NORMAL;
 			}
 			
-			return title;
+			return r;
 		}
 		
 		_this.send = function() {

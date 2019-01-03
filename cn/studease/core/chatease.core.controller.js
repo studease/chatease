@@ -10,7 +10,9 @@
 		opts = message.opts,
 		modes = message.modes,
 		roles = message.roles,
-		status = message.status;
+		status = message.status,
+		
+		SYSTEM = { 'id': -1, 'name': '[系统]', role: roles.SYSTEM };
 	
 	core.controller = function(model, view) {
 		var _this = utils.extend(this, new events.eventdispatcher('core.controller')),
@@ -46,7 +48,7 @@
 			switch (e.state) {
 				case states.CONNECTED:
 					if (chatease.debug) {
-						view.show('聊天室已连接…');
+						view.show(SYSTEM, '聊天室已连接…');
 					} else {
 						utils.log('聊天室已连接…');
 					}
@@ -57,7 +59,7 @@
 					
 				case states.CLOSED:
 					if (chatease.debug) {
-						view.show('聊天室连接已断开！');
+						view.show(SYSTEM, '聊天室连接已断开！');
 					} else {
 						utils.log('聊天室连接已断开！');
 					}
@@ -68,7 +70,7 @@
 					
 				case states.ERROR:
 					if (chatease.debug) {
-						view.show('聊天室异常！');
+						view.show(SYSTEM, '聊天室异常！');
 					} else {
 						utils.log('聊天室异常！');
 					}
@@ -94,7 +96,7 @@
 				_forward(e);
 				
 				if (!chatease.debug) {
-					view.show('聊天室已连接！');
+					view.show(SYSTEM, '聊天室已连接！');
 				}
 				
 				_connect();
@@ -128,7 +130,7 @@
 			view.render.clearScreen();
 			
 			if (chatease.debug) {
-				view.show('聊天室连接中…');
+				view.show(SYSTEM, '聊天室连接中…');
 			} else {
 				utils.log('聊天室连接中…');
 			}
@@ -246,13 +248,13 @@
 					ch.update(utils.extend({}, data.channel));
 					
 					if (chatease.debug) {
-						view.show('已加入房间（' + ch.id + '）。');
+						view.show(SYSTEM, '已加入房间（' + ch.id + '）。');
 					} else {
 						utils.log('已加入房间（' + ch.id + '）。');
 					}
 					
 					if (usr.role < ch.stat) {
-						view.show('您所在的用户组不能发言！');
+						view.show(SYSTEM, '您所在的用户组不能发言！');
 					}
 					
 					_this.dispatchEvent(events.CHATEASE_INFO, data);
@@ -271,7 +273,7 @@
 					
 					ch.add(data.user);
 					
-					view.show(data.data, data.user, data.mode);
+					view.show(data.user, data.data, data.mode);
 					_this.dispatchEvent(events.CHATEASE_MESSAGE, data);
 					break;
 					
@@ -282,16 +284,14 @@
 				case cmds.JOIN:
 					ch.add(data.user);
 					
-					var title = _getUserTitle(data.user.role);
-					view.show(title + data.user.name + ' 进入房间。');
+					view.show(data.user, data.user.name + ' 进入房间。');
 					_this.dispatchEvent(events.CHATEASE_JOIN, data);
 					break;
 					
 				case cmds.LEFT:
 					ch.remove(data.user);
 					
-					var title = _getUserTitle(data.user.role);
-					view.show(title + data.user.name + ' 离开房间。');
+					view.show(data.user, data.user.name + ' 离开房间。');
 					_this.dispatchEvent(events.CHATEASE_LEFT, data);
 					break;
 					
@@ -308,11 +308,11 @@
 						if (data.sub == usr.id) {
 							switch (opt) {
 								case opts.MUTE:
-									view.show('您已被' + (d ? '' : '解除') + '禁言' + (d ? d + '秒' : '') + '。');
+									view.show(SYSTEM, '您已被' + (d ? '' : '解除') + '禁言' + (d ? d + '秒' : '') + '。');
 									break;
 									
 								case opts.FORBID:
-									view.show('您已被限制进入该房间' + d + '秒。');
+									view.show(SYSTEM, '您已被限制进入该房间' + d + '秒。');
 									model.config.maxretries = 0;
 									_this.close();
 									break;
@@ -343,48 +343,10 @@
 			model.setState(states.CLOSED);
 		};
 		
-		function _getUserTitle(role) {
-			var title = '';
-			
-			if (utils.typeOf(role) != 'number') {
-				role = parseInt(role);
-				if (role == NaN || role < 0) {
-					return '';
-				}
-			}
-			
-			if (role & roles.SYSTEM) {
-				if ((role & roles.SYSTEM) == roles.SYSTEM) {
-					title += '[系统] ';
-				} else if (role & roles.SU_ADMIN) {
-					title += '[超管] ';
-				} else {
-					title += '[管理员] ';
-				}
-			} else if (role & roles.ANCHOR) {
-				if ((role & roles.ANCHOR) == roles.ANCHOR) {
-					title += '[主播] ';
-				} else if (role & roles.SECRETARY) {
-					title += '[助理] ';
-				} else {
-					title += '[房管] ';
-				}
-			} else if (role & roles.VIP) {
-				var lv = (role & roles.VIP) - 1;
-				title += '[VIP' + lv + '] ';
-			} else if ((role & roles.NORMAL) == roles.NORMAL) {
-				// no title here
-			} else {
-				title += '[游客] ';
-			}
-			
-			return title;
-		}
-		
 		function _error(code, params) {
 			var status = _getErrorStatus(code);
 			if (status) {
-				view.show(status);
+				view.show(SYSTEM, status);
 			}
 			
 			var data = {
@@ -456,7 +418,7 @@
 				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
 				
 				if (chatease.debug) {
-					view.show('正在准备重连，' + delay / 1000 + '秒...');
+					view.show(SYSTEM, '正在准备重连，' + delay / 1000 + '秒...');
 				} else {
 					utils.log('正在准备重连，' + delay / 1000 + '秒...');
 				}
@@ -487,7 +449,7 @@
 		function _onViewSend(e) {
 			var text = e.data.data;
 			if (!text) {
-				view.show('请输入内容！');
+				view.show(SYSTEM, '请输入内容！');
 				return;
 			}
 			
