@@ -45,7 +45,7 @@
 		UNI:       0x00,
 		MULTI:     0x01,
 		BROADCAST: 0x02,
-		OUTDATED:  0x04
+		OUTDATED:  0x80
 	};
 	
 	message.roles = {

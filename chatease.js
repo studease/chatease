@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.04';
+chatease.version = '1.1.05';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -892,7 +892,7 @@ chatease.version = '1.1.04';
 		UNI:       0x00,
 		MULTI:     0x01,
 		BROADCAST: 0x02,
-		OUTDATED:  0x04
+		OUTDATED:  0x80
 	};
 	
 	message.roles = {
@@ -1705,13 +1705,18 @@ chatease.version = '1.1.04';
 		AREAS_CLASS = {
 			0: 'uni',
 			1: '',
-			2: '',
-			3: 'outdated'
+			2: ''
 		},
 		ROLES_CLASS = {
 			0:   'r-visitor',
 			1:   'r-normal',
-			14:  'r-vip',
+			2:   'r-vip1',
+			4:   'r-vip2',
+			6:   'r-vip3',
+			8:   'r-vip4',
+			10:  'r-vip5',
+			12:  'r-vip6',
+			14:  'r-vip7',
 			16:  'r-assistant',
 			32:  'r-secretary',
 			48:  'r-anchor',
@@ -1723,13 +1728,18 @@ chatease.version = '1.1.04';
 		areas = {
 			0: '[密语]',
 			1: '',
-			2: '',
-			3: '[历史]'
+			2: ''
 		},
 		titles = {
 			0:   '',
 			1:   '',
-			14:  'VIP',
+			2:   'VIP1',
+			4:   'VIP2',
+			6:   'VIP3',
+			8:   'VIP4',
+			10:  'VIP5',
+			12:  'VIP6',
+			14:  'VIP7',
 			16:  '助理',
 			32:  '秘书',
 			48:  '主播',
@@ -1974,9 +1984,9 @@ chatease.version = '1.1.04';
 			var box = utils.createElement('div', ROLES_CLASS[role]);
 			
 			// area
-			var area = areas[mode];
+			var area = areas[mode & 0x7F];
 			if (area && role != roles.SYSTEM) {
-				var span = utils.createElement('span', AREA_CLASS + ' ' + AREAS_CLASS[mode]);
+				var span = utils.createElement('span', AREA_CLASS + ' ' + AREAS_CLASS[mode & 0x7F]);
 				span.innerHTML = area;
 				box.appendChild(span);
 			}
@@ -2029,7 +2039,7 @@ chatease.version = '1.1.04';
 			}
 			
 			// append this box
-			if (mode == modes.OUTDATED) {
+			if (mode & modes.OUTDATED) {
 				_contentLayer.insertBefore(box, _contentLayer.childNodes[0]);
 			} else {
 				_contentLayer.appendChild(box);
@@ -2057,7 +2067,7 @@ chatease.version = '1.1.04';
 			} else if (role & roles.ANCHOR) {
 				r = role & roles.ANCHOR;
 			} else if (role & roles.VIP) {
-				r = roles.VIP;
+				r = role & roles.VIP;
 			} else if (role & roles.NORMAL) {
 				r = roles.NORMAL;
 			}
