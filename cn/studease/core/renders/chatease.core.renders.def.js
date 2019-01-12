@@ -101,7 +101,6 @@
 		
 		function _init() {
 			_this.name = rendermodes.DEFAULT;
-			
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -336,6 +335,7 @@
 			// nickname
 			var a = utils.createElement('a', NICK_CLASS);
 			a.innerHTML = user.name + ': ';
+			tmp.appendChild(a);
 			
 			var nickHandler = (function(user) {
 				return function(e) {
@@ -349,13 +349,11 @@
 			} catch (err) {
 				tmp.attachEvent('onclick', nickHandler);
 			}
-			tmp.appendChild(a);
 			
 			// context
-			var span = utils.createElement('span', CONTEXT_CLASS);
-			span.innerHTML = text;
-			
-			box.appendChild(span);
+			var ctx = utils.createElement('div', CONTEXT_CLASS);
+			ctx.innerHTML = '<span>' + text + '</span>';
+			box.appendChild(ctx);
 			
 			// check records
 			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {

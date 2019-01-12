@@ -3,7 +3,6 @@
 		events = chatease.events,
 		core = chatease.core,
 		message = core.message,
-		modes = message.modes,
 		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
@@ -55,6 +54,7 @@
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
 		CSS_BLOCK = 'block',
+		CSS_INLINE = 'inline',
 		CSS_INLINE_BLOCK = 'inline-block';
 	
 	skins.mobile = function(config) {
@@ -62,7 +62,6 @@
 		
 		function _init() {
 			_this.name = skinmodes.MOBILE;
-			
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
@@ -93,7 +92,7 @@
 				'background-repeat': 'no-repeat',
 				'background-position': 'center',
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOAgMAAABiJsVCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcebm5ubm5kbBEu0AAAACdFJOUwCgoEVu0AAAABpJREFUCNdjYAABqVWrHBi0Vq1qII0AawMBACnPF0kf/g8sAAAAAElFTkSuQmCC)',
-				display: 'inline-block'
+				display: CSS_INLINE_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + CHECKBOX_CLASS + '.checked .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAA40lEQVQ4T52SvXHCQBCF3wuUKDHp7QXYFZgOrBKgAqADOsDuRK7ALoEOGDqwk1UoSHSBZrTMMWhGY358w0YbvG9/3i7xYDByqloCmKfUMLPSe7/sQUuADmfNk4gwCTSzXZZli7ZtS5KvSWCE8jwvmqZZkVzHrv+CPRRCKAB89etcA38BjM+CA8lJzLuu25Ic3QJ/RORl4PBMRL5VdQPgbWjeRUcz+/Dev1dVVTjnNqo6HY54b1SQXDrnyrquRyGELYDnv6e6Z87MzCa9i8mgme2jeGjIrR2TXw7Ap4gsTp/zSBwBq1l6D5ci9L8AAAAASUVORK5CYII=)'
@@ -110,7 +109,7 @@
 				border: CSS_NONE,
 				'border-radius': '2px',
 				cursor: 'pointer',
-				display: 'inline-block',
+				display: CSS_INLINE_BLOCK,
 				'-webkit-font-smoothing': 'subpixel-antialiased',
 				'-moz-osx-font-smoothing': 'grayscale',
 				transition: '150ms ease-in-out',
@@ -268,7 +267,8 @@
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
-				'word-wrap': 'break-word'
+				'word-wrap': 'break-word',
+				display: CSS_INLINE
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
@@ -309,7 +309,7 @@
 				'border-radius': '5px',
 				'background-repeat': 'no-repeat',
 				'background-position': 'center',
-				display: 'inline-block'
+				display: CSS_INLINE_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACeklEQVRYR8VX0XUTMRAcVQAdQCrAVJCkAkIFkAqyqSChAg8VkFQAqQCnApwKEiqIXYF4c0h6ynG6k87mWe/dl6Td2dHu7J7DgZc7sH9UAzCzhXPu2Hv/GoC+BYCVAnDOrb33DySfWgMaBWBmbwFcATgLTqfsr51zXC6Xt1MH4/4gADNThEsAn2sN9c6JiUuSP6bu/wPAzE4AfK+MeMq+AJyT3JQOvgBgZor425TVxv01gNMSiATAzPTOivx/rBXJ0yHDHYDw5o97or0UwBeS1/3NCIAALvYQ+l0oTdGeL+WVGD7rl6oL0T/v6PwrgOuxZCsmoZlZKLk5GB5UqiRTxBIsAB9SnTu38d7flURKDEjNjmd4l/OTGHWoIImWxGtoyY/yoFPPBNDMhP5dI4CtHMl5eMKfQZprzNyQPM8B+JpbvTOq69UM59FMAqEnkEq9agBxT1JZrfKV0qX3brCho5JqzsmBj9L4INmifu5S4EcC0BLFlqQa1a7RR9CXAiA6ayPJ6e8/3W8AU/OAKuRNRtl9VEJdzDdKtHZyGuYESXdc73MtGHuTXs/ZRAC1jSgCyFlLrNQmg5mlysu7YU0/iACkdr9mMpDf3fbngSlVlKSKLSVhrh/Kh34DKhHSlXBYf3MgX2Z2A+BT4fYTyaO9VsGQo4kG1SVcY/UMuZGcL4pT8QgTtyS7YXWHRqbrXT6NARjTh8iCREkl3CLlcp4qZwzA0JygeV85olzoRCdogtS0tqPKhsU2Xvov6I/mUjldGpzzQ1cUYH0lNmRDU5MCSGuoCiSXGh5Fr0prXfODES0GpVOty47KU5+m4heDSDxf/W9Yq3Kt5w4O4A9JNgxutXqzoAAAAABJRU5ErkJggg==)'

@@ -5,6 +5,7 @@
 		states = core.states,
 		message = core.message,
 		roles = message.roles,
+		components = core.components,
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
@@ -13,6 +14,7 @@
 		
 		WRAP_CLASS = 'cha-wrapper',
 		SKIN_CLASS = 'cha-skin',
+		BUBBLE_CLASS = 'cha-bubble',
 		RENDER_CLASS = 'cha-render',
 		CONTEXTMENU_CLASS = 'cha-contextmenu';
 	
@@ -22,12 +24,14 @@
 			_object,
 			_renderLayer,
 			_contextmenuLayer,
+			_bubble,
 			_render,
 			_skin,
 			_errorOccurred = false;
 		
 		function _init() {
-			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name);
+			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name 
+				+ ' ' + BUBBLE_CLASS + '-' + model.getConfig('bubble').name);
 			_wrapper.id = model.getConfig('id');
 			//_wrapper.tabIndex = 0; 
 			
@@ -37,6 +41,7 @@
 			_wrapper.appendChild(_renderLayer);
 			_wrapper.appendChild(_contextmenuLayer);
 			
+			_initComponents();
 			_initRender();
 			_initSkin();
 			
@@ -53,6 +58,19 @@
 			} catch (err) {
 				_wrapper.attachEvent('onkeydown', _onKeyDown);
 				window.attachEvent('onresize', _onResize);
+			}
+		}
+		
+		function _initComponents() {
+			// bubble
+			var cfg = utils.extend({}, model.getConfig('bubble'), {
+				skin: model.getConfig('skin').name
+			});
+			
+			try {
+				_bubble = new components.bubble(cfg);
+			} catch (err) {
+				utils.log('Failed to init "bubble" component!');
 			}
 		}
 		

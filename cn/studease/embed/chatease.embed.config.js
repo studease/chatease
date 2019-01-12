@@ -24,6 +24,9 @@
 			},
 			skin: {
 				name: skinmodes.DEFAULT
+			},
+			bubble: {
+				name: ''
 			}
 		},
 		

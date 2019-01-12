@@ -3,7 +3,6 @@
 		events = chatease.events,
 		core = chatease.core,
 		message = core.message,
-		modes = message.modes,
 		roles = message.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
@@ -56,7 +55,6 @@
 		
 		function _init() {
 			_this.name = rendermodes.NONE;
-			
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {

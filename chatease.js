@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.05';
+chatease.version = '1.1.06';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -951,7 +951,6 @@ chatease.version = '1.1.05';
 		events = chatease.events,
 		core = chatease.core,
 		message = core.message,
-		modes = message.modes,
 		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
@@ -1003,6 +1002,7 @@ chatease.version = '1.1.05';
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
 		CSS_BLOCK = 'block',
+		CSS_INLINE = 'inline',
 		CSS_INLINE_BLOCK = 'inline-block';
 	
 	skins.def = function(config) {
@@ -1010,7 +1010,6 @@ chatease.version = '1.1.05';
 		
 		function _init() {
 			_this.name = skinmodes.DEFAULT;
-			
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
@@ -1041,7 +1040,7 @@ chatease.version = '1.1.05';
 				'background-repeat': 'no-repeat',
 				'background-position': 'center',
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOAgMAAABiJsVCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcebm5ubm5kbBEu0AAAACdFJOUwCgoEVu0AAAABpJREFUCNdjYAABqVWrHBi0Vq1qII0AawMBACnPF0kf/g8sAAAAAElFTkSuQmCC)',
-				display: 'inline-block'
+				display: CSS_INLINE_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + CHECKBOX_CLASS + '.checked .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAA40lEQVQ4T52SvXHCQBCF3wuUKDHp7QXYFZgOrBKgAqADOsDuRK7ALoEOGDqwk1UoSHSBZrTMMWhGY358w0YbvG9/3i7xYDByqloCmKfUMLPSe7/sQUuADmfNk4gwCTSzXZZli7ZtS5KvSWCE8jwvmqZZkVzHrv+CPRRCKAB89etcA38BjM+CA8lJzLuu25Ic3QJ/RORl4PBMRL5VdQPgbWjeRUcz+/Dev1dVVTjnNqo6HY54b1SQXDrnyrquRyGELYDnv6e6Z87MzCa9i8mgme2jeGjIrR2TXw7Ap4gsTp/zSBwBq1l6D5ci9L8AAAAASUVORK5CYII=)'
@@ -1058,7 +1057,7 @@ chatease.version = '1.1.05';
 				border: CSS_NONE,
 				'border-radius': '2px',
 				cursor: 'pointer',
-				display: 'inline-block',
+				display: CSS_INLINE_BLOCK,
 				'-webkit-font-smoothing': 'subpixel-antialiased',
 				'-moz-osx-font-smoothing': 'grayscale',
 				transition: '150ms ease-in-out',
@@ -1212,7 +1211,8 @@ chatease.version = '1.1.05';
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
-				'word-wrap': 'break-word'
+				'word-wrap': 'break-word',
+				display: CSS_INLINE
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
@@ -1229,7 +1229,7 @@ chatease.version = '1.1.05';
 				margin: '8px 0',
 				'text-align': 'center',
 				'line-height': '24px',
-				display: 'block'
+				display: CSS_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext', {
 				'float': 'left'
@@ -1289,7 +1289,6 @@ chatease.version = '1.1.05';
 		events = chatease.events,
 		core = chatease.core,
 		message = core.message,
-		modes = message.modes,
 		roles = message.roles,
 		skins = chatease.core.skins,
 		skinmodes = skins.modes,
@@ -1341,6 +1340,7 @@ chatease.version = '1.1.05';
 		CSS_HIDDEN = 'hidden',
 		CSS_NONE = 'none',
 		CSS_BLOCK = 'block',
+		CSS_INLINE = 'inline',
 		CSS_INLINE_BLOCK = 'inline-block';
 	
 	skins.mobile = function(config) {
@@ -1348,7 +1348,6 @@ chatease.version = '1.1.05';
 		
 		function _init() {
 			_this.name = skinmodes.MOBILE;
-			
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
@@ -1379,7 +1378,7 @@ chatease.version = '1.1.05';
 				'background-repeat': 'no-repeat',
 				'background-position': 'center',
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOAgMAAABiJsVCAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJUExURUxpcebm5ubm5kbBEu0AAAACdFJOUwCgoEVu0AAAABpJREFUCNdjYAABqVWrHBi0Vq1qII0AawMBACnPF0kf/g8sAAAAAElFTkSuQmCC)',
-				display: 'inline-block'
+				display: CSS_INLINE_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + CHECKBOX_CLASS + '.checked .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAA40lEQVQ4T52SvXHCQBCF3wuUKDHp7QXYFZgOrBKgAqADOsDuRK7ALoEOGDqwk1UoSHSBZrTMMWhGY358w0YbvG9/3i7xYDByqloCmKfUMLPSe7/sQUuADmfNk4gwCTSzXZZli7ZtS5KvSWCE8jwvmqZZkVzHrv+CPRRCKAB89etcA38BjM+CA8lJzLuu25Ic3QJ/RORl4PBMRL5VdQPgbWjeRUcz+/Dev1dVVTjnNqo6HY54b1SQXDrnyrquRyGELYDnv6e6Z87MzCa9i8mgme2jeGjIrR2TXw7Ap4gsTp/zSBwBq1l6D5ci9L8AAAAASUVORK5CYII=)'
@@ -1396,7 +1395,7 @@ chatease.version = '1.1.05';
 				border: CSS_NONE,
 				'border-radius': '2px',
 				cursor: 'pointer',
-				display: 'inline-block',
+				display: CSS_INLINE_BLOCK,
 				'-webkit-font-smoothing': 'subpixel-antialiased',
 				'-moz-osx-font-smoothing': 'grayscale',
 				transition: '150ms ease-in-out',
@@ -1554,7 +1553,8 @@ chatease.version = '1.1.05';
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
-				'word-wrap': 'break-word'
+				'word-wrap': 'break-word',
+				display: CSS_INLINE
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS, {
@@ -1595,7 +1595,7 @@ chatease.version = '1.1.05';
 				'border-radius': '5px',
 				'background-repeat': 'no-repeat',
 				'background-position': 'center',
-				display: 'inline-block'
+				display: CSS_INLINE_BLOCK
 			});
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS + ' .' + CONTROLS_CLASS + ' .shieldtext .icon', {
 				'background-image': 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACeklEQVRYR8VX0XUTMRAcVQAdQCrAVJCkAkIFkAqyqSChAg8VkFQAqQCnApwKEiqIXYF4c0h6ynG6k87mWe/dl6Td2dHu7J7DgZc7sH9UAzCzhXPu2Hv/GoC+BYCVAnDOrb33DySfWgMaBWBmbwFcATgLTqfsr51zXC6Xt1MH4/4gADNThEsAn2sN9c6JiUuSP6bu/wPAzE4AfK+MeMq+AJyT3JQOvgBgZor425TVxv01gNMSiATAzPTOivx/rBXJ0yHDHYDw5o97or0UwBeS1/3NCIAALvYQ+l0oTdGeL+WVGD7rl6oL0T/v6PwrgOuxZCsmoZlZKLk5GB5UqiRTxBIsAB9SnTu38d7flURKDEjNjmd4l/OTGHWoIImWxGtoyY/yoFPPBNDMhP5dI4CtHMl5eMKfQZprzNyQPM8B+JpbvTOq69UM59FMAqEnkEq9agBxT1JZrfKV0qX3brCho5JqzsmBj9L4INmifu5S4EcC0BLFlqQa1a7RR9CXAiA6ayPJ6e8/3W8AU/OAKuRNRtl9VEJdzDdKtHZyGuYESXdc73MtGHuTXs/ZRAC1jSgCyFlLrNQmg5mlysu7YU0/iACkdr9mMpDf3fbngSlVlKSKLSVhrh/Kh34DKhHSlXBYf3MgX2Z2A+BT4fYTyaO9VsGQo4kG1SVcY/UMuZGcL4pT8QgTtyS7YXWHRqbrXT6NARjTh8iCREkl3CLlcp4qZwzA0JygeV85olzoRCdogtS0tqPKhsU2Xvov6I/mUjldGpzzQ1cUYH0lNmRDU5MCSGuoCiSXGh5Fr0prXfODES0GpVOty47KU5+m4heDSDxf/W9Yq3Kt5w4O4A9JNgxutXqzoAAAAABJRU5ErkJggg==)'
@@ -1777,7 +1777,6 @@ chatease.version = '1.1.05';
 		
 		function _init() {
 			_this.name = rendermodes.DEFAULT;
-			
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -2012,6 +2011,7 @@ chatease.version = '1.1.05';
 			// nickname
 			var a = utils.createElement('a', NICK_CLASS);
 			a.innerHTML = user.name + ': ';
+			tmp.appendChild(a);
 			
 			var nickHandler = (function(user) {
 				return function(e) {
@@ -2025,13 +2025,11 @@ chatease.version = '1.1.05';
 			} catch (err) {
 				tmp.attachEvent('onclick', nickHandler);
 			}
-			tmp.appendChild(a);
 			
 			// context
-			var span = utils.createElement('span', CONTEXT_CLASS);
-			span.innerHTML = text;
-			
-			box.appendChild(span);
+			var ctx = utils.createElement('div', CONTEXT_CLASS);
+			ctx.innerHTML = '<span>' + text + '</span>';
+			box.appendChild(ctx);
 			
 			// check records
 			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
@@ -2129,7 +2127,6 @@ chatease.version = '1.1.05';
 		events = chatease.events,
 		core = chatease.core,
 		message = core.message,
-		modes = message.modes,
 		roles = message.roles,
 		renders = core.renders,
 		rendermodes = renders.modes,
@@ -2182,7 +2179,6 @@ chatease.version = '1.1.05';
 		
 		function _init() {
 			_this.name = rendermodes.NONE;
-			
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -2261,6 +2257,115 @@ chatease.version = '1.1.05';
 		};
 		
 		_this.destroy = function() {
+			
+		};
+		
+		_init();
+	};
+})(chatease);
+
+(function(chatease) {
+	chatease.core.components = {};
+})(chatease);
+
+(function(chatease) {
+	var utils = chatease.utils,
+		css = utils.css,
+		events = chatease.events,
+		core = chatease.core,
+		message = core.message,
+		roles = message.roles,
+		components = core.components,
+		skins = chatease.core.skins,
+		skinmodes = skins.modes,
+		
+		SKIN_CLASS = 'cha-skin',
+		BUBBLE_CLASS = 'cha-bubble',
+		RENDER_CLASS = 'cha-render',
+		CONSOLE_CLASS = 'cha-console',
+		
+		AREA_CLASS = 'area',
+		USER_CLASS = 'user',
+		ICON_CLASS = 'icon',
+		ROLE_CLASS = 'role',
+		NICK_CLASS = 'nick',
+		CONTEXT_CLASS = 'context',
+		
+		ROLES_CLASS = {
+			0:   'r-visitor',
+			1:   'r-normal',
+			14:  'r-vip',
+			16:  'r-assistant',
+			32:  'r-secretary',
+			48:  'r-anchor',
+			64:  'r-admin',
+			128: 'r-suadmin',
+			192: 'r-system'
+		},
+		
+		// For all api instances
+		CSS_SMOOTH_EASE = 'opacity .25s ease',
+		CSS_100PCT = '100%',
+		CSS_ABSOLUTE = 'absolute',
+		CSS_RELATIVE = 'relative',
+		CSS_NORMAL = 'normal',
+		CSS_IMPORTANT = ' !important',
+		CSS_HIDDEN = 'hidden',
+		CSS_NONE = 'none',
+		CSS_BLOCK = 'block',
+		CSS_INLINE_BLOCK = 'inline-block';
+	
+	components.bubble = function(config) {
+		var _this = utils.extend(this, new events.eventdispatcher('components.bubble')),
+			_defaults = {
+				name: '',
+				skin: skinmodes.DEFAULT
+			};
+		
+		function _init() {
+			_this.config = utils.extend({}, _defaults, config);
+			if (!_this.config.name) {
+				return;
+			}
+			
+			SKIN_CLASS += '-' + _this.config.skin;
+			BUBBLE_CLASS += '-' + _this.config.name;
+			
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + AREA_CLASS +
+				', .' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLE_CLASS, {
+				//display: CSS_NONE
+			});
+			
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ICON_CLASS, {
+				'float': 'left',
+				'margin-top': '4px',
+				width: '32px',
+				height: '32px'
+			});
+			
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS, {
+				margin: '4px 0 10px 36px',
+				display: CSS_BLOCK
+			});
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + CONTEXT_CLASS + ' span', {
+				padding: '8px 12px',
+				'border-radius': '5px',
+				'background-color': '#D9DDD4',
+				display: CSS_INLINE_BLOCK
+			});
+			
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + CONTEXT_CLASS, {
+				margin: '0',
+				display: CSS_INLINE_BLOCK
+			});
+			css('.' + SKIN_CLASS + '.' + BUBBLE_CLASS + ' .' + RENDER_CLASS + ' .' + CONSOLE_CLASS + ' .' + ROLES_CLASS[roles.SYSTEM] + ' .' + CONTEXT_CLASS + ' span', {
+				padding: '0',
+				'border-radius': '0',
+				'background-color': 'inherit'
+			});
+		}
+		
+		_this.resize = function(width, height) {
 			
 		};
 		
@@ -2513,6 +2618,7 @@ chatease.version = '1.1.05';
 		states = core.states,
 		message = core.message,
 		roles = message.roles,
+		components = core.components,
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
@@ -2521,6 +2627,7 @@ chatease.version = '1.1.05';
 		
 		WRAP_CLASS = 'cha-wrapper',
 		SKIN_CLASS = 'cha-skin',
+		BUBBLE_CLASS = 'cha-bubble',
 		RENDER_CLASS = 'cha-render',
 		CONTEXTMENU_CLASS = 'cha-contextmenu';
 	
@@ -2530,12 +2637,14 @@ chatease.version = '1.1.05';
 			_object,
 			_renderLayer,
 			_contextmenuLayer,
+			_bubble,
 			_render,
 			_skin,
 			_errorOccurred = false;
 		
 		function _init() {
-			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name);
+			_wrapper = utils.createElement('div', WRAP_CLASS + ' ' + SKIN_CLASS + '-' + model.getConfig('skin').name 
+				+ ' ' + BUBBLE_CLASS + '-' + model.getConfig('bubble').name);
 			_wrapper.id = model.getConfig('id');
 			//_wrapper.tabIndex = 0; 
 			
@@ -2545,6 +2654,7 @@ chatease.version = '1.1.05';
 			_wrapper.appendChild(_renderLayer);
 			_wrapper.appendChild(_contextmenuLayer);
 			
+			_initComponents();
 			_initRender();
 			_initSkin();
 			
@@ -2561,6 +2671,19 @@ chatease.version = '1.1.05';
 			} catch (err) {
 				_wrapper.attachEvent('onkeydown', _onKeyDown);
 				window.attachEvent('onresize', _onResize);
+			}
+		}
+		
+		function _initComponents() {
+			// bubble
+			var cfg = utils.extend({}, model.getConfig('bubble'), {
+				skin: model.getConfig('skin').name
+			});
+			
+			try {
+				_bubble = new components.bubble(cfg);
+			} catch (err) {
+				utils.log('Failed to init "bubble" component!');
 			}
 		}
 		
