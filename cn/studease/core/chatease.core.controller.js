@@ -313,7 +313,7 @@
 									
 								case opts.FORBID:
 									view.show(SYSTEM, '您已被限制进入该房间' + d + '秒。');
-									model.config.maxretries = 0;
+									model.config.maxRetries = 0;
 									_this.close();
 									break;
 							}
@@ -414,8 +414,8 @@
 		}
 		
 		function _reconnect() {
-			if (model.config.maxretries < 0 || _retrycount < model.config.maxretries) {
-				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
+			if (model.config.maxRetries < 0 || _retrycount < model.config.maxRetries) {
+				var delay = Math.ceil(model.config.retryDelay + Math.random() * 3000);
 				
 				if (chatease.debug) {
 					view.show(SYSTEM, '正在准备重连，' + delay / 1000 + '秒...');
@@ -474,8 +474,8 @@
 				text = arr[2];
 			}
 			
-			if (model.config.maxlength >= 0) {
-				text = text.substr(0, model.config.maxlength);
+			if (model.config.maxLength >= 0) {
+				text = text.substr(0, model.config.maxLength);
 			}
 			
 			text = utils.trim(text);

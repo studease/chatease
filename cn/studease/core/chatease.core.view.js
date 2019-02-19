@@ -9,7 +9,6 @@
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
-		skinmodes = skins.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'cha-wrapper',
@@ -80,8 +79,8 @@
 				url: model.getConfig('url'),
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
-				maxlength: model.getConfig('maxlength'),
-				maxrecords: model.getConfig('maxrecords'),
+				maxLength: model.getConfig('maxLength'),
+				maxRecords: model.getConfig('maxRecords'),
 				smoothing: model.getConfig('smoothing')
 			});
 			

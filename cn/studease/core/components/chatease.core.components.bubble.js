@@ -7,7 +7,7 @@
 		roles = message.roles,
 		components = core.components,
 		skins = chatease.core.skins,
-		skinmodes = skins.modes,
+		skinModes = skins.modes,
 		
 		SKIN_CLASS = 'cha-skin',
 		BUBBLE_CLASS = 'cha-bubble',
@@ -49,7 +49,7 @@
 		var _this = utils.extend(this, new events.eventdispatcher('components.bubble')),
 			_defaults = {
 				name: '',
-				skin: skinmodes.DEFAULT
+				skin: skinModes.DEFAULT
 			};
 		
 		function _init() {

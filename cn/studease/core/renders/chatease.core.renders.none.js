@@ -5,7 +5,7 @@
 		message = core.message,
 		roles = message.roles,
 		renders = core.renders,
-		rendermodes = renders.modes,
+		renderModes = renders.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',
@@ -54,7 +54,7 @@
 			_sendButton;
 		
 		function _init() {
-			_this.name = rendermodes.NONE;
+			_this.name = renderModes.NONE;
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {

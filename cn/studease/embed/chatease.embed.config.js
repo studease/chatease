@@ -2,8 +2,9 @@
 	var utils = chatease.utils,
 		events = chatease.events,
 		embed = chatease.embed,
-		rendermodes = chatease.core.renders.modes,
-		skinmodes = chatease.core.skins.modes;
+		core = chatease.core,
+		renderModes = core.renders.modes,
+		skinModes = core.skins.modes;
 	
 	embed.config = function(config) {
 		var _defaults = {
@@ -11,19 +12,19 @@
 			width: 640,
 			height: 400,
 			keywords: '',
-	 		maxlength: 50,  // -1: no limit
-	 		maxrecords: 50,
-	 		maxretries: -1, // -1: always
-	 		retrydelay: 3000,
+	 		maxLength: 50,  // -1: no limit
+	 		maxRecords: 50,
+	 		maxRetries: -1, // -1: always
+	 		retryDelay: 3000,
 	 		smoothing: false,
 	 		debug: false,
 			render: {
-				name: rendermodes.DEFAULT,
+				name: renderModes.DEFAULT,
 				title: 'CHATEASE ' + chatease.version,
 				swf: 'swf/chatease.swf'
 			},
 			skin: {
-				name: skinmodes.DEFAULT
+				name: skinModes.DEFAULT
 			},
 			bubble: {
 				name: ''

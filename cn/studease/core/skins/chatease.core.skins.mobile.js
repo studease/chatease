@@ -5,7 +5,7 @@
 		message = core.message,
 		roles = message.roles,
 		skins = chatease.core.skins,
-		skinmodes = skins.modes,
+		skinModes = skins.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'cha-wrapper',
@@ -61,7 +61,7 @@
 		var _this = utils.extend(this, new events.eventdispatcher('skins.mobile'));
 		
 		function _init() {
-			_this.name = skinmodes.MOBILE;
+			_this.name = skinModes.MOBILE;
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;

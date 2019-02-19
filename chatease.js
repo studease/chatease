@@ -4,7 +4,7 @@
 	}
 };
 
-chatease.version = '1.1.06';
+chatease.version = '1.2.00';
 
 (function(chatease) {
 	var utils = chatease.utils = {};
@@ -953,7 +953,7 @@ chatease.version = '1.1.06';
 		message = core.message,
 		roles = message.roles,
 		skins = chatease.core.skins,
-		skinmodes = skins.modes,
+		skinModes = skins.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'cha-wrapper',
@@ -1009,7 +1009,7 @@ chatease.version = '1.1.06';
 		var _this = utils.extend(this, new events.eventdispatcher('skins.def'));
 		
 		function _init() {
-			_this.name = skinmodes.DEFAULT;
+			_this.name = skinModes.DEFAULT;
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
@@ -1291,7 +1291,7 @@ chatease.version = '1.1.06';
 		message = core.message,
 		roles = message.roles,
 		skins = chatease.core.skins,
-		skinmodes = skins.modes,
+		skinModes = skins.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'cha-wrapper',
@@ -1347,7 +1347,7 @@ chatease.version = '1.1.06';
 		var _this = utils.extend(this, new events.eventdispatcher('skins.mobile'));
 		
 		function _init() {
-			_this.name = skinmodes.MOBILE;
+			_this.name = skinModes.MOBILE;
 			_this.config = utils.extend({}, config);
 			
 			SKIN_CLASS += '-' + _this.name;
@@ -1682,7 +1682,7 @@ chatease.version = '1.1.06';
 		modes = message.modes,
 		roles = message.roles,
 		renders = core.renders,
-		rendermodes = renders.modes,
+		renderModes = renders.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',
@@ -1776,7 +1776,7 @@ chatease.version = '1.1.06';
 			_bscroll;
 		
 		function _init() {
-			_this.name = rendermodes.DEFAULT;
+			_this.name = renderModes.DEFAULT;
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -1868,8 +1868,8 @@ chatease.version = '1.1.06';
 			
 			// textarea
 			_textInput.setAttribute('placeholder', '输入聊天内容');
-			if (_this.config.maxlength) {
-				_textInput.setAttribute('maxlength', _this.config.maxlength);
+			if (_this.config.maxLength) {
+				_textInput.setAttribute('maxlength', _this.config.maxLength);
 			}
 			
 			var handler = (function() {
@@ -2032,7 +2032,7 @@ chatease.version = '1.1.06';
 			box.appendChild(ctx);
 			
 			// check records
-			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
+			if (_contentLayer.childNodes.length >= _this.config.maxRecords) {
 				_contentLayer.removeChild(_contentLayer.childNodes[0]);
 			}
 			
@@ -2129,7 +2129,7 @@ chatease.version = '1.1.06';
 		message = core.message,
 		roles = message.roles,
 		renders = core.renders,
-		rendermodes = renders.modes,
+		renderModes = renders.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',
@@ -2178,7 +2178,7 @@ chatease.version = '1.1.06';
 			_sendButton;
 		
 		function _init() {
-			_this.name = rendermodes.NONE;
+			_this.name = renderModes.NONE;
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -2277,7 +2277,7 @@ chatease.version = '1.1.06';
 		roles = message.roles,
 		components = core.components,
 		skins = chatease.core.skins,
-		skinmodes = skins.modes,
+		skinModes = skins.modes,
 		
 		SKIN_CLASS = 'cha-skin',
 		BUBBLE_CLASS = 'cha-bubble',
@@ -2319,7 +2319,7 @@ chatease.version = '1.1.06';
 		var _this = utils.extend(this, new events.eventdispatcher('components.bubble')),
 			_defaults = {
 				name: '',
-				skin: skinmodes.DEFAULT
+				skin: skinModes.DEFAULT
 			};
 		
 		function _init() {
@@ -2622,7 +2622,6 @@ chatease.version = '1.1.06';
 		renders = core.renders,
 		renderModes = renders.modes,
 		skins = core.skins,
-		skinmodes = skins.modes,
 		css = utils.css,
 		
 		WRAP_CLASS = 'cha-wrapper',
@@ -2693,8 +2692,8 @@ chatease.version = '1.1.06';
 				url: model.getConfig('url'),
 				width: model.getConfig('width'),
 				height: model.getConfig('height'),
-				maxlength: model.getConfig('maxlength'),
-				maxrecords: model.getConfig('maxrecords'),
+				maxLength: model.getConfig('maxLength'),
+				maxRecords: model.getConfig('maxRecords'),
 				smoothing: model.getConfig('smoothing')
 			});
 			
@@ -3140,7 +3139,7 @@ chatease.version = '1.1.06';
 									
 								case opts.FORBID:
 									view.show(SYSTEM, '您已被限制进入该房间' + d + '秒。');
-									model.config.maxretries = 0;
+									model.config.maxRetries = 0;
 									_this.close();
 									break;
 							}
@@ -3241,8 +3240,8 @@ chatease.version = '1.1.06';
 		}
 		
 		function _reconnect() {
-			if (model.config.maxretries < 0 || _retrycount < model.config.maxretries) {
-				var delay = Math.ceil(model.config.retrydelay + Math.random() * 3000);
+			if (model.config.maxRetries < 0 || _retrycount < model.config.maxRetries) {
+				var delay = Math.ceil(model.config.retryDelay + Math.random() * 3000);
 				
 				if (chatease.debug) {
 					view.show(SYSTEM, '正在准备重连，' + delay / 1000 + '秒...');
@@ -3301,8 +3300,8 @@ chatease.version = '1.1.06';
 				text = arr[2];
 			}
 			
-			if (model.config.maxlength >= 0) {
-				text = text.substr(0, model.config.maxlength);
+			if (model.config.maxLength >= 0) {
+				text = text.substr(0, model.config.maxLength);
 			}
 			
 			text = utils.trim(text);
@@ -3421,8 +3420,9 @@ chatease.version = '1.1.06';
 	var utils = chatease.utils,
 		events = chatease.events,
 		embed = chatease.embed,
-		rendermodes = chatease.core.renders.modes,
-		skinmodes = chatease.core.skins.modes;
+		core = chatease.core,
+		renderModes = core.renders.modes,
+		skinModes = core.skins.modes;
 	
 	embed.config = function(config) {
 		var _defaults = {
@@ -3430,19 +3430,22 @@ chatease.version = '1.1.06';
 			width: 640,
 			height: 400,
 			keywords: '',
-	 		maxlength: 50,  // -1: no limit
-	 		maxrecords: 50,
-	 		maxretries: -1, // -1: always
-	 		retrydelay: 3000,
+	 		maxLength: 50,  // -1: no limit
+	 		maxRecords: 50,
+	 		maxRetries: -1, // -1: always
+	 		retryDelay: 3000,
 	 		smoothing: false,
 	 		debug: false,
 			render: {
-				name: rendermodes.DEFAULT,
+				name: renderModes.DEFAULT,
 				title: 'CHATEASE ' + chatease.version,
 				swf: 'swf/chatease.swf'
 			},
 			skin: {
-				name: skinmodes.DEFAULT
+				name: skinModes.DEFAULT
+			},
+			bubble: {
+				name: ''
 			}
 		},
 		

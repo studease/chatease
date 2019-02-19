@@ -74,18 +74,18 @@ _defaults = {
 	width: 640,
 	height: 400,
 	keywords: '',
-	maxlength: 30,  // -1: no limit
-	maxrecords: 50,
-	maxretries: -1, // -1: always
-	retrydelay: 3000,
+	maxLength: 30,  // -1: no limit
+	maxRecords: 50,
+	maxRetries: -1, // -1: always
+	retryDelay: 3000,
 	smoothing: false,
 	debug: false,
 	render: {
-		name: rendermodes.DEFAULT,
+		name: renderModes.DEFAULT,
 		swf: 'swf/chatease.swf'
 	},
 	skin: {
-		name: skinmodes.DEFAULT
+		name: skinModes.DEFAULT
 	}
 }
 ```

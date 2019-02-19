@@ -6,7 +6,7 @@
 		modes = message.modes,
 		roles = message.roles,
 		renders = core.renders,
-		rendermodes = renders.modes,
+		renderModes = renders.modes,
 		css = utils.css,
 		
 		RENDER_CLASS = 'cha-render',
@@ -100,7 +100,7 @@
 			_bscroll;
 		
 		function _init() {
-			_this.name = rendermodes.DEFAULT;
+			_this.name = renderModes.DEFAULT;
 			_this.config = utils.extend({}, _defaults, config);
 			
 			if (utils.isMSIE('(8|9)')) {
@@ -192,8 +192,8 @@
 			
 			// textarea
 			_textInput.setAttribute('placeholder', '输入聊天内容');
-			if (_this.config.maxlength) {
-				_textInput.setAttribute('maxlength', _this.config.maxlength);
+			if (_this.config.maxLength) {
+				_textInput.setAttribute('maxlength', _this.config.maxLength);
 			}
 			
 			var handler = (function() {
@@ -356,7 +356,7 @@
 			box.appendChild(ctx);
 			
 			// check records
-			if (_contentLayer.childNodes.length >= _this.config.maxrecords) {
+			if (_contentLayer.childNodes.length >= _this.config.maxRecords) {
 				_contentLayer.removeChild(_contentLayer.childNodes[0]);
 			}
 			
