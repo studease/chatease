@@ -10,6 +10,8 @@
 
 > QQ群：528109813
 
+> Skype: live:670292548
+
 This is a client-side script for websocket chat, with skin built in.
 
 
