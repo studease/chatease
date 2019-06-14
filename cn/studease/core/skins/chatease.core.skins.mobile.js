@@ -116,32 +116,39 @@
 				'transition-property': 'background-color, color'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red', {
-				color: '#FFFFFF',
-				'background-color': '#FF0046'
+				color: '#F0FFF0',
+				'background-color': '#DC143C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
-				'background-color': '#97052D'
+				'background-color': '#CD5C5C'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green', {
+				color: '#F0FFF0',
+				'background-color': '#449d44'
+			});
+			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green:hover', {
+				'background-color': '#4CAE4C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue', {
-				color: '#FFFFFF',
+				color: '#F0FFF0',
 				'background-color': '#0B7EF4'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue:hover', {
-				'background-color': '#0966C3'
+				'background-color': '#00A1D7'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white', {
-				color: '#000000',
-				'background-color': '#FFFFFF'
+				color: '#2F4F4F',
+				'background-color': '#D3D3D3'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white:hover', {
-				'background-color': '#E0E0E0'
+				'background-color': '#F5F5F5'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray', {
-				color: '#000000',
-				'background-color': '#E0E0E0'
+				color: '#F0FFF0',
+				'background-color': '#808080'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray:hover', {
-				'background-color': '#96A0B4'
+				'background-color': '#A9A9A9'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
