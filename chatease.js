@@ -1065,38 +1065,38 @@ chatease.version = '1.2.01';
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red', {
 				color: '#F0FFF0',
-				'background-color': '#DC143C'
+				'background-color': '#D9534C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
-				'background-color': '#CD5C5C'
+				'background-color': '#DC143C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green', {
 				color: '#F0FFF0',
-				'background-color': '#449d44'
+				'background-color': '#4CAE4C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green:hover', {
-				'background-color': '#4CAE4C'
+				'background-color': '#449d44'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue', {
 				color: '#F0FFF0',
-				'background-color': '#0B7EF4'
+				'background-color': '#00A1D7'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue:hover', {
-				'background-color': '#00A1D7'
+				'background-color': '#0B7EF4'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white', {
 				color: '#2F4F4F',
-				'background-color': '#D3D3D3'
+				'background-color': '#F5F5F5'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white:hover', {
-				'background-color': '#F5F5F5'
+				'background-color': '#D3D3D3'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray', {
 				color: '#F0FFF0',
-				'background-color': '#808080'
+				'background-color': '#A9A9A9'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray:hover', {
-				'background-color': '#A9A9A9'
+				'background-color': '#808080'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
@@ -1410,38 +1410,38 @@ chatease.version = '1.2.01';
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red', {
 				color: '#F0FFF0',
-				'background-color': '#DC143C'
+				'background-color': '#D9534C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.red:hover', {
-				'background-color': '#CD5C5C'
+				'background-color': '#DC143C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green', {
 				color: '#F0FFF0',
-				'background-color': '#449d44'
+				'background-color': '#4CAE4C'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.green:hover', {
-				'background-color': '#4CAE4C'
+				'background-color': '#449d44'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue', {
 				color: '#F0FFF0',
-				'background-color': '#0B7EF4'
+				'background-color': '#00A1D7'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.blue:hover', {
-				'background-color': '#00A1D7'
+				'background-color': '#0B7EF4'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white', {
 				color: '#2F4F4F',
-				'background-color': '#D3D3D3'
+				'background-color': '#F5F5F5'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.white:hover', {
-				'background-color': '#F5F5F5'
+				'background-color': '#D3D3D3'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray', {
 				color: '#F0FFF0',
-				'background-color': '#808080'
+				'background-color': '#A9A9A9'
 			});
 			css('.' + SKIN_CLASS + ' .' + BUTTON_CLASS + '.gray:hover', {
-				'background-color': '#A9A9A9'
+				'background-color': '#808080'
 			});
 			
 			css('.' + SKIN_CLASS + ' .' + RENDER_CLASS, {
