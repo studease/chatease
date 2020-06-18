@@ -31,9 +31,10 @@
 		LEFT:   'left',
 		CTRL:   'ctrl',
 		EXTERN: 'extern',
+		RESULT: 'result',
+		ERROR:  'error',
 		PING:   'ping',
-		PONG:   'pong',
-		ERROR:  'error'
+		PONG:   'pong'
 	};
 	
 	message.opts = {
@@ -43,9 +44,10 @@
 	
 	message.modes = {
 		UNI:       0x00,
-		MULTI:     0x01,
-		BROADCAST: 0x02,
-		OUTDATED:  0x80
+		GROUP:     0x01,
+		CHANNEL:   0x02,
+		BROADCAST: 0x03,
+		HISTORY:   0x04
 	};
 	
 	message.roles = {

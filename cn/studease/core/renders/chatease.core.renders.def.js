@@ -29,7 +29,9 @@
 		AREAS_CLASS = {
 			0: 'uni',
 			1: '',
-			2: ''
+			2: '',
+			3: '',
+			4: 'outdated'
 		},
 		ROLES_CLASS = {
 			0:   'r-visitor',
@@ -50,9 +52,7 @@
 		},
 		
 		areas = {
-			0: '[密语]',
-			1: '',
-			2: ''
+			0: '[密语]'
 		},
 		titles = {
 			0:   '',
@@ -361,7 +361,7 @@
 			}
 			
 			// append this box
-			if (mode & modes.OUTDATED) {
+			if (mode & modes.HISTORY) {
 				_contentLayer.insertBefore(box, _contentLayer.childNodes[0]);
 			} else {
 				_contentLayer.appendChild(box);
@@ -400,7 +400,7 @@
 		_this.send = function() {
 			_this.dispatchEvent(events.CHATEASE_VIEW_SEND, { data: {
 				data: _textInput.value,
-				mode: modes.MULTI
+				mode: modes.GROUP
 			}});
 			
 			_this.clearInput();

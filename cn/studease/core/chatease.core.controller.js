@@ -261,6 +261,7 @@
 					break;
 					
 				case cmds.TEXT:
+				case cmds.RESULT:
 					try {
 						if (!_filter) {
 							_filter = new utils.filter(model.config.keywords);
